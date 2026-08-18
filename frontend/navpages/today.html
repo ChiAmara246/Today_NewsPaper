@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today Newspaper</title>
+    <script>
+      (function () {
+
+        const isDarkMode = localStorage.getItem("darkMode") === "enabled";
+
+        // Apply theme before the page is painted
+        if (isDarkMode) {
+          document.documentElement.classList.add("dark-mode");
+        }
+
+        // Set the correct logo path immediately
+        const logoPath = window.location.pathname.includes("/navpages/")
+          ? "../images/"
+          : "images/";
+
+        const logoFile = isDarkMode
+          ? "logoDarkMode.PNG"
+          : "logoDefaultMode.PNG";
+
+        // Create a preload link for the correct logo
+        const preload = document.createElement("link");
+        preload.rel = "preload";
+        preload.as = "image";
+        preload.href = logoPath + logoFile;
+
+        document.head.appendChild(preload);
+
+      })();
+    </script>
+    <link rel="stylesheet" type="text/css" href="autrepage.css">
+    <link rel="stylesheet" type="text/css" href="../index.css">
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="../index.js" defer></script>
+  </head>
+  <body data-category="Trending">
+    <div class="subnav">
+      <div class="subnavRight">
+        <ul>
+          <li id="dateheure"></li>
+          <li><a href="laugh.html">Laugh It Out</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+
+      <div class="subnavLeft">
+
+        <ul>
+          <li><a href="https://www.facebook.com/Today-Newspaper-100000000000000" rel="noopener noreferrer" target="_blank"><img src="../images/facebook.png" alt="Facebook Logo"></a></li>
+          <li><a href="https://twitter.com/TodayNewspaper" rel="noopener noreferrer" target="_blank"><img src="../images/twitter.png" alt="Twitter Logo"></a></li>
+          <li><a href="https://www.instagram.com/todaynewspaper/" rel="noopener noreferrer" target="_blank"><img src="../images/instagram.png" alt="Instagram Logo"></a></li>
+        </ul>
+        <button id="darkModeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+          <span class="theme-icon sun">☀</span>
+          <span class="theme-icon moon">☾</span>
+          <span class="theme-switch"></span>
+        </button>
+      </div>
+    </div>
+
+    <header>
+      <img id="logo" alt="Today Newspaper">
+
+      <script>
+      (function () {
+
+        const logo = document.getElementById("logo");
+        const isDarkMode =
+          document.documentElement.classList.contains("dark-mode");
+
+        const logoPath = window.location.pathname.includes("/navpages/")
+          ? "../images/"
+          : "images/";
+
+        logo.src = logoPath + (
+          isDarkMode
+            ? "logoDarkMode.PNG"
+            : "logoDefaultMode.PNG"
+        );
+
+      })();
+      </script>
+    </header>
+
+    <nav>
+      <div class="dot" onclick="toggleMenu()">☰</div>
+      <ul id = "articleList" class="navlist">
+      	<li><a href="../index.html">Home</a></li>
+        <li><a href="education.html">Education</a></li>
+        <li><a href="politics.html">Politics</a></li>
+        <li><a href="economy.html">Economy</a></li>
+        <li><a href="today.html">Trending NEWS</a></li>
+        <li><a href="entertainment.html">Entertainment</a></li>
+        <li><a href="announces.html">Jobs & Opportunities</a></li>
+        <li><a href="pressEvent.html">Press & Events</a></li>
+      </ul>
+      <div class="search-box">
+      	<input type="text" id="searchInput" placeholder="Search articles... " onkeyup="searchFunction()">
+       	<button type="button" aria-label="Search">🔍</button>
+      </div>
+    </nav>
+    <div class="links" id="links">
+
+      <a href="../index.html">Home</a>
+      <a href="education.html">Education</a>
+      <a href="politics.html">Politics</a>
+      <a href="economy.html">Economy</a>
+      <a href="entertainment.html">Entertainment</a>
+      <a href="today.html">Trending NEWS</a>
+      <a href="announces.html">Jobs & Opportunities</a>
+      <a href="laugh.html">Laugh It Out</a>
+      <a href="about.html">About Us</a>
+      <a href="pressEvent.html">Press & Events</a>
+
+    </div>
+    <div>
+            <div class="slider" id="slider">
+
+        <img id="slide" src="slider/bnimage1.png">
+        <span class="categoryTag" id="categoryTag"></span>
+
+        <div class="headline">
+          <h1 id="title"></h1>
+          <p id="desc"></p>
+        </div>
+
+        <button class="btn" id="prev" onclick="prevSlide()">&#10094;</button>
+        <button class="btn" id="next" onclick="nextSlide()">&#10095;</button>
+      </div>
+    </div>
+    <div class="container0">
+      <div class="container">
+        <section id="topNewsGrid">
+          <div class="h2">
+            <h2> Top News</h2>
+          </div>
+          <div class="grid" id="topNewsGrids"></div>
+        </section>
+
+        <section>
+          <div class="h2">
+          <h2> Latest News </h2>
+          </div>
+          <div class="grid" id="articlesGrid"></div>
+          <div id="pagination">
+            <button id="prevBtn">←</button>
+
+            <button id="firstPage">1</button>
+
+            <span class="Dots">...</span>
+
+            <span id="currentPage">1</span>
+
+            <span class="Dots">...</span>
+
+            <button id="lastPage">1</button>
+
+            <button id="nextBtn">→</button>
+          </div>
+        </section>
+      </div>
+      <section id="searchResults" class="hidden"></section>
+      <div class="aside">
+
+          <aside id="frameBox">
+            <h3>Today Newspaper Team</h3>
+            <div class="carousel">
+              <div class="track"></div>
+            </div>
+          </aside>
+
+          <aside id="ePaper">
+            <h6>ePaper</h6>
+            <div class="epaper-carousel" id="epaperTrigger">
+                <img id="epaperImage" src="" alt="Today Newspaper ePaper">
+            </div>
+            </aside>
+
+          <aside id="charityEvent"></aside>
+
+
+          <div class="mobile-sticky-area">
+
+            <div id="mobileAds" class="mobile-ads">
+
+                <aside class="uniPub">
+                    <a href="https://babcock.edu.ng"><img src="../images/babcockLogo.jpeg" alt="babcock university logo"/></a>
+                </aside>
+
+                <aside id="mostRead">
+                    <div class="most-read-header">
+                        <span class="section-label">TRENDING</span>
+                        <h2>Most Read</h2>
+                    </div>
+                    <div id="mostReadGrid"></div>
+                </aside>
+
+                <aside class="uniPub">
+                    <a href="https://nileuniversity.edu.ng"><img src="../images/nileLogo.jpeg" alt="nile university logo"/></a>
+                </aside>
+
+            </div>
+            
+            <aside id="whatsapp">
+              <a
+                href="https://chat.whatsapp.com/JRep0h9StkDKcaHAel0TeN?mode=gi_t"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <img
+                  src="../images/images-8.jpeg"
+                  alt="Join us on WhatsApp"
+                >
+              </a>
+            </aside>
+
+            <!-- WhatsApp Popup -->
+            <div id="whatsappPopup" class="whatsapp-popup">
+
+              <div class="whatsapp-popup-card">
+
+                <button id="closeWhatsappPopup" class="whatsapp-close" aria-label="Close popup">
+                  &times;
+                </button>
+
+                <div class="whatsapp-icon">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </div>
+
+                <p>
+                  Sorry, this whatsapp community is filled.
+                </p>
+
+              </div>
+
+          </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+
+      <!-- Brand -->
+      <div class="footer-brand">
+
+        <img
+          src="../images/tnp-icon.png"
+          alt="Today Newspaper"
+          class="footer-icon"
+        >
+
+        <div class="footer-brand-text">
+          <h2>Today Newspaper</h2>
+
+          <p>
+            Your trusted source for news and insights on Education since 2020.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Navigation -->
+      <div class="footer-navigation">
+
+        <div class="footer-links">
+          <h3>◉Explore</h3>
+
+          <a href="../index.html">Home</a>
+          <a href="education.html">Education</a>
+          <a href="economy.html">Economy</a>
+          <a href="today.html">Today's News</a>
+        </div>
+
+        <div class="footer-links">
+          <h3>◇About</h3>
+
+          <a href="about.html">Our Purpose</a>
+          <a href="about.html">Our Mission</a>
+          <a href="about.html">Our Vision</a>
+          <a href="about.html">Our Values</a>
+        </div>
+
+        <div class="footer-links">
+          <h3>◎Connect</h3>
+
+          <a href="#">Contact Us</a>
+          <a href="#">Advertise With Us</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+        </div>
+
+      </div>
+
+      <!-- Values -->
+      <div class="footer-values">
+
+        <span>Integrity</span>
+        <span>Accuracy</span>
+        <span>Empowerment</span>
+        <span>Excellence</span>
+
+      </div>
+
+      <!-- Copyright -->
+      <div class="footer-bottom">
+
+        <p>
+          &copy; 2026 Today Newspaper &middot; All Rights Reserved.
+        </p>
+
+      </div>
+
+    </footer>
+
+  </body>
+</html>

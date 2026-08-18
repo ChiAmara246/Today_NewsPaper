@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today Newspaper</title>
+    <script>
+      (function () {
+
+        const isDarkMode = localStorage.getItem("darkMode") === "enabled";
+
+        // Apply theme before the page is painted
+        if (isDarkMode) {
+          document.documentElement.classList.add("dark-mode");
+        }
+
+        // Set the correct logo path immediately
+        const logoPath = window.location.pathname.includes("/navpages/")
+          ? "../images/"
+          : "images/";
+
+        const logoFile = isDarkMode
+          ? "logoDarkMode.PNG"
+          : "logoDefaultMode.PNG";
+
+        // Create a preload link for the correct logo
+        const preload = document.createElement("link");
+        preload.rel = "preload";
+        preload.as = "image";
+        preload.href = logoPath + logoFile;
+
+        document.head.appendChild(preload);
+
+      })();
+    </script>
+    <link rel="stylesheet" type="text/css" href="autrepage.css">
+    <link rel="stylesheet" type="text/css" href="../index.css">
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="../index.js" defer></script>
+</head>
+  <body>
+    <div class="popup" id="popup">
+      <h2>Our Policies</h2>
+      <p>Your privacy matters to us. We collect only necessary information to improve your experience, and we never share your personal data without your consent. By using this website, you agree to our privacy practices and data protection policies.</p>
+      <button onclick="close_Popup()">I agree</button>
+    </div>
+    <script>
+      window.onload = function () {
+
+        const popup = document.getElementById("popup");
+
+        if (!localStorage.getItem("popupShown")) {
+
+          popup.style.display = "block";
+
+          localStorage.setItem("popupShown", "true");
+        }
+      }
+
+      function close_Popup() {
+
+        document.getElementById("popup").style.display = "none";
+
+      }
+    </script>
+    <div class="subnav">
+      <div class="subnavRight">
+        <ul>
+          <li id="dateheure"></li>
+          <li><a href="laugh.html">Laugh It Out</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div class="subnavLeft">
+
+        <ul>
+          <li><a href="https://www.facebook.com/Today-Newspaper-100000000000000" rel="noopener noreferrer" target="_blank"><img src="../images/facebook.png" alt="Facebook Logo"></a></li>
+          <li><a href="https://twitter.com/TodayNewspaper" rel="noopener noreferrer" target="_blank"><img src="../images/twitter.png" alt="Twitter Logo"></a></li>
+          <li><a href="https://www.instagram.com/todaynewspaper/" rel="noopener noreferrer" target="_blank"><img src="../images/instagram.png" alt="Instagram Logo"></a></li>
+        </ul>
+        <button id="darkModeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+          <span class="theme-icon sun">☀</span>
+          <span class="theme-icon moon">☾</span>
+          <span class="theme-switch"></span>
+        </button>
+      </div>
+    </div>
+    <header>
+      <img id="logo" alt="Today Newspaper">
+
+      <script>
+      (function () {
+
+        const logo = document.getElementById("logo");
+        const isDarkMode =
+          document.documentElement.classList.contains("dark-mode");
+
+        const logoPath = window.location.pathname.includes("/navpages/")
+          ? "../images/"
+          : "images/";
+
+        logo.src = logoPath + (
+          isDarkMode
+            ? "logoDarkMode.PNG"
+            : "logoDefaultMode.PNG"
+        );
+
+      })();
+      </script>
+    </header>
+
+    <nav >
+      <div class="dot" onclick="toggleMenu()">☰</div>
+      <ul id = "articleList" class="navlist">
+
+      	<li><a href="../index.html">Home</a></li>
+      	<li><a href="education.html">Education</a></li>
+      	<li><a href="politics.html">Politics</a></li>
+      	<li><a href="economy.html">Economy</a></li>
+        <li><a href="today.html">Trending NEWS</a></li>
+    		<li><a href="entertainment.html">Entertainment</a></li>
+      	<li><a href="announces.html">Jobs & Opportunities</a></li>
+        <li><a href="pressEvent.html">Press & Events</a></li>
+
+      </ul>
+      <div class="search-box">
+      	<input type="text" id="searchInput" placeholder="Search articles... " onkeyup="searchFunction()">
+      	<button>🔍</button>
+      </div>
+    </nav>
+    <div class="links" id="links">
+
+        <a href="../index.html">Home</a>
+        <a href="education.html">Education</a>
+        <a href="politics.html">Politics</a>
+        <a href="economy.html">Economy</a>
+        <a href="entertainment.html">Entertainment</a>
+        <a href="today.html">Trending NEWS</a>
+        <a href="announces.html">Jobs & Opportunities</a>
+        <a href="pressEvent.html">Press & Events</a>
+        <a href="laugh.html">Laugh It Out</a>
+        <a href="about.html">About Us</a>
+
+    </div>
+          <div class="slider" id="slider">
+
+        <img id="slide" src="slider/bnimage1.png">
+        <span class="categoryTag" id="categoryTag"></span>
+
+        <div class="headline">
+          <h1 id="title"></h1>
+          <p id="desc"></p>
+        </div>
+
+        <button class="btn" id="prev" onclick="prevSlide()">&#10094;</button>
+        <button class="btn" id="next" onclick="nextSlide()">&#10095;</button>
+      </div>
+    <div class="container0">
+      <div class="container" id="aboutContainer">
+        <section>
+          <h3> About Us </h3>
+          <p>
+            Welcome to TODAY NEWSPAPER , modern digital media platform committed to delivering credible news, insightful analysis, and engaging stories that matter. <br/>We provide timely coverage across politic, education, economy, entertainment, public affairs, and trending events, keeping our readers informed away and connected in the rapidly changing world. <br/>Our platform was built with a simple vision: to create a reliable space where information is accurate accessible, and relevant to everyday people.
+          </p>
+        </section>
+        <section id="contactUs">
+          <h3> Join Our Community </h3>
+          <p>
+            Whether you are here for breaking news, educational updates, political insights, business trends, or entertainment, TODAY NEWSPAPER is designed to keep you connected to the stories shaping today and tomorrow. <br/><br/>Thank you for being part of our growing community.
+          </p>
+        </section>
+        <section class="about-us">
+          <h3> Contact us </h3>
+          <p alt="call our office">☎️: +234 7076254498</p>
+          <p alt="call for personnal assistance">📞: +234 8129493173</p>
+          <p><a href="mailto:press@todaynewspaper.com" alt="send us and email">✉️: press@todaynewspaperng.com</a></p>
+          <p alt="our location"><a href="https://maps.app.goo.gl/2A75kmczoF2HZVJ4A?g_st=iwb">📍: lagos lekki</a></p>
+        </section>
+
+      </div>
+      <div class="aside">
+
+          <aside id="frameBox">
+            <h3>Today Newspaper Team</h3>
+            <div class="carousel">
+              <div class="track"></div>
+            </div>
+          </aside>
+
+          <aside id="ePaper">
+            <h6>ePaper</h6>
+            <div class="epaper-carousel" id="epaperTrigger">
+                <img id="epaperImage" src="" alt="Today Newspaper ePaper">
+            </div>
+            </aside>
+
+          <aside id="charityEvent"></aside>
+
+
+          <div class="mobile-sticky-area">
+
+            <div id="mobileAds" class="mobile-ads">
+
+                <aside class="uniPub">
+                    <a href="https://babcock.edu.ng"><img src="../images/babcockLogo.jpeg" alt="babcock university logo"/></a>
+                </aside>
+
+                <aside id="mostRead">
+                    <div class="most-read-header">
+                        <span class="section-label">TRENDING</span>
+                        <h2>Most Read</h2>
+                    </div>
+                    <div id="mostReadGrid"></div>
+                </aside>
+
+                <aside class="uniPub">
+                    <a href="https://nileuniversity.edu.ng"><img src="../images/nileLogo.jpeg" alt="nile university logo"/></a>
+                </aside>
+
+            </div>
+            
+            <aside id="whatsapp">
+              <a
+                href="https://chat.whatsapp.com/JRep0h9StkDKcaHAel0TeN?mode=gi_t"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <img
+                  src="../images/images-8.jpeg"
+                  alt="Join us on WhatsApp"
+                >
+              </a>
+            </aside>
+
+            <!-- WhatsApp Popup -->
+            <div id="whatsappPopup" class="whatsapp-popup">
+
+              <div class="whatsapp-popup-card">
+
+                <button id="closeWhatsappPopup" class="whatsapp-close" aria-label="Close popup">
+                  &times;
+                </button>
+
+                <div class="whatsapp-icon">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </div>
+
+                <p>
+                  Sorry, this whatsapp community is filled.
+                </p>
+
+              </div>
+
+          </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+
+      <!-- Brand -->
+      <div class="footer-brand">
+
+        <img
+          src="../images/tnp-icon.png"
+          alt="Today Newspaper"
+          class="footer-icon"
+        >
+
+        <div class="footer-brand-text">
+          <h2>Today Newspaper</h2>
+
+          <p>
+            Your trusted source for news and insights on Education since 2020.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Navigation -->
+      <div class="footer-navigation">
+
+        <div class="footer-links">
+          <h3>◉Explore</h3>
+
+          <a href="../index.html">Home</a>
+          <a href="education.html">Education</a>
+          <a href="economy.html">Economy</a>
+          <a href="today.html">Today's News</a>
+        </div>
+
+        <div class="footer-links">
+          <h3>◇About</h3>
+
+          <a href="about.html">Our Purpose</a>
+          <a href="about.html">Our Mission</a>
+          <a href="about.html">Our Vision</a>
+          <a href="about.html">Our Values</a>
+        </div>
+
+        <div class="footer-links">
+          <h3>◎Connect</h3>
+
+          <a href="#">Contact Us</a>
+          <a href="#">Advertise With Us</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+        </div>
+
+      </div>
+
+      <!-- Values -->
+      <div class="footer-values">
+
+        <span>Integrity</span>
+        <span>Accuracy</span>
+        <span>Empowerment</span>
+        <span>Excellence</span>
+
+      </div>
+
+      <!-- Copyright -->
+      <div class="footer-bottom">
+
+        <p>
+          &copy; 2026 Today Newspaper &middot; All Rights Reserved.
+        </p>
+
+      </div>
+
+    </footer>
+
+  </body>
+</html>

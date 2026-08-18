@@ -1,0 +1,157 @@
+/* ARTICLE pagination */
+.hidden{
+    display: none;
+}
+#pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin: 50px 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+/* base buttons */
+#pagination button{
+    background:transparent;
+    border: var(--border);
+    color:var(--text);
+    padding:6px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    transition:0.2s ease;
+}
+
+/* hover = soft lift */
+#pagination button:hover{
+    border-color: rgba(0,0,0,0.3);
+    transform: translateY(-1px);
+}
+
+/* active page = clean dark pill */
+#currentPage {
+    padding: 6px 12px;
+    border-radius: 10px;
+    background: #111;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    min-width: 24px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+.active-page{
+    background:#111 !important;
+    color:white !important;
+    box-shadow:0 6px 14px rgba(11,44,95,0.25);
+    font-size: 14px;
+    min-width: 24px;
+}
+/* dots = subtle, not noisy */
+.Dots{
+    color: rgba(0,0,0,0.4);
+    font-weight: 500;
+    letter-spacing: 2px;
+}
+
+/* disabled state */
+#pagination button:disabled{
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* optional: remove arrow box feel */
+#prevBtn, #nextBtn{
+    border-radius: 999px;
+    width: 38px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/*Top news style*/
+
+
+#topNewsGrids{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    grid-auto-flow: dense;
+    gap:18px;
+}
+#topNewsGrids .featured{
+    grid-column: span 2;
+    grid-row: span 2;
+    height: 100%;
+    position:relative;
+    border-radius:14px;
+}
+#topNewsGrids .card{
+    border-radius:14px;
+    overflow:hidden;
+    border:1px solid rgba(0,0,0,0.08);
+    flex-direction:column;
+    margin-top: 10px;
+}
+#topNewsGrids .card img{
+    width:100%;
+    height: 120px;
+    object-fit:cover;
+    display:block;
+}
+
+
+#topNewsGrids .featured img{
+    width: 100%;
+    height:100%;
+}
+#topNewsGrids .featured .cardContent{
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    padding:16px;
+    background:linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+    color:white;
+}
+#topNewsGrids .cardContent{
+    padding:12px;
+}
+#topNewsGrids .cardContent.featured h3{
+    color:white;
+    font-size:1.1rem;
+    margin:0;
+}
+#topNewsGrids .cardContent.featured p{
+    color:white;
+    font-size:0.85rem;
+}
+
+.s-card{
+    display: block;
+}
+
+ol li{
+    height: 80px;
+}
+
+ /*PHONE*/
+
+@media (max-width:746px){
+
+    ol{
+        display: none;
+    }
+    #topNewsGrids{
+        display:block;
+    }
+    #topNewsGrids .card.featured{
+        height: 300px;
+    }
+    #topNewsGrids .card{
+        margin-bottom: 20px;
+    }
+}

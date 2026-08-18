@@ -1,0 +1,358 @@
+/* =========================================
+   ARTICLE SKELETON
+   PREMIUM EDITORIAL
+   ========================================= */
+
+.article-skeleton-block,
+.article-skeleton-story {
+    position: relative;
+}
+
+
+/* -----------------------------------------
+   BASE SKELETON SURFACE
+   ----------------------------------------- */
+
+.article-skeleton-headline-line,
+.article-skeleton-meta-line,
+.article-skeleton-story span,
+.article-skeleton-image {
+
+    position: relative;
+    overflow: hidden;
+
+    background: #eeeeee;
+}
+
+
+/* -----------------------------------------
+   HEADLINE
+   ----------------------------------------- */
+
+.article-skeleton-headline-line {
+
+    display: block;
+
+    width: 94%;
+    height: 30px;
+
+    margin-bottom: 11px;
+
+    border-radius: 2px;
+}
+
+.article-skeleton-headline-line:nth-child(2) {
+    width: 86%;
+}
+
+.article-skeleton-headline-short {
+    width: 48% !important;
+}
+
+
+/* -----------------------------------------
+   ARTICLE META
+   ----------------------------------------- */
+
+.article-skeleton-meta-line {
+
+    display: block;
+
+    height: 11px;
+
+    border-radius: 2px;
+}
+
+.article-skeleton-author-line {
+    width: 125px;
+}
+
+.article-skeleton-date-line {
+    width: 100px;
+}
+
+.article-skeleton-reading-line {
+    width: 80px;
+}
+
+
+/* -----------------------------------------
+   ARTICLE IMAGE
+   ----------------------------------------- */
+
+.article-skeleton-image {
+
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    min-height: 340px;
+
+    background: #e9e9e9;
+
+    border-radius: 2px;
+}
+
+
+/* -----------------------------------------
+   STORY
+   ----------------------------------------- */
+
+.article-skeleton-story {
+
+    width: 100%;
+}
+
+.article-skeleton-story span {
+
+    display: block;
+
+    width: 100%;
+    height: 14px;
+
+    margin-bottom: 12px;
+
+    border-radius: 2px;
+}
+
+.article-skeleton-story span:nth-child(2) {
+    width: 98%;
+}
+
+.article-skeleton-story span:nth-child(3) {
+    width: 94%;
+}
+
+.article-skeleton-story span:nth-child(4) {
+    width: 97%;
+}
+
+.article-skeleton-story span:nth-child(5) {
+    width: 91%;
+}
+
+.article-skeleton-story span:nth-child(6) {
+    width: 98%;
+}
+
+.article-skeleton-story span:nth-child(7) {
+    width: 94%;
+}
+
+.article-skeleton-story span:nth-child(8) {
+    width: 89%;
+}
+
+.article-skeleton-story-short {
+    width: 57% !important;
+}
+
+
+/* =========================================
+   SINGLE SOFT SHIMMER
+   ========================================= */
+
+.article-skeleton-headline-line::after,
+.article-skeleton-meta-line::after,
+.article-skeleton-story span::after,
+.article-skeleton-image::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    left: -35%;
+
+    width: 30%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.45),
+        transparent
+    );
+
+    animation: articleSkeletonSweep 2.2s
+               cubic-bezier(.4, 0, .2, 1)
+               infinite;
+}
+
+
+@keyframes articleSkeletonSweep {
+
+    0% {
+        left: -35%;
+    }
+
+    100% {
+        left: 135%;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 746px) {
+
+    .article-skeleton-headline-line {
+        height: 24px;
+        margin-bottom: 9px;
+    }
+
+    .article-skeleton-headline-line:nth-child(2) {
+        width: 91%;
+    }
+
+    .article-skeleton-headline-short {
+        width: 62% !important;
+    }
+
+    .article-skeleton-image {
+        min-height: 210px;
+    }
+
+    .article-skeleton-story span {
+        height: 13px;
+        margin-bottom: 10px;
+    }
+
+}
+
+
+/* =========================================
+   SMALL PHONE
+   ========================================= */
+
+@media (max-width: 420px) {
+
+    .article-skeleton-headline-line {
+        height: 21px;
+    }
+
+    .article-skeleton-image {
+        min-height: 185px;
+    }
+
+    .article-skeleton-story span {
+        height: 12px;
+        margin-bottom: 9px;
+    }
+
+}
+
+/* =========================================
+   ARTICLE CONTENT ERROR
+   PROFESSIONAL EDITORIAL STATE
+   ========================================= */
+
+.article-content-error {
+    width: 100%;
+    min-height: 500px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+    padding: 45px 25px;
+    text-align: center;
+}
+
+
+/* -----------------------------------------
+   WARNING ICON
+   ----------------------------------------- */
+
+.article-content-error-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
+
+    border: 1.5px solid #b5b5b5;
+    border-radius: 50%;
+
+    color: #555;
+
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    font-weight: 600;
+
+    line-height: 1;
+}
+
+
+/* -----------------------------------------
+   TITLE
+   ----------------------------------------- */
+
+.article-content-error-title {
+    margin-bottom: 9px;
+
+    color: #202020;
+
+    font-size: 17px;
+    font-weight: 600;
+
+    letter-spacing: -0.1px;
+}
+
+
+/* -----------------------------------------
+   MESSAGE
+   ----------------------------------------- */
+
+.article-content-error-message {
+    max-width: 430px;
+
+    color: #777;
+
+    font-size: 13.5px;
+    font-weight: 400;
+
+    line-height: 1.65;
+}
+
+
+/* -----------------------------------------
+   MOBILE
+   ----------------------------------------- */
+
+@media (max-width: 746px) {
+
+    .article-content-error {
+        min-height: 240px;
+        padding: 35px 20px;
+    }
+
+    .article-content-error-icon {
+        width: 44px;
+        height: 44px;
+
+        margin-bottom: 16px;
+
+        font-size: 23px;
+    }
+
+    .article-content-error-title {
+        font-size: 16px;
+    }
+
+    .article-content-error-message {
+        max-width: 320px;
+        font-size: 13px;
+    }
+
+}
