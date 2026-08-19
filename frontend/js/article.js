@@ -7,8 +7,8 @@ async function loadRelatedArticles(articleId) {
 
         const response =
             await fetch(
-                `http://localhost:3000/api/articles/${articleId}/related`
-            );
+    `https://today-newspaper-api.onrender.com/api/articles/${articleId}/related`
+);
 
 
         if (!response.ok) {
@@ -184,8 +184,8 @@ async function loadArticle() {
 
     const response =
     await fetch(
-        `http://localhost:3000/api/articles/${articleId}`
-    );
+    `https://today-newspaper-api.onrender.com/api/articles/${articleId}`
+);
 
 
 if (!response.ok) {

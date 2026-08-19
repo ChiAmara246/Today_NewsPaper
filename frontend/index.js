@@ -47,8 +47,8 @@ async function fetchArticlesFromAPI(
 
     const response =
         await fetch(
-            `http://localhost:3000/api/articles?${params.toString()}`
-        );
+    `https://today-newspaper-api.onrender.com/api/articles?${params.toString()}`
+);
 
     if (!response.ok) {
 
@@ -64,8 +64,8 @@ async function fetchTopNewsFromAPI() {
 
     const response =
         await fetch(
-            "http://localhost:3000/api/top-news"
-        );
+    "https://today-newspaper-api.onrender.com/api/top-news"
+);
 
     if (!response.ok) {
 
@@ -93,8 +93,8 @@ async function fetchCategoryTopNewsFromAPI(
 
     const response =
         await fetch(
-            `http://localhost:3000/api/top-news/category?${params.toString()}`
-        );
+    `https://today-newspaper-api.onrender.com/api/top-news/category?${params.toString()}`
+);
 
     if (!response.ok) {
 
@@ -112,8 +112,8 @@ async function fetchMostReadFromAPI() {
 
     const response =
         await fetch(
-            "http://localhost:3000/api/most-read"
-        );
+    "https://today-newspaper-api.onrender.com/api/most-read"
+);
 
     if (!response.ok) {
 
@@ -131,8 +131,8 @@ async function fetchEditorsPicksFromAPI() {
 
     const response =
         await fetch(
-            "http://localhost:3000/api/editors-picks"
-        );
+    "https://today-newspaper-api.onrender.com/api/editors-picks"
+);
 
     if (!response.ok) {
 
@@ -2188,8 +2188,8 @@ if (isCategoryPage) {
 
         const topNewsResponse =
             await fetch(
-                `http://localhost:3000/api/top-news/category?category=${encodeURIComponent(category)}`
-            );
+    `https://today-newspaper-api.onrender.com/api/top-news/category?category=${encodeURIComponent(category)}`
+);
 
 
         if (!topNewsResponse.ok) {
@@ -2603,8 +2603,8 @@ async function searchFunction() {
 
         const response =
             await fetch(
-                `http://localhost:3000/api/search?q=${encodeURIComponent(query)}&page=1&limit=10000`
-            );
+    `https://today-newspaper-api.onrender.com/api/search?q=${encodeURIComponent(query)}&page=1&limit=10000`
+);
 
 
         if (!response.ok) {
@@ -2893,8 +2893,8 @@ async function loadHomePage() {
 
             const response =
                 await fetch(
-                    "http://localhost:3000/api/top-news"
-                );
+    "https://today-newspaper-api.onrender.com/api/top-news"
+);
 
             if (!response.ok) {
 
