@@ -356,3 +356,89 @@
     }
 
 }
+/* =====================================================
+   ARTICLE ACTIONS
+===================================================== */
+
+.article-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin:35px 0;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* VIEWS */
+
+.article-views {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #777;
+    font-size: 14px;
+}
+
+.views-icon {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+/*share article button*/
+
+.share-article-btn {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid #d9d9d6;
+    border-radius: 50%;
+
+    background: var(--background);
+    color: var(--text);
+
+    cursor: pointer;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.share-article-btn svg {
+    width: 20px;
+    height: 20px;
+
+    fill: currentColor;
+
+    transition: transform 0.3s ease;
+}
+
+.share-article-btn:hover {
+    background: var(--primary-dark);
+    color: #fff;
+
+    border-color: var(--primary-dark);
+
+    transform: translateY(-1px);
+}
+
+.share-article-btn:hover svg {
+    transform: translateX(1px);
+}
+
+.share-article-btn:active {
+    transform: scale(0.96);
+}

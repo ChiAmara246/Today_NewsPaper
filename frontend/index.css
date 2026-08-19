@@ -682,16 +682,14 @@ header img{
   transform: scale(1.1);
 }
 /* Main Navigation */
+
 nav{
   position: sticky;
   top: 0;
   z-index: 1000;
-
   display: flex;
   align-items: center;
-
   padding: 5px 15px;
-
   background: var(--primary);
 }
 
@@ -699,23 +697,18 @@ nav ul{
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-
   margin: 0;
   padding: 0;
-
   list-style: none;
 }
 
 nav a,
 .links a{
   display: block;
-
   padding: 7px 10px;
-
   color: #fff;
   font-size: 14px;
   text-decoration: none;
-
   border-radius: 5px;
   transition: background var(--transition);
 }
@@ -726,7 +719,8 @@ nav a:hover,
 }
 
 nav a.active{
-  background: #fff;
+  background: var(--primary-dark);
+  color: var(--text-light);
 }
 
 /* Mobile Menu */
@@ -734,22 +728,16 @@ nav a.active{
 .links{
   position: fixed;
   left: 0;
-  top: 0;                 /* JS will update this */
-
+  top: 0;
   width: min(250px, 85vw);
-
   background: var(--primary);
   border-radius: 0 0 12px 0;
-
   transform: translateX(-100%);
   transition: transform .35s ease;
-
   z-index: 10000;
-
   overflow-y: auto;
   max-height: calc(65vh - 20px);
   opacity: 0.95;
-
   box-shadow: 0 12px 30px rgba(0,0,0,.25);
 }
 
@@ -762,7 +750,6 @@ nav a.active{
   font-size: 15px;
   border-bottom: 1px solid rgba(255,255,255,.2);
 }
-
 /* Mobile Menu Button */
 .dot{
   display: none;

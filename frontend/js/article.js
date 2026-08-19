@@ -94,20 +94,21 @@ function positionRelatedStories() {
     const related =
         document.querySelector(".related-section");
 
-    const article =
-        document.getElementById("story");
+    const actions =
+        document.querySelector(".article-actions");
 
-    if (!related || !article) return;
+    if (!related || !actions) return;
 
     if (window.innerWidth <= 746) {
 
-        // Move Related Stories directly after the article
-        article.insertAdjacentElement(
+        // Move Related Stories directly after
+        // the views/share buttons
+        actions.insertAdjacentElement(
             "afterend",
             related
         );
 
-        // Remember the new position for all articles
+        // Remember the mobile position
         localStorage.setItem(
             "relatedStoriesPosition",
             "mobile"
@@ -204,6 +205,14 @@ const data =
 const article =
     data.article;
 
+    const viewsElement =
+    document.getElementById("articleViews");
+
+    if (viewsElement) {
+        viewsElement.textContent =
+            Number(article.views || 0).toLocaleString();
+    }
+
     if (!article) {
         document.body.innerHTML = "Article not found";
         return;
@@ -275,3 +284,53 @@ const article =
 }
 
 loadArticle();
+const shareButton =
+    document.getElementById("shareArticleBtn");
+
+if (shareButton) {
+
+    shareButton.addEventListener("click", async () => {
+
+        const shareData = {
+            title: document.title,
+            text: "Read this article on Today Newspaper",
+            url: window.location.href
+        };
+
+        try {
+
+            if (navigator.share) {
+
+                await navigator.share(shareData);
+
+            } else {
+
+                await navigator.clipboard.writeText(
+                    window.location.href
+                );
+
+                const originalText =
+                    shareButton.innerHTML;
+
+                shareButton.innerHTML =
+                    "<span>✓</span> Copied";
+
+                setTimeout(() => {
+
+                    shareButton.innerHTML =
+                        originalText;
+
+                }, 2000);
+
+            }
+
+        } catch (error) {
+
+            // User cancelled the native share dialog.
+            // Nothing needs to happen.
+
+        }
+
+    });
+
+}
