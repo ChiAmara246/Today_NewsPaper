@@ -321,6 +321,11 @@ app.get(
 
         const mostRead =
             [...articles]
+                .filter(
+                    article =>
+                        typeof article.fullStory === "string" &&
+                        article.fullStory.trim() !== ""
+                )
                 .sort(
                     (a, b) =>
                         (b.view || 0) -
@@ -330,7 +335,6 @@ app.get(
                     0,
                     4
                 );
-
 
         res.json({
 
@@ -658,7 +662,9 @@ app.get(
                     String(article.id) !==
                         String(articleId) &&
                     article.category ===
-                        currentArticle.category
+                        currentArticle.category &&
+                    typeof article.fullStory === "string" &&
+                    article.fullStory.trim() !== ""
             );
 
 
@@ -677,7 +683,9 @@ app.get(
                             item =>
                                 String(item.id) ===
                                 String(article.id)
-                        )
+                        ) &&
+                        typeof article.fullStory === "string" &&
+                        article.fullStory.trim() !== ""
                 );
 
 
@@ -823,6 +831,7 @@ app.get(
 
         /* =============================================
            TOTAL
+           Includes ALL matching articles
         ============================================= */
 
         const totalArticles =
@@ -848,11 +857,21 @@ app.get(
             limit;
 
 
+        /* =============================================
+           ONLY SEND ARTICLES WITH FULL STORY
+        ============================================= */
+
         const paginated =
-            sorted.slice(
-                start,
-                start + limit
-            );
+            sorted
+                .slice(
+                    start,
+                    start + limit
+                )
+                .filter(
+                    article =>
+                        typeof article.fullStory === "string" &&
+                        article.fullStory.trim() !== ""
+                );
 
 
         /* =============================================
