@@ -741,10 +741,7 @@ app.get(
 
 
         const limit =
-            Math.max(
-                1,
-                Number(req.query.limit) || 10
-            );
+            6;
 
 
         /* =============================================
@@ -849,6 +846,18 @@ app.get(
 
 
         /* =============================================
+           VALID ARTICLES FOR DISPLAY
+        ============================================= */
+
+        const validArticles =
+            sorted.filter(
+                article =>
+                    typeof article.fullStory === "string" &&
+                    article.fullStory.trim() !== ""
+            );
+
+
+        /* =============================================
            PAGINATION
         ============================================= */
 
@@ -857,21 +866,11 @@ app.get(
             limit;
 
 
-        /* =============================================
-           ONLY SEND ARTICLES WITH FULL STORY
-        ============================================= */
-
         const paginated =
-            sorted
-                .slice(
-                    start,
-                    start + limit
-                )
-                .filter(
-                    article =>
-                        typeof article.fullStory === "string" &&
-                        article.fullStory.trim() !== ""
-                );
+            validArticles.slice(
+                start,
+                start + limit
+            );
 
 
         /* =============================================
