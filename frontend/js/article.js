@@ -6,9 +6,9 @@ async function loadRelatedArticles(articleId) {
     try {
 
         const response =
-            await fetch(
-    `https://today-newspaper-api.onrender.com/api/articles/${articleId}/related`
-);
+        await fetch(
+            `${API_BASE_URL}/api/articles/${articleId}/related`
+        );
 
 
         if (!response.ok) {
@@ -185,8 +185,8 @@ async function loadArticle() {
 
     const response =
     await fetch(
-    `https://today-newspaper-api.onrender.com/api/articles/${articleId}`
-);
+        `${API_BASE_URL}/api/articles/${articleId}`
+    );
 
 
 if (!response.ok) {
@@ -210,7 +210,7 @@ const article =
 
     if (viewsElement) {
         viewsElement.textContent =
-            Number(article.views || 0).toLocaleString();
+            Number(article.view || 0).toLocaleString();
     }
 
     if (!article) {
@@ -239,40 +239,44 @@ const article =
     /* ONLY CHANGE: FULL STORY */
 
     const articleImg =
-        document.getElementById("articleImg");
+    document.getElementById("articleImg");
 
-    const story =
-        document.getElementById("story");
+const story =
+    document.getElementById("story");
 
-    articleImg.onload = function () {
+if (
+    typeof article.fullStory === "string" &&
+    article.fullStory.trim() !== ""
+) {
 
-        story.textContent =
-            article.fullStory;
+    story.textContent =
+        article.fullStory;
 
-    };
+} else {
 
-    articleImg.onerror = function () {
+    story.innerHTML = `
+        <div class="article-content-error">
 
-        story.innerHTML = `
-            <div class="article-content-error">
-
-                <div class="article-content-error-icon">
-                    !
-                </div>
-
-                <div class="article-content-error-title">
-                    Article content unavailable
-                </div>
-
-                <div class="article-content-error-message">
-                    something went wrong at the moment.
-                    Please try again later.
-                </div>
-
+            <div class="article-content-error-icon">
+                !
             </div>
-        `;
 
-    };
+            <div class="article-content-error-title">
+                Article content unavailable
+            </div>
+
+            <div class="article-content-error-message">
+                something went wrong at the moment.
+                Please try again later.
+            </div>
+
+        </div>
+    `;
+
+}
+
+articleImg.src =
+    getImagePath(article.img);
 
     articleImg.src =
         getImagePath(article.img);

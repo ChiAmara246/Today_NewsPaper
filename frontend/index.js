@@ -1,6 +1,13 @@
 /* =========================
    GLOBAL DATA
 ========================= */
+
+const API_BASE_URL =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+        ? "http://localhost:3000"
+        : "https://today-newspaper-api.onrender.com";
+
 document.querySelectorAll("nav a").forEach(link => {
 
     if (
@@ -18,13 +25,14 @@ function getImagePath(img) {
         return img;
     }
 
-    // Plain filename
-    const isNavPage =
-        window.location.pathname.includes(
-            "/navpages/"
-        );
+    // Pages inside folders that sit directly under /frontend/
+    const path = window.location.pathname;
 
-    return isNavPage
+    const isSubfolderPage =
+        path.includes("/navpages/") ||
+        path.includes("/charityEvent/");
+
+    return isSubfolderPage
         ? `../images/${img}`
         : `images/${img}`;
 }
@@ -56,9 +64,9 @@ async function fetchArticlesFromAPI(
     );
 
     const response =
-        await fetch(
-    `https://today-newspaper-api.onrender.com/api/articles?${params.toString()}`
-);
+    await fetch(
+        `${API_BASE_URL}/api/articles?${params.toString()}`
+    );
 
     if (!response.ok) {
 
@@ -73,9 +81,9 @@ async function fetchArticlesFromAPI(
 async function fetchTopNewsFromAPI() {
 
     const response =
-        await fetch(
-    "https://today-newspaper-api.onrender.com/api/top-news"
-);
+    await fetch(
+        `${API_BASE_URL}/api/top-news`
+    );
 
     if (!response.ok) {
 
@@ -102,9 +110,9 @@ async function fetchCategoryTopNewsFromAPI(
     );
 
     const response =
-        await fetch(
-    `https://today-newspaper-api.onrender.com/api/top-news/category?${params.toString()}`
-);
+    await fetch(
+        `${API_BASE_URL}/api/top-news/category?category=${encodeURIComponent(category)}`
+    );
 
     if (!response.ok) {
 
@@ -121,9 +129,9 @@ async function fetchCategoryTopNewsFromAPI(
 async function fetchMostReadFromAPI() {
 
     const response =
-        await fetch(
-    "https://today-newspaper-api.onrender.com/api/most-read"
-);
+    await fetch(
+        `${API_BASE_URL}/api/most-read`
+    );
 
     if (!response.ok) {
 
@@ -140,9 +148,9 @@ async function fetchMostReadFromAPI() {
 async function fetchEditorsPicksFromAPI() {
 
     const response =
-        await fetch(
-    "https://today-newspaper-api.onrender.com/api/editors-picks"
-);
+    await fetch(
+        `${API_BASE_URL}/api/editors-picks`
+    );
 
     if (!response.ok) {
 
@@ -1833,8 +1841,10 @@ async function loadArticles(containerId, category, limit = 6, page = 1) {
 
     const container =
         document.getElementById(containerId);
-        const topNewsSection =
-    document.getElementById("topNewsGrids");
+
+    const topNewsSection =
+        document.getElementById("topNewsGrids");
+
 
     if (!container) {
 
@@ -1844,9 +1854,10 @@ async function loadArticles(containerId, category, limit = 6, page = 1) {
 
         return;
     }
-    
+
+
     /* =====================================================
-    EDITOR'S PICKS
+       EDITOR'S PICKS
     ===================================================== */
 
     if (containerId === "newsGridEditor") {
@@ -1887,7 +1898,7 @@ async function loadArticles(containerId, category, limit = 6, page = 1) {
 
     /* =====================================================
        CATEGORY PAGE
-       ===================================================== */
+    ===================================================== */
 
     const isCategoryPage =
         !!document.getElementById(
@@ -1897,7 +1908,7 @@ async function loadArticles(containerId, category, limit = 6, page = 1) {
 
     /* =====================================================
        CACHE
-       ===================================================== */
+    ===================================================== */
 
     const cacheKey =
         `pageCache_${containerId}_${category || "all"}_${page}`;
@@ -1968,7 +1979,7 @@ async function loadArticles(containerId, category, limit = 6, page = 1) {
 
                 /* =====================================
                    RESTORE IMAGE ERRORS
-                   ===================================== */
+                ===================================== */
 
                 const restoreImageError =
                     image => {
@@ -2039,7 +2050,7 @@ async function loadArticles(containerId, category, limit = 6, page = 1) {
 
                 /* =====================================
                    RESTORE ARTICLE CLICKS
-                   ===================================== */
+                ===================================== */
 
                 container
                     .querySelectorAll("[data-id]")
@@ -2099,80 +2110,72 @@ async function loadArticles(containerId, category, limit = 6, page = 1) {
 
 
     /* =====================================================
-   PAGE CAPACITY
-   ===================================================== */
+       PAGE CAPACITY
+    ===================================================== */
 
-let pageLimit =
-    limit;
-
-
-/* =====================================================
-   CATEGORY PAGE
-   ===================================================== */
-
-if (isCategoryPage) {
-
-    /* ================================================
-       PHONE
-       ================================================ */
-
-    if (window.innerWidth <= 746) {
-
-        pageLimit =
-            Math.max(
-                4,
-                Math.min(
-                    6,
-                    limit
-                )
-            );
+    let pageLimit =
+        limit;
 
 
-        categoryPageLimit =
-            pageLimit;
+    /* =====================================================
+       CATEGORY PAGE CAPACITY
+    ===================================================== */
 
+    if (isCategoryPage) {
 
-        categoryPageWidth =
-            window.innerWidth;
-    }
+        /* ================================================
+           PHONE
+        ================================================ */
 
+        if (window.innerWidth <= 746) {
 
-    /* ================================================
-       DESKTOP / TABLET
-       ================================================ */
+            pageLimit =
+                Math.max(
+                    4,
+                    Math.min(
+                        6,
+                        limit
+                    )
+                );
 
-    else {
-
-        /*
-           The first page must wait for Top News
-           before calculating the available space.
-
-           Therefore the capacity calculation is
-           performed later, after Top News has
-           been rendered.
-        */
-
-        if (
-            page === 1 ||
-            categoryPageLimit === null ||
-            categoryPageWidth !==
-                window.innerWidth
-        ) {
 
             categoryPageLimit =
-                null;
+                pageLimit;
+
+
+            categoryPageWidth =
+                window.innerWidth;
         }
 
 
-        pageLimit =
-            categoryPageLimit ||
-            limit;
+        /* ================================================
+           DESKTOP / TABLET
+        ================================================ */
+
+        else {
+
+            if (
+                page === 1 ||
+                categoryPageLimit === null ||
+                categoryPageWidth !==
+                    window.innerWidth
+            ) {
+
+                categoryPageLimit =
+                    null;
+            }
+
+
+            pageLimit =
+                categoryPageLimit ||
+                limit;
+        }
     }
-}
+
 
     /* =====================================================
        LOADING
-       ===================================================== */
+    ===================================================== */
 
     showLoadingCards(
         container,
@@ -2181,247 +2184,203 @@ if (isCategoryPage) {
 
 
     /* =====================================================
-   CATEGORY TOP NEWS
-   ===================================================== */
+       CATEGORY TOP NEWS
+    ===================================================== */
 
-let usedIds = [];
+    let usedIds = [];
 
 
-/*
-   Category Top News must be loaded and rendered
-   BEFORE Latest News capacity is calculated.
-*/
+    if (isCategoryPage) {
 
-if (isCategoryPage) {
+        try {
 
-    try {
-
-        const topNewsResponse =
+            const topNewsResponse =
             await fetch(
-    `https://today-newspaper-api.onrender.com/api/top-news/category?category=${encodeURIComponent(category)}`
-);
-
-
-        if (!topNewsResponse.ok) {
-
-            throw new Error(
-                `HTTP ${topNewsResponse.status}`
-            );
-
-        }
-
-
-        const topNewsData =
-            await topNewsResponse.json();
-
-            console.log(
-    "TOP NEWS API:",
-    topNewsData.articles
-);
-
-
-        usedIds =
-            renderTopNewsCategory(
-                topNewsData.articles
-            ) || [];
-            console.log(
-    "TOP NEWS HTML:",
-    document.getElementById(
-        "topNewsGrids"
-    )?.innerHTML
-);
-
-
-    } catch (err) {
-
-        console.error(
-            "Failed to load category Top News:",
-            err
-        );
-
-
-        const topNewsGrid =
-            document.getElementById(
-                "topNewsGrids"
+                `${API_BASE_URL}/api/top-news/category?category=${encodeURIComponent(category)}`
             );
 
 
-        if (topNewsGrid) {
+            if (!topNewsResponse.ok) {
 
-            topNewsGrid.innerHTML = "";
+                throw new Error(
+                    `HTTP ${topNewsResponse.status}`
+                );
 
+            }
+
+
+            const topNewsData =
+                await topNewsResponse.json();
+
+
+            usedIds =
+                renderTopNewsCategory(
+                    topNewsData.articles
+                ) || [];
+        } catch (err) {
+
+
+            const topNewsGrid =
+                document.getElementById(
+                    "topNewsGrids"
+                );
+
+
+            if (topNewsGrid) {
+
+                topNewsGrid.innerHTML = "";
+
+            }
         }
     }
-}
 
 
-/* =====================================================
-   CALCULATE LATEST NEWS CAPACITY
-   ===================================================== */
-
-if (
-    isCategoryPage &&
-    window.innerWidth > 746
-) {
+    /* =====================================================
+       CALCULATE LATEST NEWS CAPACITY
+    ===================================================== */
 
     if (
-        page === 1 ||
-        categoryPageLimit === null ||
-        categoryPageWidth !==
-            window.innerWidth
+        isCategoryPage &&
+        window.innerWidth > 746
     ) {
 
-        /*
-           Top News has now been rendered.
+        if (
+            page === 1 ||
+            categoryPageLimit === null ||
+            categoryPageWidth !==
+                window.innerWidth
+        ) {
 
-           The browser has its actual DOM structure,
-           so its height can now be measured.
-        */
-
-        await new Promise(resolve =>
-    requestAnimationFrame(() => {
-        requestAnimationFrame(resolve);
-    })
-);
-
-        const calculatedLimit =
-            fitCategoryContentToAside(
-                container
+            await new Promise(resolve =>
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(
+                        resolve
+                    );
+                })
             );
 
 
-        console.log(
-    "Top News height:",
-    document
-        .getElementById("topNewsGrids")
-        ?.getBoundingClientRect()
-        .height
-);
-
-console.log(
-    "Latest News capacity:",
-    calculatedLimit
-);
+            const calculatedLimit =
+                fitCategoryContentToAside(
+                    container
+                );
 
 
-        if (
-            calculatedLimit &&
-            calculatedLimit > 0
-        ) {
+            if (
+                calculatedLimit &&
+                calculatedLimit > 0
+            ) {
 
-            categoryPageLimit =
-                calculatedLimit;
+                categoryPageLimit =
+                    calculatedLimit;
 
-        } else {
+            } else {
 
-            categoryPageLimit =
-                limit;
+                categoryPageLimit =
+                    limit;
+            }
+
+
+            categoryPageWidth =
+                window.innerWidth;
         }
 
 
-        categoryPageWidth =
-            window.innerWidth;
+        pageLimit =
+            categoryPageLimit;
     }
 
 
-    pageLimit =
-        categoryPageLimit;
-}
+    /* =====================================================
+       LOADING LATEST NEWS
+    ===================================================== */
 
-
-/* =====================================================
-   LOADING LATEST NEWS
-   ===================================================== */
-
-showLoadingCards(
-    container,
-    pageLimit
-);
-
-
-/* =====================================================
-   FETCH LATEST NEWS FROM BACKEND
-   ===================================================== */
-
-let articles = [];
-let totalPages = 1;
-
-
-try {
-
-    const result =
-        await fetchArticlesFromAPI(
-            category,
-            page,
-            pageLimit
-        );
-
-
-    articles =
-        Array.isArray(
-            result.articles
-        )
-            ? result.articles
-            : [];
-
-
-    totalPages =
-        Number(
-            result.totalPages
-        ) || 1;
-
-
-} catch (err) {
-
-    console.error(
-        "Failed to load articles from backend:",
-        err
-    );
-
-
-    showFailedCards(
+    showLoadingCards(
         container,
         pageLimit
     );
 
 
-    return;
-}
+    /* =====================================================
+       FETCH LATEST NEWS FROM BACKEND
+    ===================================================== */
+
+    let articles = [];
+    let totalPages = 1;
 
 
-/* =====================================================
-   GENERAL TOP NEWS
-   ===================================================== */
+    try {
 
-if (
-    document.getElementById(
-        "newsGridEducation"
-    )
-) {
-
-    renderTopNews(
-        articles
-    );
-}
+        const result =
+            await fetchArticlesFromAPI(
+                category,
+                page,
+                pageLimit
+            );
 
 
-/* =====================================================
-   TOP NEWS ALWAYS VISIBLE
-   ===================================================== */
+        articles =
+            Array.isArray(
+                result.articles
+            )
+                ? result.articles
+                : [];
 
 
-if (topNewsSection) {
+        totalPages =
+            Number(
+                result.totalPages
+            ) || 1;
 
-    topNewsSection.style.display =
-        "";
-}
+
+    } catch (err) {
+
+        console.error(
+            "Failed to load articles from backend:",
+            err
+        );
+
+
+        showFailedCards(
+            container,
+            pageLimit
+        );
+
+
+        return;
+    }
+
+
+    /* =====================================================
+       GENERAL TOP NEWS
+    ===================================================== */
+
+    if (
+        document.getElementById(
+            "newsGridEducation"
+        )
+    ) {
+
+        renderTopNews(
+            articles
+        );
+    }
+
+
+    /* =====================================================
+       TOP NEWS ALWAYS VISIBLE
+    ===================================================== */
+
+    if (topNewsSection) {
+
+        topNewsSection.style.display =
+            "";
+    }
+
 
     /* =====================================================
        RENDER ARTICLES
-       
-       The backend has already selected the correct page.
-       There is NO frontend pagination anymore.
-       ===================================================== */
+    ===================================================== */
 
     container.innerHTML = "";
 
@@ -2439,13 +2398,14 @@ if (topNewsSection) {
             container.appendChild(
                 card
             );
+
         }
     );
 
 
     /* =====================================================
        GRID LAYOUT
-       ===================================================== */
+    ===================================================== */
 
     setArticleGridLayout(
         container
@@ -2454,37 +2414,36 @@ if (topNewsSection) {
 
     /* =====================================================
        MATCH MAIN CONTAINER TO ASIDE
-       ===================================================== */
+    ===================================================== */
 
     if (isCategoryPage) {
 
-    const container0 =
-        document.querySelector(".container0");
+        const container0 =
+            document.querySelector(
+                ".container0"
+            );
 
-    const mainContainer =
-        container0?.querySelector(".container");
 
-    if (
-        mainContainer &&
-        window.innerWidth > 746
-    ) {
+        const mainContainer =
+            container0?.querySelector(
+                ".container"
+            );
 
-        /*
-         * The height was only needed during
-         * the Latest News capacity calculation.
-         *
-         * Let the content determine the final
-         * height so no empty space is created
-         * before the footer.
-         */
-        mainContainer.style.height = "auto";
+
+        if (
+            mainContainer &&
+            window.innerWidth > 746
+        ) {
+
+            mainContainer.style.height =
+                "auto";
+        }
     }
-}
 
 
     /* =====================================================
        CACHE NON-CATEGORY PAGES ONLY
-       ===================================================== */
+    ===================================================== */
 
     if (!isCategoryPage) {
 
@@ -2518,6 +2477,7 @@ if (topNewsSection) {
 
                     totalPages:
                         totalPages
+
                 })
             );
 
@@ -2534,7 +2494,7 @@ if (topNewsSection) {
 
     /* =====================================================
        RETURN TOTAL PAGES
-       ===================================================== */
+    ===================================================== */
 
     return totalPages;
 }
@@ -2545,182 +2505,176 @@ if (topNewsSection) {
    SEARCH SYSTEM
 ========================= */
 
-async function searchFunction() {
-
-    const input =
-        document.getElementById(
-            "searchInput"
-        );
-
+async function searchFunction(page = 1) {
+    const input = document.getElementById("searchInput");
     if (!input) return;
 
-
-    const query =
-        input.value
-            .toLowerCase()
-            .trim();
-
-
-    const home =
-        document.querySelector(
-            "div.container"
-        );
-
-    const results =
-        document.getElementById(
-            "searchResults"
-        );
-
+    const query = input.value.toLowerCase().trim();
+    const home = document.querySelector("div.container");
+    const results = document.getElementById("searchResults");
 
     if (!results) return;
-
 
     /* =============================================
        FORCE HIDE HOME WHEN SEARCH RUNS
     ============================================= */
-
     if (home) {
         home.style.display = "none";
     }
 
-
     /* =============================================
        EMPTY SEARCH
     ============================================= */
-
     if (query === "") {
-
         if (home) {
             home.style.display = "block";
         }
 
-        results.classList.add(
-            "hidden"
-        );
-
+        results.classList.add("hidden");
         results.innerHTML = "";
-
         return;
-
     }
 
+    /* =============================================
+       SEARCH API PARAMETERS
+    ============================================= */
+    const limit = 6;
+    const params = new URLSearchParams({
+        q: query,
+        page: page.toString(),
+        limit: limit.toString()
+    });
 
     /* =============================================
        SEARCH API
     ============================================= */
-
     try {
-
         const response =
-            await fetch(
-    `https://today-newspaper-api.onrender.com/api/search?q=${encodeURIComponent(query)}&page=1&limit=10000`
-);
-
+        await fetch(
+            `${API_BASE_URL}/api/search?${params.toString()}`
+        );
 
         if (!response.ok) {
-
-            throw new Error(
-                `HTTP ${response.status}`
-            );
-
+            throw new Error(`HTTP ${response.status}`);
         }
 
+        const data = await response.json();
 
-        const data =
-            await response.json();
-
-
-        /*
-         * Backend already sorts newest → oldest.
-         *
-         * Sort again defensively so the frontend
-         * can never display search results oldest
-         * → newest.
-         */
-
-        const matches =
-            [...(data.articles || [])]
-                .sort(
-                    (a, b) =>
-                        new Date(b.date) -
-                        new Date(a.date)
-                );
-
+        /* =============================================
+           SORT NEWEST → OLDEST
+        ============================================= */
+        const matches = [...(data.articles || [])].sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+        );
 
         /* =============================================
            SHOW RESULTS
         ============================================= */
-
-        results.classList.remove(
-            "hidden"
-        );
-
+        results.classList.remove("hidden");
 
         results.innerHTML = `
             <h2>Search Results (${data.totalArticles})</h2>
             <div class="grid"></div>
+            <div class="searchPagination" id="searchPagination"></div>
         `;
 
-
-        const grid =
-            results.querySelector(
-                ".grid"
-            );
-
+        const grid = results.querySelector(".grid");
 
         /* =============================================
            NO RESULTS
         ============================================= */
-
         if (matches.length === 0) {
-
-            grid.innerHTML =
-                "<p>No articles found</p>";
-
+            grid.innerHTML = "<p>No articles found</p>";
             return;
-
         }
 
+        /* =============================================
+           RENDER ARTICLES
+        ============================================= */
+        matches.forEach(article => {
+            const card = createNewsCard(article);
+            grid.appendChild(card);
+        });
 
         /* =============================================
-           RENDER NEWEST → OLDEST
+           PAGINATION INFORMATION
         ============================================= */
+        const totalArticles = Number(data.totalArticles || 0);
+        const totalPages = Math.ceil(totalArticles / limit);
+        const pagination = document.getElementById("searchPagination");
 
-        matches.forEach(
-            article => {
+        /* =============================================
+           NO PAGINATION NEEDED
+        ============================================= */
+        if (!pagination || totalPages <= 1) {
+            return;
+        }
 
-                const card =
-                    createNewsCard(
-                        article
-                    );
+        /* =============================================
+           PREVIOUS / CURRENT / NEXT
+        ============================================= */
+        pagination.innerHTML = `
+            <button
+                class="searchPageButton"
+                id="searchPrevButton"
+                ${page <= 1 ? "disabled" : ""}
+            >
+                Previous
+            </button>
+            <span class="searchCurrentPage">${page}</span>
+            <button
+                class="searchPageButton"
+                id="searchNextButton"
+                ${page >= totalPages ? "disabled" : ""}
+            >
+                Next
+            </button>
+        `;
 
+        /* =============================================
+           PREVIOUS BUTTON
+        ============================================= */
+        const previousButton = document.getElementById("searchPrevButton");
 
-                grid.appendChild(
-                    card
-                );
+        if (previousButton) {
+            previousButton.addEventListener("click", () => {
+                if (page > 1) {
+                    searchFunction(page - 1);
+                }
+            });
+        }
 
-            }
-        );
+        /* =============================================
+           NEXT BUTTON
+        ============================================= */
+        const nextButton = document.getElementById("searchNextButton");
 
+        if (nextButton) {
+            nextButton.addEventListener("click", () => {
+                if (page < totalPages) {
+                    searchFunction(page + 1);
+                }
+            });
+        }
+
+        /* =============================================
+           SCROLL BACK TO SEARCH RESULTS
+        ============================================= */
+        pagination.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+        });
 
     } catch (err) {
+        console.error("Failed to search articles:", err);
 
-        console.error(
-            "Failed to search articles:",
-            err
-        );
-
-        results.classList.remove(
-            "hidden"
-        );
+        results.classList.remove("hidden");
 
         results.innerHTML = `
             <h2>Search Results</h2>
             <p>Unable to load search results.</p>
         `;
-
     }
-
 }
 
 function setArticleGridLayout(container) {
@@ -2902,10 +2856,9 @@ async function loadHomePage() {
         try {
 
             const response =
-                await fetch(
-    "https://today-newspaper-api.onrender.com/api/top-news"
-);
-
+            await fetch(
+                `${API_BASE_URL}/api/top-news`
+            );
             if (!response.ok) {
 
                 throw new Error(

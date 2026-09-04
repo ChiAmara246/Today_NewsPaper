@@ -1,0 +1,1203 @@
+.container0 {
+
+    display: block;
+
+}
+
+.container {
+
+}
+
+.aside {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 3fr)
+        minmax(280px, 1fr);
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+
+/* =========================================================
+   CHARITY & CHARITABLE WORKS
+   FANCY • CLASSY • ELEGANT
+========================================================= */
+
+.charity-section {
+
+    width: 100%;
+
+    padding:
+        35px 0 60px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   CHARITY SECTION BLOCKS
+
+   Actual HTML:
+
+   .charity-section
+       > div
+           > h1
+           > .charity-container
+========================================================= */
+
+.charity-section > div {
+
+    width: 92%;
+
+    max-width: 1400px;
+
+    margin:
+        0 auto;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+.charity-section > div + div {
+
+    margin-top: 70px;
+
+}
+
+
+/* =========================================================
+   SECTION TITLE
+========================================================= */
+
+.charity-section > div > h1 {
+
+    width: 100%;
+
+    margin:
+        0 0 28px;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    font-family:
+        "Playfair Display",
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(
+            1.8rem,
+            3vw,
+            2.5rem
+        );
+
+    font-weight: 600;
+
+    line-height: 1.1;
+
+    color: #0A1D3F;
+
+}
+
+
+/* =========================================================
+   CHARITY GRID
+
+   THIS IS THE MAIN DISPLAY RULE
+========================================================= */
+
+.charity-section .charity-container {
+
+    width: 100%;
+
+    max-width: none;
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 28px;
+
+    align-items: stretch;
+
+}
+
+
+/* =========================================================
+   FORCE GENERATED CARDS TO BE GRID ITEMS
+========================================================= */
+
+.charity-section
+.charity-container
+.charity-card {
+
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   CHARITY CARD
+========================================================= */
+
+.charity-card {
+
+    position: relative;
+
+    width: 100%;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    aspect-ratio: 1 / 1;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        rgba(
+            10,
+            29,
+            63,
+            0.08
+        );
+
+    border-radius: 4px;
+
+    box-shadow:
+        0 12px 35px
+        rgba(
+            10,
+            29,
+            63,
+            0.10
+        ),
+        0 3px 10px
+        rgba(
+            10,
+            29,
+            63,
+            0.05
+        );
+
+    transition:
+        transform 0.45s ease,
+        box-shadow 0.45s ease;
+
+    isolation: isolate;
+
+}
+
+
+/* =========================================================
+   CARD HOVER
+========================================================= */
+
+.charity-card:hover {
+
+    transform:
+        translateY(-7px);
+
+    box-shadow:
+        0 22px 50px
+        rgba(
+            10,
+            29,
+            63,
+            0.16
+        ),
+        0 5px 15px
+        rgba(
+            10,
+            29,
+            63,
+            0.08
+        );
+
+}
+
+
+/* =========================================================
+   CHARITY IMAGE
+========================================================= */
+
+.charity-image {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    max-width: none;
+
+    margin: 0;
+
+    padding: 0;
+
+    display: block;
+
+    object-fit: cover;
+
+    box-sizing: border-box;
+
+    transition:
+        transform 0.8s
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        );
+
+}
+
+
+.charity-card:hover .charity-image {
+
+    transform:
+        scale(1.055);
+
+}
+
+
+/* =========================================================
+   IMAGE DARKENING
+========================================================= */
+
+.charity-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(
+                5,
+                18,
+                38,
+                0.02
+            ) 15%,
+            rgba(
+                5,
+                18,
+                38,
+                0.10
+            ) 42%,
+            rgba(
+                5,
+                18,
+                38,
+                0.82
+            ) 100%
+        );
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   CARD CONTENT
+========================================================= */
+
+.charity-content {
+
+    position: absolute;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    z-index: 2;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding:
+        28px
+        27px
+        26px;
+
+    color: #ffffff;
+
+}
+
+
+/* =========================================================
+   ACTIVITY HEADLINE
+========================================================= */
+
+.charity-content h2 {
+
+    width: 100%;
+
+    margin:
+        0 0 16px;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    font-family:
+        "Playfair Display",
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(
+            1.35rem,
+            2vw,
+            1.85rem
+        );
+
+    font-weight: 600;
+
+    line-height: 1.15;
+
+    letter-spacing:
+        -0.015em;
+
+    text-shadow:
+        0 2px 8px
+        rgba(
+            0,
+            0,
+            0,
+            0.28
+        );
+
+}
+
+
+/* =========================================================
+   DATE + ACTIONS
+========================================================= */
+
+.charity-bottom {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+.charity-date {
+
+    margin: 0;
+
+    padding: 0;
+
+    flex: 1 1 auto;
+
+    min-width: 0;
+
+    font-family:
+        "Inter",
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 0.7rem;
+
+    font-weight: 500;
+
+    letter-spacing:
+        0.10em;
+
+    text-transform: uppercase;
+
+    opacity: 0.88;
+
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.charity-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 8px;
+
+    flex:
+        0 0 auto;
+
+}
+
+
+/* =========================================================
+   REMINDER BUTTON
+========================================================= */
+
+.charity-reminder {
+
+    width: 29px;
+
+    height: 29px;
+
+    min-width: 29px;
+
+    padding: 0;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border: none;
+
+    border-radius: 2px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.12
+        );
+
+    color: #ffffff;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.3s ease,
+        transform 0.3s ease;
+
+}
+
+
+.charity-reminder:hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.22
+        );
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/* =========================================================
+   DONATE BUTTON
+========================================================= */
+
+.charity-donate {
+
+    position: static;
+
+    min-width: 110px;
+
+    height: 35px;
+
+    padding:
+        0 17px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.55
+        );
+
+    border-radius: 2px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.95
+        );
+
+    color: #0a1d3f;
+
+    font-family:
+        "Inter",
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 0.75rem;
+
+    font-weight: 700;
+
+    letter-spacing:
+        0.10em;
+
+    text-transform: uppercase;
+
+    text-decoration: none;
+
+    box-shadow:
+        0 5px 15px
+        rgba(
+            0,
+            0,
+            0,
+            0.14
+        );
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+
+}
+
+
+.charity-donate:hover {
+
+    background: #0a1d3f;
+
+    color: #ffffff;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(
+            0,
+            0,
+            0,
+            0.22
+        );
+
+}
+
+
+/* =========================================================
+   EMPTY / ERROR
+========================================================= */
+
+.charity-empty,
+.charity-error {
+
+    grid-column:
+        1 / -1;
+
+    width: 100%;
+
+    min-height: 220px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    padding: 30px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        rgba(
+            10,
+            29,
+            63,
+            0.08
+        );
+
+    box-shadow:
+        0 10px 30px
+        rgba(
+            10,
+            29,
+            63,
+            0.06
+        );
+
+}
+
+
+.charity-empty p,
+.charity-error p {
+
+    margin: 0;
+
+    padding: 0;
+
+    font-family:
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+    font-size: 1.35rem;
+
+    color: #526070;
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .charity-section > div {
+
+        width: 90%;
+
+    }
+
+
+    .charity-section .charity-container {
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 22px;
+
+    }
+
+
+    .charity-section > div > h1 {
+
+        margin-bottom: 22px;
+
+        font-size: 2rem;
+
+    }
+
+
+    .charity-section > div + div {
+
+        margin-top: 55px;
+
+    }
+
+
+    .charity-content {
+
+        padding:
+            23px
+            22px
+            22px;
+
+    }
+
+
+    .charity-content h2 {
+
+        font-size: 1.4rem;
+
+    }
+
+
+    .charity-reminder {
+
+        width: 29px;
+
+        height: 29px;
+
+        min-width: 29px;
+
+        font-size: 15px;
+
+    }
+
+
+    .charity-donate {
+
+        min-width: 105px;
+
+        height: 35px;
+
+        padding:
+            0 16px;
+
+    }
+
+}
+
+
+/* =========================================================
+   PHONE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .charity-section {
+
+        padding:
+            20px 0 40px;
+
+    }
+
+
+    .charity-section > div {
+
+        width: 92%;
+
+    }
+
+
+    .charity-section .charity-container {
+
+        grid-template-columns: 1fr;
+
+        gap: 22px;
+
+    }
+
+
+    .charity-section > div > h1 {
+
+        margin-bottom: 18px;
+
+        font-size: 1.8rem;
+
+    }
+
+
+    .charity-section > div + div {
+
+        margin-top: 45px;
+
+    }
+
+
+    .charity-card {
+
+        width: 100%;
+
+        aspect-ratio: 1 / 1;
+
+        border-radius: 3px;
+
+    }
+
+
+    .charity-content {
+
+        padding:
+            24px
+            21px
+            21px;
+
+    }
+
+
+    .charity-content h2 {
+
+        font-size: 1.5rem;
+
+        line-height: 1.12;
+
+        margin-bottom: 15px;
+
+    }
+
+
+    .charity-date {
+
+        font-size: 0.72rem;
+
+    }
+
+
+    .charity-bottom {
+
+        gap: 12px;
+
+    }
+
+
+    .charity-actions {
+
+        gap: 6px;
+
+    }
+
+
+    .charity-reminder {
+
+        width: 29px;
+
+        height: 29px;
+
+        min-width: 29px;
+
+        font-size: 15px;
+
+    }
+
+
+    .charity-donate {
+
+        min-width: 105px;
+
+        height: 38px;
+
+        padding:
+            0 18px;
+
+        font-size: 0.72rem;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .charity-section > div {
+
+        width: 94%;
+
+    }
+
+
+    .charity-section > div > h1 {
+
+        font-size: 1.6rem;
+
+    }
+
+
+    .charity-content {
+
+        padding:
+            20px
+            18px
+            18px;
+
+    }
+
+
+    .charity-content h2 {
+
+        font-size: 1.3rem;
+
+    }
+
+
+    .charity-date {
+
+        font-size: 0.65rem;
+
+    }
+
+
+    .charity-bottom {
+
+        gap: 8px;
+
+    }
+
+
+    .charity-actions {
+
+        gap: 5px;
+
+    }
+
+
+    .charity-reminder {
+
+        width: 28px;
+
+        height: 28px;
+
+        min-width: 28px;
+
+    }
+
+
+    .charity-donate {
+
+        min-width: 95px;
+
+        height: 36px;
+
+        padding:
+            0 14px;
+
+        font-size: 0.68rem;
+
+    }
+
+}
+
+
+/* =========================================================
+   CHARITY PAGINATION
+========================================================= */
+
+.charity-pagination {
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin:
+        32px 0 10px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   PAGINATION BUTTONS
+========================================================= */
+
+.charity-page-button {
+
+    min-width: 44px;
+
+    height: 42px;
+
+    padding:
+        0 16px;
+
+    display: inline-flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        rgba(
+            10,
+            29,
+            63,
+            0.18
+        );
+
+    background: #ffffff;
+
+    color: #0A1D3F;
+
+    font-family:
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.3px;
+
+    border-radius: 3px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+}
+
+
+/* =========================================================
+   PAGINATION HOVER
+========================================================= */
+
+.charity-page-button:hover:not(:disabled) {
+
+    background: #0A1D3F;
+
+    color: #ffffff;
+
+    border-color: #0A1D3F;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 7px 18px
+        rgba(
+            10,
+            29,
+            63,
+            0.14
+        );
+
+}
+
+
+/* =========================================================
+   CURRENT PAGE
+========================================================= */
+
+.charity-page-button.active {
+
+    background: #0A1D3F;
+
+    color: #ffffff;
+
+    border-color: #0A1D3F;
+
+    cursor: default;
+
+    box-shadow:
+        0 5px 14px
+        rgba(
+            10,
+            29,
+            63,
+            0.12
+        );
+
+}
+
+
+/* =========================================================
+   DISABLED PREV / NEXT
+========================================================= */
+
+.charity-page-button:disabled {
+
+    opacity: 0.45;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+
+}
+
+
+/* =========================================================
+   PAGINATION MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .charity-pagination {
+
+        margin:
+            26px 0 5px;
+
+        gap: 8px;
+
+    }
+
+
+    .charity-page-button {
+
+        min-width: 40px;
+
+        height: 40px;
+
+        padding:
+            0 13px;
+
+        font-size: 15px;
+
+    }
+
+}

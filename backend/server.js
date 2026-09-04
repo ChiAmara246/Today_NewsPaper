@@ -31,6 +31,26 @@ console.log(
     `Loaded ${articles.length} articles.`
 );
 
+/* =====================================================
+   LOAD CHARITY DATA ONCE
+===================================================== */
+
+const charityPath = path.join(
+    __dirname,
+    "data",
+    "charity.json"
+);
+
+const charities = JSON.parse(
+    fs.readFileSync(
+        charityPath,
+        "utf8"
+    )
+);
+
+console.log(
+    `Loaded ${charities.length} charity activities.`
+);
 
 /* =====================================================
    HELPERS
@@ -930,6 +950,63 @@ app.get(
         res.json({
 
             article
+
+        });
+
+    }
+);
+
+/* =====================================================
+   CHARITY
+===================================================== */
+
+app.get(
+    "/api/charities",
+    (req, res) => {
+
+        res.json({
+            charities
+        });
+
+    }
+);
+
+
+/* =====================================================
+   SINGLE CHARITY
+===================================================== */
+
+app.get(
+    "/api/charities/:id",
+    (req, res) => {
+
+        const charityId =
+            req.params.id;
+
+
+        const charity =
+            charities.find(
+                item =>
+                    String(item.id) ===
+                    String(charityId)
+            );
+
+
+        if (!charity) {
+
+            return res.status(404).json({
+
+                error:
+                    "Charity activity not found."
+
+            });
+
+        }
+
+
+        res.json({
+
+            charity
 
         });
 

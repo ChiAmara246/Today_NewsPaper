@@ -1,0 +1,352 @@
+[
+  {
+    "id": 1,
+    "img": "charity1.jpg",
+    "activityHeadline": "Community Food Support Programme",
+    "date": "2026-09-05",
+    "donateUrl": "#"
+  },
+  {
+    "id": 2,
+    "img": "charity2.jpg",
+    "activityHeadline": "Back-to-School Support for Children",
+    "date": "2026-09-12",
+    "donateUrl": "#"
+  },
+  {
+    "id": 3,
+    "img": "charity3.jpg",
+    "activityHeadline": "Clean Water and Sanitation Initiative",
+    "date": "2026-09-18",
+    "donateUrl": "#"
+  },
+  {
+    "id": 4,
+    "img": "charity4.jpg",
+    "activityHeadline": "Women Empowerment and Skills Workshop",
+    "date": "2026-09-25",
+    "donateUrl": "#"
+  },
+  {
+    "id": 5,
+    "img": "charity5.jpg",
+    "activityHeadline": "Children's Educational Support Drive",
+    "date": "2026-10-02",
+    "donateUrl": "#"
+  },
+  {
+    "id": 6,
+    "img": "charity6.jpg",
+    "activityHeadline": "Community Health Awareness Campaign",
+    "date": "2026-08-28",
+    "donateUrl": "#"
+  },
+  {
+    "id": 7,
+    "img": "charity7.jpg",
+    "activityHeadline": "Youth Skills Development Programme",
+    "date": "2026-08-21",
+    "donateUrl": "#"
+  },
+  {
+    "id": 8,
+    "img": "charity8.jpg",
+    "activityHeadline": "Support for Elderly Members of the Community",
+    "date": "2026-08-15",
+    "donateUrl": "#"
+  },
+  {
+    "id": 9,
+    "img": "charity9.jpg",
+    "activityHeadline": "Emergency Relief and Family Assistance",
+    "date": "2026-08-08",
+    "donateUrl": "#"
+  },
+  {
+    "id": 10,
+    "img": "charity10.jpg",
+    "activityHeadline": "Free Medical Outreach for Underserved Families",
+    "date": "2026-08-01",
+    "donateUrl": "#"
+  },
+  {
+    "id": 11,
+    "img": "charity11.jpg",
+    "activityHeadline": "Community Library Development Project",
+    "date": "2026-07-25",
+    "donateUrl": "#"
+  },
+  {
+    "id": 12,
+    "img": "charity12.jpg",
+    "activityHeadline": "Food and Clothing Distribution Programme",
+    "date": "2026-07-18",
+    "donateUrl": "#"
+  },
+  {
+    "id": 13,
+    "img": "charity13.jpg",
+    "activityHeadline": "Support Programme for Single Mothers",
+    "date": "2026-07-11",
+    "donateUrl": "#"
+  },
+  {
+    "id": 14,
+    "img": "charity14.jpg",
+    "activityHeadline": "Rural Community Health Initiative",
+    "date": "2026-07-04",
+    "donateUrl": "#"
+  },
+  {
+    "id": 15,
+    "img": "charity15.jpg",
+    "activityHeadline": "Scholarship Support for Young Students",
+    "date": "2026-06-27",
+    "donateUrl": "#"
+  },
+  {
+    "id": 16,
+    "img": "charity16.jpg",
+    "activityHeadline": "Community Housing Assistance Programme",
+    "date": "2026-06-20",
+    "donateUrl": "#"
+  },
+  {
+    "id": 17,
+    "img": "charity17.jpg",
+    "activityHeadline": "Holiday Care Programme for Children",
+    "date": "2026-06-13",
+    "donateUrl": "#"
+  },
+  {
+    "id": 18,
+    "img": "charity18.jpg",
+    "activityHeadline": "New Year Community Support Initiative",
+    "date": "2026-06-06",
+    "donateUrl": "#"
+  },
+  {
+    "id": 19,
+    "img": "charity19.jpg",
+    "activityHeadline": "Free Dental Care Outreach",
+    "date": "2026-05-30",
+    "donateUrl": "#"
+  },
+  {
+    "id": 20,
+    "img": "charity20.jpg",
+    "activityHeadline": "Vocational Training for Young Adults",
+    "date": "2026-05-23",
+    "donateUrl": "#"
+  },
+  {
+    "id": 21,
+    "img": "charity21.jpg",
+    "activityHeadline": "Community Tree Planting Initiative",
+    "date": "2026-05-16",
+    "donateUrl": "#"
+  },
+  {
+    "id": 22,
+    "img": "charity22.jpg",
+    "activityHeadline": "Support for Children with Special Needs",
+    "date": "2026-05-09",
+    "donateUrl": "#"
+  },
+  {
+    "id": 23,
+    "img": "charity23.jpg",
+    "activityHeadline": "Women's Health and Wellness Outreach",
+    "date": "2026-05-02",
+    "donateUrl": "#"
+  },
+  {
+    "id": 24,
+    "img": "charity24.jpg",
+    "activityHeadline": "Rural Education Improvement Programme",
+    "date": "2026-04-25",
+    "donateUrl": "#"
+  },
+  {
+    "id": 25,
+    "img": "charity25.jpg",
+    "activityHeadline": "Community Meals and Nutrition Programme",
+    "date": "2026-04-18",
+    "donateUrl": "#"
+  },
+  {
+    "id": 26,
+    "img": "charity26.jpg",
+    "activityHeadline": "Youth Entrepreneurship Support Programme",
+    "date": "2026-04-11",
+    "donateUrl": "#"
+  },
+  {
+    "id": 27,
+    "img": "charity27.jpg",
+    "activityHeadline": "Free Maternal and Child Health Outreach",
+    "date": "2026-04-04",
+    "donateUrl": "#"
+  },
+  {
+    "id": 28,
+    "img": "charity28.jpg",
+    "activityHeadline": "Community Clothing and Essentials Drive",
+    "date": "2026-03-28",
+    "donateUrl": "#"
+  },
+  {
+    "id": 29,
+    "img": "charity29.jpg",
+    "activityHeadline": "Educational Materials Donation Campaign",
+    "date": "2026-03-21",
+    "donateUrl": "#"
+  },
+  {
+    "id": 30,
+    "img": "charity30.jpg",
+    "activityHeadline": "Community Mental Wellness Awareness Day",
+    "date": "2026-03-14",
+    "donateUrl": "#"
+  },
+  {
+    "id": 31,
+    "img": "charity31.jpg",
+    "activityHeadline": "Clean Environment Community Action",
+    "date": "2026-03-07",
+    "donateUrl": "#"
+  },
+  {
+    "id": 32,
+    "img": "charity32.jpg",
+    "activityHeadline": "Skills Training for Women and Girls",
+    "date": "2026-02-28",
+    "donateUrl": "#"
+  },
+  {
+    "id": 33,
+    "img": "charity33.jpg",
+    "activityHeadline": "Community Medical Equipment Support",
+    "date": "2026-02-21",
+    "donateUrl": "#"
+  },
+  {
+    "id": 34,
+    "img": "charity34.jpg",
+    "activityHeadline": "Youth Education and Mentorship Programme",
+    "date": "2026-02-14",
+    "donateUrl": "#"
+  },
+  {
+    "id": 35,
+    "img": "charity35.jpg",
+    "activityHeadline": "Food Security and Family Support Initiative",
+    "date": "2026-02-07",
+    "donateUrl": "#"
+  },
+  {
+    "id": 36,
+    "img": "charity36.jpg",
+    "activityHeadline": "Community Water Access Project",
+    "date": "2026-01-31",
+    "donateUrl": "#"
+  },
+  {
+    "id": 37,
+    "img": "charity37.jpg",
+    "activityHeadline": "Scholarship and School Fees Assistance",
+    "date": "2026-01-24",
+    "donateUrl": "#"
+  },
+  {
+    "id": 38,
+    "img": "charity38.jpg",
+    "activityHeadline": "Free Health Check-Up Campaign",
+    "date": "2026-01-17",
+    "donateUrl": "#"
+  },
+  {
+    "id": 39,
+    "img": "charity39.jpg",
+    "activityHeadline": "Community Youth Leadership Programme",
+    "date": "2026-01-10",
+    "donateUrl": "#"
+  },
+  {
+    "id": 40,
+    "img": "charity40.jpg",
+    "activityHeadline": "Support for Vulnerable Families",
+    "date": "2026-01-03",
+    "donateUrl": "#"
+  },
+  {
+    "id": 41,
+    "img": "charity41.jpg",
+    "activityHeadline": "Rural Women Economic Empowerment Project",
+    "date": "2025-12-27",
+    "donateUrl": "#"
+  },
+  {
+    "id": 42,
+    "img": "charity42.jpg",
+    "activityHeadline": "Children's Literacy and Reading Initiative",
+    "date": "2025-12-20",
+    "donateUrl": "#"
+  },
+  {
+    "id": 43,
+    "img": "charity43.jpg",
+    "activityHeadline": "Community Food Bank Support Day",
+    "date": "2025-12-13",
+    "donateUrl": "#"
+  },
+  {
+    "id": 44,
+    "img": "charity44.jpg",
+    "activityHeadline": "Free Legal and Community Support Clinic",
+    "date": "2025-12-06",
+    "donateUrl": "#"
+  },
+  {
+    "id": 45,
+    "img": "charity45.jpg",
+    "activityHeadline": "Community Agriculture Support Programme",
+    "date": "2025-11-29",
+    "donateUrl": "#"
+  },
+  {
+    "id": 46,
+    "img": "charity46.jpg",
+    "activityHeadline": "School Infrastructure Improvement Project",
+    "date": "2025-11-22",
+    "donateUrl": "#"
+  },
+  {
+    "id": 47,
+    "img": "charity47.jpg",
+    "activityHeadline": "Community Care and Support Outreach",
+    "date": "2025-11-15",
+    "donateUrl": "#"
+  },
+  {
+    "id": 48,
+    "img": "charity48.jpg",
+    "activityHeadline": "Annual Community Giving and Service Day",
+    "date": "2025-11-08",
+    "donateUrl": "#"
+  },
+  {
+    "id": 49,
+    "img": "charity49.jpg",
+    "activityHeadline": "Community Nutrition and Family Assistance",
+    "date": "2025-11-01",
+    "donateUrl": "#"
+  },
+  {
+    "id": 50,
+    "img": "charity50.jpg",
+    "activityHeadline": "Local Community Support and Outreach Day",
+    "date": "2025-10-25",
+    "donateUrl": "#"
+  }
+]

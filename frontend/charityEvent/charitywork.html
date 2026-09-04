@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today Newspaper</title>
+    <script>
+      (function () {
+
+        const isDarkMode = localStorage.getItem("darkMode") === "enabled";
+
+        // Apply theme before the page is painted
+        if (isDarkMode) {
+          document.documentElement.classList.add("dark-mode");
+        }
+
+        // Set the correct logo path immediately
+        const logoPath = window.location.pathname.includes("/charityEvent/")
+          ? "../images/"
+          : "images/";
+
+        const logoFile = isDarkMode
+          ? "logoDarkMode.PNG"
+          : "logoDefaultMode.PNG";
+
+        // Create a preload link for the correct logo
+        const preload = document.createElement("link");
+        preload.rel = "preload";
+        preload.as = "image";
+        preload.href = logoPath + logoFile;
+
+        document.head.appendChild(preload);
+
+      })();
+    </script>
+    <link rel="stylesheet" type="text/css" href="../index.css">
+    <link rel="stylesheet" type="text/css" href="charite.css">
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="../index.js" defer></script>
+    <script src="charity.js" defer></script>
+  </head>
+  <body>
+    <div class="subnav">
+      <div class="subnavRight">
+        <ul>
+          <li id="dateheure"></li>
+          <li><a href="../navpages/laugh.html">Laugh It Out</a></li>
+          <li><a href="../navpages/about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div class="subnavLeft">
+
+        <ul>
+          <li><a href="https://www.tiktok.com/@todaynewspaper" rel="noopener noreferrer" target="_blank"><img src="../images/tiktok.png" alt="TikTok Logo"></a></li>
+          <li><a href="https://www.facebook.com/Today-Newspaper-100000000000000" rel="noopener noreferrer" target="_blank"><img src="../images/facebook.png" alt="Facebook Logo"></a></li>
+          <li><a href="https://twitter.com/TodayNewspaper" rel="noopener noreferrer" target="_blank"><img src="../images/twitter.png" alt="Twitter Logo"></a></li>
+          <li><a href="https://www.instagram.com/todaynewspaper/" rel="noopener noreferrer" target="_blank"><img src="../images/instagram.png" alt="Instagram Logo"></a></li>
+        </ul>
+        <button id="darkModeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+          <span class="theme-icon sun">☀</span>
+          <span class="theme-icon moon">☾</span>
+          <span class="theme-switch"></span>
+        </button>
+      </div>
+    </div>
+    <header>
+      <img id="logo" alt="Today Newspaper"/>
+
+      <script>
+        (function () {
+
+          const logo = document.getElementById("logo");
+
+          if (!logo) return;
+
+          const isDarkMode =
+            document.documentElement.classList.contains("dark-mode");
+
+          logo.src = "../images/" + (
+            isDarkMode
+              ? "logoDarkMode.PNG"
+              : "logoDefaultMode.PNG"
+          );
+
+        })();
+      </script>
+    </header>
+    <nav>
+        <div class="dot" onclick="toggleMenu()">☰</div>
+        <ul id = "articleList" class="navlist">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../navpages/education.html">Education</a></li>
+          <li><a href="../navpages/politics.html">Politics</a></li>
+          <li><a href="../navpages/economy.html">Economy</a></li>
+          <li><a href="../navpages/today.html">Trending NEWS</a></li>
+          <li><a href="../navpages/entertainment.html">Entertainment</a></li>
+          <li><a href="../navpages/announces.html">Jobs & Opportunities</a></li>
+          <li><a href="../navpages/pressEvent.html">Press & Events</a></li>
+          <li><a href="campaign images/charity_events_fluid_motion_loop.webp"><img src="campaign images/charity_events_fluid_motion_loop.webp"/></a></li>
+        </ul>
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search articles... " onkeyup="searchFunction()">
+          <button type="button" aria-label="Search">🔍</button>
+        </div>
+    </nav>
+    <div class="links" id="links">
+
+      <a href="../index.html">Home</a>
+      <a href="../navpages/education.html">Education</a>
+      <a href="../navpages/politics.html">Politics</a>
+      <a href="../navpages/economy.html">Economy</a>
+      <a href="../navpages/today.html">Trending NEWS</a>
+      <a href="../navpages/entertainment.html">Entertainment</a>
+      <a href="../navpages/announces.html">Jobs & Opportunities</a>
+      <a href="../navpages/pressEvent.html">Press & Events</a>
+      <a href="../navpages/laugh.html">Laugh It Out</a>
+      <a href="../navpages/about.html">About Us</a>
+
+    </div>
+    
+    <main>
+      <div class="container0">
+        <div class="container">
+
+          <section>
+            <h2>Upcoming events</h2>
+
+          </section>
+
+          <section>
+            <h2>Latest events</h2>
+
+          </section>
+
+        </div>
+        <section id="searchResults" class="hidden"></section>
+        <div class="aside">
+
+          <aside id="frameBox">
+            <h3>Today Newspaper Team</h3>
+            <div class="carousel">
+              <div class="track"></div>
+            </div>
+          </aside>
+
+          <aside id="ePaper">
+            <h6>ePaper</h6>
+            <div class="epaper-carousel" id="epaperTrigger">
+                <img id="epaperImage" src="" alt="Today Newspaper ePaper">
+            </div>
+            </aside>
+
+            <div class="mobile-sticky-area">
+
+              <aside id="whatsapp">
+                <a href="https://chat.whatsapp.com/JRep0h9StkDKcaHAel0TeN?mode=gi_t" rel="noopener noreferrer" target="_blank">
+                  <img src="../images/images-8.jpeg" alt="Join us on WhatsApp">
+                </a>
+              </aside>
+
+              <!-- WhatsApp Popup -->
+              <div id="whatsappPopup" class="whatsapp-popup">
+
+                <div class="whatsapp-popup-card">
+
+                  <button id="closeWhatsappPopup" class="whatsapp-close" aria-label="Close popup">
+                    &times;
+                  </button>
+
+                  <div class="whatsapp-icon">
+                    <i class="fa-brands fa-whatsapp"></i>
+                  </div>
+
+                  <p>
+                    Sorry, this whatsapp community is filled.
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+
+      <!-- Brand -->
+      <div class="footer-brand">
+
+        <img src="../images/tnp-icon.png" alt="Today Newspaper" class="footer-icon">
+
+        <div class="footer-brand-text">
+          <h2>Today Newspaper</h2>
+          <p>
+            Your trusted source for news and insights on Education since 2020.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Navigation -->
+      <div class="footer-navigation">
+
+        <div class="footer-links">
+          <h3>◉Explore</h3>
+
+          <a href="../index.html">Home</a>
+          <a href="../navpages/education.html">Education</a>
+          <a href="../navpages/economy.html">Economy</a>
+          <a href="../navpages/today.html">Today's News</a>
+        </div>
+
+        <div class="footer-links">
+          <h3>◇About</h3>
+
+          <a href="../navpages/about.html">Our Purpose</a>
+          <a href="../navpages/about.html">Our Mission</a>
+          <a href="../navpages/about.html">Our Vision</a>
+          <a href="../navpages/about.html">Our Values</a>
+        </div>
+
+        <div class="footer-links">
+          <h3>◎Connect</h3>
+
+          <a href="#">Contact Us</a>
+          <a href="#">Advertise With Us</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+        </div>
+
+      </div>
+
+      <!-- Values -->
+      <div class="footer-values">
+
+        <span>Integrity</span>
+        <span>Accuracy</span>
+        <span>Empowerment</span>
+        <span>Excellence</span>
+
+      </div>
+
+      <!-- Copyright -->
+      <div class="footer-bottom">
+
+        <p>
+          &copy; 2026 Today Newspaper &middot; All Rights Reserved.
+        </p>
+
+      </div>
+
+    </footer>
+
+  </body>
+</html>

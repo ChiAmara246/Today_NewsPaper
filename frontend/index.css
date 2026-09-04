@@ -1,6 +1,6 @@
 
 /* =========================================================
-   1. RESET & GLOBAL
+   1. RESET & GLOBAL {source ~/.nvm/nvm.sh && nvm use 24.19.0}
    ========================================================= */
 
 /* ROOT VARIABLES*/
@@ -275,7 +275,6 @@ p {
 }
 
 #aboutContainer{
-  margin: auto;
   padding: 20px;
   text-align: justify;
 }
@@ -712,7 +711,10 @@ nav a,
   border-radius: 5px;
   transition: background var(--transition);
 }
-
+nav a img{
+  height: 30px;
+  
+}
 nav a:hover,
 .links a:hover{
   background: var(--primary-dark);
@@ -799,6 +801,84 @@ nav a.active{
   cursor: pointer;
   transform: translateY(-50%);
 }
+
+/*SEARCH PAGINATION*/
+
+.searchPagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin: 35px 0 25px;
+    padding: 10px 0;
+}
+
+.searchPageButton {
+    min-width: 90px;
+    height: 42px;
+    padding: 0 18px;
+    border: 1px solid #d8d8d8;
+    border-radius: 7px;
+    background: #fff;
+    color: #222;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.searchPageButton:hover:not(:disabled) {
+    background: #0b2c5f;
+    border-color: #0b2c5f;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.searchPageButton:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.searchPageButton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.searchCurrentPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 42px;
+    height: 42px;
+    padding: 0 12px;
+    border-radius: 7px;
+    background: #0b2c5f;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 600px) {
+    .searchPagination {
+        gap: 7px;
+        margin: 25px 0 20px;
+    }
+
+    .searchPageButton {
+        min-width: 80px;
+        height: 40px;
+        padding: 0 12px;
+        font-size: 13px;
+    }
+
+    .searchCurrentPage {
+        min-width: 40px;
+        height: 40px;
+        font-size: 13px;
+    }
+}
+
 /*-----5. SLIDER------*/
 
 #slider{
