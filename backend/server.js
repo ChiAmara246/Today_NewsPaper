@@ -6,51 +6,83 @@ const cors = require("cors");
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
+const PORT =
+    process.env.PORT || 3000;
 
 
 /* =====================================================
    LOAD ARTICLES ONCE
 ===================================================== */
 
-const articlesPath = path.join(
-    __dirname,
-    "data",
-    "index.json"
-);
+const articlesPath =
+    path.join(
+        __dirname,
+        "data",
+        "index.json"
+    );
 
-const articles = JSON.parse(
-    fs.readFileSync(
-        articlesPath,
-        "utf8"
-    )
-);
+const articles =
+    JSON.parse(
+        fs.readFileSync(
+            articlesPath,
+            "utf8"
+        )
+    );
 
 console.log(
     `Loaded ${articles.length} articles.`
 );
 
+
 /* =====================================================
    LOAD CHARITY DATA ONCE
 ===================================================== */
 
-const charityPath = path.join(
-    __dirname,
-    "data",
-    "charity.json"
-);
+const charityPath =
+    path.join(
+        __dirname,
+        "data",
+        "charity.json"
+    );
 
-const charities = JSON.parse(
-    fs.readFileSync(
-        charityPath,
-        "utf8"
-    )
-);
+const charities =
+    JSON.parse(
+        fs.readFileSync(
+            charityPath,
+            "utf8"
+        )
+    );
 
 console.log(
     `Loaded ${charities.length} charity activities.`
 );
+
+
+/* =====================================================
+   LOAD DONATION DATA ONCE
+===================================================== */
+
+const donationsPath =
+    path.join(
+        __dirname,
+        "data",
+        "donations.json"
+    );
+
+let donations =
+    JSON.parse(
+        fs.readFileSync(
+            donationsPath,
+            "utf8"
+        )
+    );
+
+console.log(
+    `Loaded ${donations.length} donations.`
+);
+
 
 /* =====================================================
    HELPERS
@@ -71,183 +103,189 @@ function sortedArticles(data) {
    GENERAL ARTICLES
 ===================================================== */
 
-app.get("/api/articles", (req, res) => {
+app.get(
+    "/api/articles",
+    (req, res) => {
 
-    const category =
-        req.query.category;
+        const category =
+            req.query.category;
 
-    const page =
-        Math.max(
-            1,
-            Number(req.query.page) || 1
-        );
-
-    const limit =
-        Math.max(
-            1,
-            Number(req.query.limit) || 6
-        );
-
-
-    let data =
-        [...articles];
-
-
-    /* FILTER CATEGORY */
-
-    if (category) {
-
-        data =
-            data.filter(
-                article =>
-                    article.category ===
-                    category
+        const page =
+            Math.max(
+                1,
+                Number(req.query.page) || 1
             );
 
+        const limit =
+            Math.max(
+                1,
+                Number(req.query.limit) || 6
+            );
+
+
+        let data =
+            [...articles];
+
+
+        /* FILTER CATEGORY */
+
+        if (category) {
+
+            data =
+                data.filter(
+                    article =>
+                        article.category ===
+                        category
+                );
+
+        }
+
+
+        /* SORT */
+
+        data =
+            sortedArticles(data);
+
+
+        /* TOTAL */
+
+        const totalArticles =
+            data.length;
+
+
+        const totalPages =
+            Math.max(
+                1,
+                Math.ceil(
+                    totalArticles /
+                    limit
+                )
+            );
+
+
+        /* PAGINATION */
+
+        const start =
+            (page - 1) *
+            limit;
+
+
+        const paginated =
+            data.slice(
+                start,
+                start + limit
+            );
+
+
+        res.json({
+
+            articles:
+                paginated,
+
+            page,
+
+            limit,
+
+            totalArticles,
+
+            totalPages
+
+        });
+
     }
-
-
-    /* SORT */
-
-    data =
-        sortedArticles(data);
-
-
-    /* TOTAL */
-
-    const totalArticles =
-        data.length;
-
-
-    const totalPages =
-        Math.max(
-            1,
-            Math.ceil(
-                totalArticles /
-                limit
-            )
-        );
-
-
-    /* PAGINATION */
-
-    const start =
-        (page - 1) *
-        limit;
-
-
-    const paginated =
-        data.slice(
-            start,
-            start + limit
-        );
-
-
-    res.json({
-
-        articles:
-            paginated,
-
-        page,
-
-        limit,
-
-        totalArticles,
-
-        totalPages
-
-    });
-
-});
+);
 
 
 /* =====================================================
    TOP NEWS
 ===================================================== */
 
-app.get("/api/top-news", (req, res) => {
+app.get(
+    "/api/top-news",
+    (req, res) => {
 
-    const sorted =
-        sortedArticles(
-            articles
-        );
-
-
-    /* NEWEST 8 */
-
-    const latestEight =
-        sorted.slice(
-            0,
-            8
-        );
+        const sorted =
+            sortedArticles(
+                articles
+            );
 
 
-    if (!latestEight.length) {
+        /* NEWEST 8 */
 
-        return res.json({
+        const latestEight =
+            sorted.slice(
+                0,
+                8
+            );
 
-            hero: null,
 
-            side: []
+        if (!latestEight.length) {
+
+            return res.json({
+
+                hero: null,
+
+                side: []
+
+            });
+
+        }
+
+
+        /* RANDOM HERO */
+
+        const hero =
+            latestEight[
+                Math.floor(
+                    Math.random() *
+                    latestEight.length
+                )
+            ];
+
+
+        /* SIDE CATEGORIES */
+
+        const categories = [
+
+            "Education",
+            "Politics",
+            "Trending",
+            "Entertainment"
+
+        ];
+
+
+        /* TWO SIDE ARTICLES */
+
+        const side =
+            categories
+                .map(
+                    category =>
+                        sorted.find(
+                            article =>
+                                article.category ===
+                                    category &&
+                                article.id !==
+                                    hero.id
+                        )
+                )
+                .filter(Boolean)
+                .slice(
+                    0,
+                    2
+                );
+
+
+        res.json({
+
+            hero,
+
+            side
 
         });
 
     }
-
-
-    /* RANDOM HERO */
-
-    const hero =
-        latestEight[
-            Math.floor(
-                Math.random() *
-                latestEight.length
-            )
-        ];
-
-
-    /* SIDE CATEGORIES */
-
-    const categories = [
-
-        "Education",
-        "Politics",
-        "Trending",
-        "Entertainment"
-
-    ];
-
-
-    /* TWO SIDE ARTICLES */
-
-    const side =
-        categories
-            .map(
-                category =>
-                    sorted.find(
-                        article =>
-                            article.category ===
-                                category &&
-                            article.id !==
-                                hero.id
-                    )
-            )
-            .filter(Boolean)
-            .slice(
-                0,
-                2
-            );
-
-
-    res.json({
-
-        hero,
-
-        side
-
-    });
-
-});
+);
 
 
 /* =====================================================
@@ -278,26 +316,30 @@ app.get(
 
         const candidates =
             articles
-                .filter(article => {
+                .filter(
+                    article => {
 
-                    return (
-                        article.category ===
-                        category
-                    );
-
-                })
-                .filter(article => {
-
-                    const date =
-                        new Date(
-                            article.date
+                        return (
+                            article.category ===
+                            category
                         );
 
-                    return !Number.isNaN(
-                        date.getTime()
-                    );
+                    }
+                )
+                .filter(
+                    article => {
 
-                })
+                        const date =
+                            new Date(
+                                article.date
+                            );
+
+                        return !Number.isNaN(
+                            date.getTime()
+                        );
+
+                    }
+                )
                 .sort(
                     (a, b) =>
                         new Date(b.date) -
@@ -343,8 +385,10 @@ app.get(
             [...articles]
                 .filter(
                     article =>
-                        typeof article.fullStory === "string" &&
-                        article.fullStory.trim() !== ""
+                        typeof article.fullStory ===
+                            "string" &&
+                        article.fullStory.trim() !==
+                            ""
                 )
                 .sort(
                     (a, b) =>
@@ -355,6 +399,7 @@ app.get(
                     0,
                     4
                 );
+
 
         res.json({
 
@@ -640,6 +685,8 @@ app.get(
 
     }
 );
+
+
 /* =====================================================
    RELATED ARTICLES
 ===================================================== */
@@ -683,8 +730,10 @@ app.get(
                         String(articleId) &&
                     article.category ===
                         currentArticle.category &&
-                    typeof article.fullStory === "string" &&
-                    article.fullStory.trim() !== ""
+                    typeof article.fullStory ===
+                        "string" &&
+                    article.fullStory.trim() !==
+                        ""
             );
 
 
@@ -692,7 +741,10 @@ app.get(
            FILL REMAINING SLOTS
         ============================================= */
 
-        if (related.length < 4) {
+        if (
+            related.length <
+            4
+        ) {
 
             const extra =
                 articles.filter(
@@ -704,14 +756,19 @@ app.get(
                                 String(item.id) ===
                                 String(article.id)
                         ) &&
-                        typeof article.fullStory === "string" &&
-                        article.fullStory.trim() !== ""
+                        typeof article.fullStory ===
+                            "string" &&
+                        article.fullStory.trim() !==
+                            ""
                 );
 
 
             related = [
+
                 ...related,
+
                 ...extra
+
             ];
 
         }
@@ -737,6 +794,8 @@ app.get(
 
     }
 );
+
+
 /* =====================================================
    SEARCH
 ===================================================== */
@@ -749,8 +808,8 @@ app.get(
             String(
                 req.query.q || ""
             )
-            .trim()
-            .toLowerCase();
+                .trim()
+                .toLowerCase();
 
 
         const page =
@@ -799,35 +858,43 @@ app.get(
                         String(
                             article.headline || ""
                         )
-                        .toLowerCase();
+                            .toLowerCase();
 
 
                     const summary =
                         String(
                             article.summary || ""
                         )
-                        .toLowerCase();
+                            .toLowerCase();
 
 
                     const category =
                         String(
                             article.category || ""
                         )
-                        .toLowerCase();
+                            .toLowerCase();
 
 
                     const fullStory =
                         String(
                             article.fullStory || ""
                         )
-                        .toLowerCase();
+                            .toLowerCase();
 
 
                     return (
-                        headline.includes(query) ||
-                        summary.includes(query) ||
-                        category.includes(query) ||
-                        fullStory.includes(query)
+                        headline.includes(
+                            query
+                        ) ||
+                        summary.includes(
+                            query
+                        ) ||
+                        category.includes(
+                            query
+                        ) ||
+                        fullStory.includes(
+                            query
+                        )
                     );
 
                 }
@@ -872,8 +939,10 @@ app.get(
         const validArticles =
             sorted.filter(
                 article =>
-                    typeof article.fullStory === "string" &&
-                    article.fullStory.trim() !== ""
+                    typeof article.fullStory ===
+                        "string" &&
+                    article.fullStory.trim() !==
+                        ""
             );
 
 
@@ -914,6 +983,7 @@ app.get(
 
     }
 );
+
 
 /* =====================================================
    SINGLE ARTICLE
@@ -956,6 +1026,7 @@ app.get(
     }
 );
 
+
 /* =====================================================
    CHARITY
 ===================================================== */
@@ -965,7 +1036,9 @@ app.get(
     (req, res) => {
 
         res.json({
+
             charities
+
         });
 
     }
@@ -1012,6 +1085,211 @@ app.get(
 
     }
 );
+
+
+/* =====================================================
+   CREATE DONATION
+===================================================== */
+
+app.post(
+    "/api/donations",
+    (req, res) => {
+
+        try {
+
+            const {
+                charityId,
+                donorName,
+                email,
+                phone,
+                message
+            } = req.body;
+
+
+            /* =========================================
+               VALIDATE REQUIRED INFORMATION
+            ========================================= */
+
+            if (
+                !donorName ||
+                !String(
+                    donorName
+                ).trim()
+            ) {
+
+                return res.status(400).json({
+
+                    error:
+                        "Full name is required."
+
+                });
+
+            }
+
+
+            if (
+                !email ||
+                !String(
+                    email
+                ).trim()
+            ) {
+
+                return res.status(400).json({
+
+                    error:
+                        "Email address is required."
+
+                });
+
+            }
+
+
+            /* =========================================
+               FIND CHARITY ACTIVITY
+            ========================================= */
+
+            const charity =
+                charities.find(
+                    item =>
+                        String(
+                            item.id
+                        ) ===
+                        String(
+                            charityId
+                        )
+                );
+
+
+            if (!charity) {
+
+                return res.status(404).json({
+
+                    error:
+                        "Charity activity not found."
+
+                });
+
+            }
+
+
+            /* =========================================
+               CREATE UNIQUE REFERENCE
+            ========================================= */
+
+            const reference =
+                `TNP-DON-${Date.now()}`;
+
+
+            /* =========================================
+               CREATE DONATION
+            ========================================= */
+
+            const donation = {
+
+                id:
+                    Date.now(),
+
+                reference:
+                    reference,
+
+                charityId:
+                    charity.id,
+
+                activityHeadline:
+                    charity.activityHeadline,
+
+                donorName:
+                    String(
+                        donorName
+                    ).trim(),
+
+                email:
+                    String(
+                        email
+                    ).trim(),
+
+                phone:
+                    String(
+                        phone || ""
+                    ).trim(),
+
+                message:
+                    String(
+                        message || ""
+                    ).trim(),
+
+                amount:
+                    null,
+
+                currency:
+                    null,
+
+                status:
+                    "pending",
+
+                createdAt:
+                    new Date().toISOString(),
+
+                verifiedAt:
+                    null
+
+            };
+
+
+            /* =========================================
+               SAVE DONATION
+            ========================================= */
+
+            donations.push(
+                donation
+            );
+
+
+            fs.writeFileSync(
+                donationsPath,
+                JSON.stringify(
+                    donations,
+                    null,
+                    2
+                ),
+                "utf8"
+            );
+
+
+            /* =========================================
+               RESPONSE
+            ========================================= */
+
+            return res.status(201).json({
+
+                success:
+                    true,
+
+                donation:
+                    donation
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Donation creation error:",
+                error
+            );
+
+
+            return res.status(500).json({
+
+                error:
+                    "Unable to create donation."
+
+            });
+
+        }
+
+    }
+);
+
 
 /* =====================================================
    SERVER
