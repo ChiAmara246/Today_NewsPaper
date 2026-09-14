@@ -1,9 +1,19 @@
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const cors = require("cors");
+const webpush = require("web-push");
+
+webpush.setVapidDetails(
+    process.env.VAPID_SUBJECT,
+    process.env.VAPID_PUBLIC_KEY,
+    process.env.VAPID_PRIVATE_KEY
+);
 
 const app = express();
+
 
 app.use(cors());
 app.use(express.json());
@@ -11,6 +21,11 @@ app.use(express.json());
 const PORT =
     process.env.PORT || 3000;
 
+app.get("/api/push/public-key", (req, res) => {
+    res.json({
+        publicKey: process.env.VAPID_PUBLIC_KEY
+    });
+});
 
 /* =====================================================
    LOAD ARTICLES ONCE
@@ -1090,7 +1105,130 @@ app.get(
 /* =====================================================
    CREATE DONATION
 ===================================================== */
+app.get("/api/donations/pending", (req, res) => {
 
+    const email =
+        String(req.query.email || "")
+            .trim()
+            .toLowerCase();
+
+    const charityId =
+        String(req.query.charityId || "")
+            .trim();
+
+    if (!email || !charityId) {
+        return res.status(400).json({
+            error: "Email and charityId are required."
+        });
+    }
+
+    const now = Date.now();
+
+    const donation =
+        donations.find(donation => {
+
+            if (
+                donation.status !== "pending"
+            ) {
+                return false;
+            }
+
+            if (
+                String(donation.email || "")
+                    .trim()
+                    .toLowerCase() !== email
+            ) {
+                return false;
+            }
+
+            if (
+                String(donation.charityId) !==
+                charityId
+            ) {
+                return false;
+            }
+
+            const expiresAt =
+                new Date(
+                    donation.expiresAt
+                ).getTime();
+
+            return (
+                !Number.isNaN(expiresAt) &&
+                expiresAt > now
+            );
+
+        });
+
+    if (!donation) {
+
+        return res.json({
+            exists: false
+        });
+
+    }
+
+    res.json({
+        exists: true,
+        donation
+    });
+
+});
+app.get("/api/donations/reference/:reference", (req, res) => {
+
+    const { reference } = req.params;
+
+    const donation =
+        donations.find(
+            donation =>
+                donation.reference === reference
+        );
+
+    if (!donation) {
+
+        return res.json({
+            exists: false
+        });
+
+    }
+
+    /*
+     * Only an active pending donation
+     * should be returned.
+     */
+
+    if (
+        donation.status !== "pending"
+    ) {
+
+        return res.json({
+            exists: false
+        });
+
+    }
+
+    const expiresAt =
+        new Date(
+            donation.expiresAt
+        ).getTime();
+
+    if (
+        Number.isNaN(expiresAt) ||
+        expiresAt <= Date.now()
+    ) {
+
+        return res.json({
+            exists: false
+        });
+
+    }
+
+    res.json({
+        exists: true,
+        donation
+    });
+
+});
 app.post(
     "/api/donations",
     (req, res) => {
@@ -1102,7 +1240,8 @@ app.post(
                 donorName,
                 email,
                 phone,
-                message
+                message,
+                paymentMethod
             } = req.body;
 
 
@@ -1138,6 +1277,53 @@ app.post(
 
                     error:
                         "Email address is required."
+
+                });
+
+            }
+
+
+            if (
+                !paymentMethod ||
+                !String(
+                    paymentMethod
+                ).trim()
+            ) {
+
+                return res.status(400).json({
+
+                    error:
+                        "Payment method is required."
+
+                });
+
+            }
+
+
+            /* =========================================
+               VALIDATE PAYMENT METHOD
+            ========================================= */
+
+            const allowedPaymentMethods = [
+
+                "bank_transfer",
+                "card"
+
+            ];
+
+
+            if (
+                !allowedPaymentMethods.includes(
+                    String(
+                        paymentMethod
+                    ).trim()
+                )
+            ) {
+
+                return res.status(400).json({
+
+                    error:
+                        "Invalid payment method."
 
                 });
 
@@ -1181,6 +1367,22 @@ app.post(
 
 
             /* =========================================
+               CREATE DONATION TIMES
+            ========================================= */
+
+            const createdAt =
+                new Date();
+
+            const expiresAt =
+                new Date(
+                    createdAt.getTime() +
+                    30 *
+                    60 *
+                    1000
+                );
+
+
+            /* =========================================
                CREATE DONATION
             ========================================= */
 
@@ -1218,6 +1420,11 @@ app.post(
                         message || ""
                     ).trim(),
 
+                paymentMethod:
+                    String(
+                        paymentMethod
+                    ).trim(),
+
                 amount:
                     null,
 
@@ -1227,11 +1434,30 @@ app.post(
                 status:
                     "pending",
 
+                donationStage:
+                    "payment",
+
                 createdAt:
-                    new Date().toISOString(),
+                    createdAt.toISOString(),
+
+                expiresAt:
+                    expiresAt.toISOString(),
 
                 verifiedAt:
-                    null
+                    null,
+
+                reminders: {
+
+                    tenMinutes:
+                        false,
+
+                    twentyMinutes:
+                        false,
+
+                    twentyFiveMinutes:
+                        false
+
+                }
 
             };
 
@@ -1289,6 +1515,669 @@ app.post(
 
     }
 );
+app.patch(
+    "/api/donations/:reference/stage",
+    (req, res) => {
+
+        try {
+
+            const { reference } =
+                req.params;
+
+            const {
+                donationStage
+            } = req.body;
+
+
+            /* =========================================
+               VALIDATE STAGE
+            ========================================= */
+
+            const allowedStages = [
+
+                "payment",
+                "verification",
+                "completed"
+
+            ];
+
+
+            if (
+                !allowedStages.includes(
+                    donationStage
+                )
+            ) {
+
+                return res.status(400).json({
+
+                    error:
+                        "Invalid donation stage."
+
+                });
+
+            }
+
+
+            /* =========================================
+               FIND DONATION
+            ========================================= */
+
+            const donation =
+                donations.find(
+                    item =>
+                        item.reference ===
+                        reference
+                );
+
+
+            if (!donation) {
+
+                return res.status(404).json({
+
+                    error:
+                        "Donation not found."
+
+                });
+
+            }
+
+
+            /* =========================================
+               ONLY PENDING DONATIONS CAN CHANGE STAGE
+            ========================================= */
+
+            if (
+                donation.status !==
+                "pending"
+            ) {
+
+                return res.status(400).json({
+
+                    error:
+                        "This donation is no longer pending."
+
+                });
+
+            }
+
+
+            /* =========================================
+               CHECK EXPIRATION
+            ========================================= */
+
+            const expiresAt =
+                new Date(
+                    donation.expiresAt
+                ).getTime();
+
+
+            if (
+                Number.isNaN(expiresAt) ||
+                expiresAt <= Date.now()
+            ) {
+
+                return res.status(400).json({
+
+                    error:
+                        "This donation has expired."
+
+                });
+
+            }
+
+
+            /* =========================================
+               UPDATE DONATION STAGE
+            ========================================= */
+
+            donation.donationStage =
+                donationStage;
+
+
+            /* =========================================
+               SAVE DONATION
+            ========================================= */
+
+            fs.writeFileSync(
+                donationsPath,
+                JSON.stringify(
+                    donations,
+                    null,
+                    2
+                ),
+                "utf8"
+            );
+
+
+            /* =========================================
+               RESPONSE
+            ========================================= */
+
+            return res.json({
+
+                success:
+                    true,
+
+                donation:
+                    donation
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Donation stage update error:",
+                error
+            );
+
+
+            return res.status(500).json({
+
+                error:
+                    "Unable to update donation stage."
+
+            });
+
+        }
+
+    }
+);
+app.post("/api/donations/:reference/push-subscription", (req, res) => {
+
+    const { reference } = req.params;
+    const { subscription } = req.body;
+
+    if (!subscription || !subscription.endpoint) {
+        return res.status(400).json({
+            error: "Valid push subscription is required."
+        });
+    }
+
+    const donation = donations.find(
+        donation => donation.reference === reference
+    );
+
+    if (!donation) {
+        return res.status(404).json({
+            error: "Donation not found."
+        });
+    }
+
+    if (donation.status !== "pending") {
+        return res.status(400).json({
+            error: "This donation is no longer pending."
+        });
+    }
+
+    donation.pushSubscription = subscription;
+
+    try {
+
+        fs.writeFileSync(
+            donationsPath,
+            JSON.stringify(
+                donations,
+                null,
+                2
+            ),
+            "utf8"
+        );
+
+        console.log(
+            `Push subscription attached: ${reference}`
+        );
+
+        res.json({
+            success: true
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Failed to save push subscription:",
+            error
+        );
+
+        res.status(500).json({
+            error: "Unable to save push subscription."
+        });
+
+    }
+
+});
+
+/* =====================================================
+   DONATION CLEANUP + REMINDER SYSTEM
+===================================================== */
+async function sendDonationReminder(
+    donation,
+    reminderType
+) {
+
+    if (
+        !donation.pushSubscription
+    ) {
+        console.log(
+            `No push subscription for donation: ${donation.reference}`
+        );
+
+        return;
+    }
+
+
+    const messages = {
+
+        tenMinutes: {
+            title:
+                "Donation Reminder",
+            body:
+                "Your donation is still pending. You have 20 minutes remaining to complete it."
+        },
+
+        twentyMinutes: {
+            title:
+                "Donation Reminder",
+            body:
+                "Your donation is still pending. You have 10 minutes remaining to complete it."
+        },
+
+        twentyFiveMinutes: {
+            title:
+                "Final Donation Reminder",
+            body:
+                "Your donation will expire in 5 minutes if payment is not completed."
+        }
+
+    };
+
+
+    const message =
+        messages[reminderType];
+
+
+    if (!message) {
+        return;
+    }
+
+
+    try {
+
+        await webpush.sendNotification(
+            donation.pushSubscription,
+            JSON.stringify({
+
+                title:
+                    message.title,
+
+                body:
+                    message.body,
+
+                icon:
+                    "/images/logoDefaultMode.PNG",
+
+                badge:
+                    "/images/tnp-icon.png",
+
+                url:
+                    `/charityEvent/charityEvents.html`
+
+            })
+        );
+
+
+        console.log(
+            `Push notification sent: ${donation.reference} - ${reminderType}`
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            `Push notification failed for ${donation.reference}:`,
+            error.message
+        );
+
+
+        /*
+         * 404 / 410 means the browser subscription
+         * is no longer valid.
+         */
+
+        if (
+            error.statusCode === 404 ||
+            error.statusCode === 410
+        ) {
+
+            donation.pushSubscription =
+                null;
+
+        }
+
+    }
+
+}
+
+async function processDonations() {
+
+    const now =
+        Date.now();
+
+
+    let changed =
+        false;
+
+
+    const activeDonations =
+        [];
+
+
+    donations.forEach(
+        donation => {
+
+            /* =========================================
+               COMPLETED DONATIONS
+               STOP ALL REMINDERS
+            ========================================= */
+
+            if (
+                donation.status ===
+                "completed"
+            ) {
+
+                activeDonations.push(
+                    donation
+                );
+
+                return;
+
+            }
+
+
+            /* =========================================
+               KEEP OTHER NON-PENDING DONATIONS
+            ========================================= */
+
+            if (
+                donation.status !==
+                "pending"
+            ) {
+
+                activeDonations.push(
+                    donation
+                );
+
+                return;
+
+            }
+
+
+            /* =========================================
+               CHECK EXPIRATION
+            ========================================= */
+
+            const createdAt =
+                new Date(
+                    donation.createdAt
+                ).getTime();
+
+
+            const expiresAt =
+                new Date(
+                    donation.expiresAt
+                ).getTime();
+
+
+            if (
+                Number.isNaN(
+                    createdAt
+                ) ||
+                Number.isNaN(
+                    expiresAt
+                )
+            ) {
+
+                activeDonations.push(
+                    donation
+                );
+
+                return;
+
+            }
+
+
+            /* =========================================
+               EXPIRE DONATION
+            ========================================= */
+
+            if (
+                now >=
+                expiresAt
+            ) {
+
+                console.log(
+                    `Donation expired: ${donation.reference}`
+                );
+
+                changed =
+                    true;
+
+                return;
+
+            }
+
+
+            /* =========================================
+               MAKE SURE REMINDER OBJECT EXISTS
+            ========================================= */
+
+            if (
+                !donation.reminders
+            ) {
+
+                donation.reminders = {
+
+                    tenMinutes:
+                        false,
+
+                    twentyMinutes:
+                        false,
+
+                    twentyFiveMinutes:
+                        false
+
+                };
+
+                changed =
+                    true;
+
+            }
+
+
+            const elapsed =
+                now -
+                createdAt;
+
+
+            const tenMinutes =
+                10 *
+                60 *
+                1000;
+
+
+            const twentyMinutes =
+                20 *
+                60 *
+                1000;
+
+
+            const twentyFiveMinutes =
+                25 *
+                60 *
+                1000;
+
+
+            /* =========================================
+               10 MINUTE REMINDER
+            ========================================= */
+
+            if (
+                elapsed >=
+                    tenMinutes &&
+                !donation.reminders
+                    .tenMinutes
+            ) {
+
+                console.log(
+                    `Donation reminder 1: ${donation.reference}`
+                );
+
+
+                donation.reminders
+                    .tenMinutes =
+                    true;
+
+
+                changed =
+                    true;
+
+
+                sendDonationReminder(
+                    donation,
+                    "tenMinutes"
+                );
+
+            }
+
+
+            /* =========================================
+               20 MINUTE REMINDER
+            ========================================= */
+
+            if (
+                elapsed >=
+                    twentyMinutes &&
+                !donation.reminders
+                    .twentyMinutes
+            ) {
+
+                console.log(
+                    `Donation reminder 2: ${donation.reference}`
+                );
+
+
+                donation.reminders
+                    .twentyMinutes =
+                    true;
+
+
+                changed =
+                    true;
+
+
+                sendDonationReminder(
+                    donation,
+                    "twentyMinutes"
+                );
+
+            }
+
+
+            /* =========================================
+               25 MINUTE FINAL REMINDER
+            ========================================= */
+
+            if (
+                elapsed >=
+                    twentyFiveMinutes &&
+                !donation.reminders
+                    .twentyFiveMinutes
+            ) {
+
+                console.log(
+                    `Donation final reminder: ${donation.reference}`
+                );
+
+
+                donation.reminders
+                    .twentyFiveMinutes =
+                    true;
+
+
+                changed =
+                    true;
+
+
+                sendDonationReminder(
+                    donation,
+                    "twentyFiveMinutes"
+                );
+
+            }
+
+
+            activeDonations.push(
+                donation
+            );
+
+        }
+    );
+
+
+    /* ===============================================
+       UPDATE DONATIONS ARRAY
+    =============================================== */
+
+    if (
+        activeDonations.length !==
+        donations.length
+    ) {
+
+        donations =
+            activeDonations;
+
+        changed =
+            true;
+
+    }
+
+
+    /* ===============================================
+       SAVE ONLY WHEN NECESSARY
+    =============================================== */
+
+    if (changed) {
+
+        fs.writeFileSync(
+            donationsPath,
+            JSON.stringify(
+                donations,
+                null,
+                2
+            ),
+            "utf8"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RUN DONATION PROCESS EVERY MINUTE
+===================================================== */
+
+setInterval(
+    processDonations,
+    60 *
+    1000
+);
+
+
+/* =====================================================
+   RUN ON SERVER START
+===================================================== */
+
+processDonations();
 
 
 /* =====================================================

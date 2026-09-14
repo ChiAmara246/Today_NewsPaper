@@ -353,9 +353,143 @@ function renderLatestCharity() {
    OPEN DONATION FORM
 ===================================================== */
 
-function openDonationForm(
-    activity
-) {
+async function openDonationForm(activity) {
+
+    /* =========================================
+       CHECK FOR EXISTING PENDING DONATION
+       ========================================= */
+
+    const pendingReference =
+        localStorage.getItem(
+            "tnpPendingDonationReference"
+        );
+
+
+    if (pendingReference) {
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/api/donations/reference/${encodeURIComponent(
+                        pendingReference
+                    )}`
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                response.ok &&
+                data.exists &&
+                data.donation
+            ) {
+
+                const donation =
+                    data.donation;
+
+
+                /*
+                 * Only reopen the pending donation
+                 * if it belongs to the campaign
+                 * the donor just selected.
+                 */
+
+                if (
+                    String(
+                        donation.charityId
+                    ) ===
+                    String(
+                        activity.id
+                    )
+                ) {
+
+                    /*
+                     * The backend already checked that
+                     * the donation is pending and has
+                     * not expired.
+                     */
+
+
+                    /* =================================
+                       PAYMENT STAGE
+                       ================================= */
+
+                    if (
+                        donation.donationStage ===
+                        "payment"
+                    ) {
+
+                        showDonationPayment(
+                            donation
+                        );
+
+                        return;
+
+                    }
+
+
+                    /* =================================
+                       VERIFICATION STAGE
+                       ================================= */
+
+                    if (
+                        donation.donationStage ===
+                        "verification"
+                    ) {
+
+                        showDonationVerification(
+                            donation
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * If the stage is unknown, do not
+                     * trap the donor. Continue to the
+                     * normal donation form.
+                     */
+
+                }
+
+            }
+
+
+            /*
+             * The reference is no longer valid,
+             * expired, completed, deleted, or belongs
+             * to another campaign.
+             *
+             * Remove the stale local reference.
+             */
+
+            localStorage.removeItem(
+                "tnpPendingDonationReference"
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Unable to check pending donation:",
+                error
+            );
+
+            /*
+             * Do not prevent the donor from opening
+             * the normal donation form if the pending
+             * donation lookup fails.
+             */
+
+        }
+
+    }
+
 
     let donationModal =
         document.getElementById(
@@ -500,6 +634,45 @@ function openDonationForm(
                             rows="4"
                             placeholder="Leave a message..."
                         ></textarea>
+
+                    </div>
+
+
+                    <div class="donation-field">
+
+                        <label>
+                            Payment Method
+                        </label>
+
+
+                        <select
+                            name="paymentMethod"
+                            required
+                        >
+
+                            <option
+                                value=""
+                                selected
+                                disabled
+                            >
+                                Select payment method
+                            </option>
+
+
+                            <option
+                                value="bank_transfer"
+                            >
+                                Bank Transfer
+                            </option>
+
+
+                            <option
+                                value="card"
+                            >
+                                Card Payment
+                            </option>
+
+                        </select>
 
                     </div>
 
@@ -925,6 +1098,7 @@ function openDonationForm(
 
 }
 
+
 /* =====================================================
    CLOSE DONATION MODAL
 ===================================================== */
@@ -1021,6 +1195,12 @@ async function submitDonation(
         ).trim();
 
 
+    const paymentMethod =
+        String(
+            formData.get("paymentMethod") || ""
+        ).trim();
+
+
     if (
         !donorName ||
         !email
@@ -1028,6 +1208,17 @@ async function submitDonation(
 
         alert(
             "Please enter your full name and email address."
+        );
+
+        return;
+
+    }
+
+
+    if (!paymentMethod) {
+
+        alert(
+            "Please select a payment method."
         );
 
         return;
@@ -1043,6 +1234,18 @@ async function submitDonation(
 
 
     try {
+
+        /* =========================================
+           REQUEST PUSH NOTIFICATION PERMISSION
+        ========================================= */
+
+        const pushSubscription =
+            await registerDonationPush();
+
+
+        /* =========================================
+           CREATE DONATION
+        ========================================= */
 
         const response =
             await fetch(
@@ -1070,7 +1273,10 @@ async function submitDonation(
                             phone,
 
                         message:
-                            message
+                            message,
+
+                        paymentMethod:
+                            paymentMethod
 
                     })
                 }
@@ -1095,6 +1301,28 @@ async function submitDonation(
             "DONATION CREATED:",
             data
         );
+        localStorage.setItem(
+    "tnpPendingDonationReference",
+    data.donation.reference
+);
+
+
+        /* =========================================
+           ATTACH PUSH SUBSCRIPTION
+        ========================================= */
+
+        if (
+            pushSubscription &&
+            data.donation &&
+            data.donation.reference
+        ) {
+
+            await attachDonationPush(
+                data.donation.reference,
+                pushSubscription
+            );
+
+        }
 
 
         /* =========================================
@@ -1145,16 +1373,17 @@ async function submitDonation(
 
 }
 
-
 /* =====================================================
    PAYMENT INSTRUCTIONS
 ===================================================== */
 
 function showDonationPayment(donation) {
+
     console.log(
-    "showDonationPayment() CALLED",
-    donation
-);
+        "showDonationPayment() CALLED",
+        donation
+    );
+
 
     let popup =
         document.getElementById(
@@ -1197,20 +1426,42 @@ function showDonationPayment(donation) {
 
                 <div class="donation-header">
 
-                    <span class="donation-label">
+                    <span
+                        class="donation-label donation-status-label"
+                    >
                         DONATION CREATED
                     </span>
 
 
-                    <h2>
+                    <h2
+                        class="donation-payment-heading"
+                    >
                         Complete Your Donation
                     </h2>
 
 
-                    <p>
-                        Your donation has been
-                        recorded as pending.
+                    <p
+                        class="donation-payment-description"
+                    >
+                        Your donation is currently
+                        pending.
                     </p>
+
+
+                    <div class="donation-payment-countdown">
+
+                        <span>
+                            TIME REMAINING
+                        </span>
+
+
+                        <strong
+                            class="donation-payment-countdown-time"
+                        >
+                            30:00
+                        </strong>
+
+                    </div>
 
                 </div>
 
@@ -1231,20 +1482,63 @@ function showDonationPayment(donation) {
                     ></p>
 
 
+                    <p>
+                        <strong>
+                            Payment Method
+                        </strong>
+                    </p>
+
+
+                    <p
+                        class="donation-payment-method"
+                    ></p>
+
+
                     <div
                         class="donation-transfer-instructions"
                     >
 
-                        <h3>
-                            Bank Transfer
+                        <h3
+                            class="donation-payment-title"
+                        >
+                            Payment
                         </h3>
 
 
-                        <p>
+                        <p
+                            class="donation-payment-message"
+                        >
                             Your payment instructions
-                            will appear here once the
-                            payment provider is connected.
+                            will appear here.
                         </p>
+
+
+                        <div
+                            class="donation-verification-status"
+                            style="display: none;"
+                        >
+
+                            <div
+                                class="donation-verification-spinner"
+                                aria-hidden="true"
+                            ></div>
+
+
+                            <p
+                                class="donation-verification-text"
+                            >
+                                Verifying your payment...
+                            </p>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="donation-sent-button"
+                        >
+                            I've Sent the Money
+                        </button>
 
                     </div>
 
@@ -1314,11 +1608,291 @@ function showDonationPayment(donation) {
             }
         );
 
+
+        /* =========================================
+           I'VE SENT THE MONEY
+        ========================================= */
+
+        const sentButton =
+            popup.querySelector(
+                ".donation-sent-button"
+            );
+
+
+        if (sentButton) {
+
+            sentButton.addEventListener(
+                "click",
+                async () => {
+
+                    console.log(
+                        "DONATION PAYMENT SUBMITTED FOR VERIFICATION:",
+                        donation.reference
+                    );
+
+
+                    /*
+                     * Prevent repeated clicks.
+                     */
+
+                    sentButton.disabled =
+                        true;
+
+
+                    sentButton.textContent =
+                        "Verifying...";
+
+
+                    /*
+                     * Change the SAME popup
+                     * into verification mode.
+                     */
+
+                    const statusLabel =
+                        popup.querySelector(
+                            ".donation-status-label"
+                        );
+
+
+                    const heading =
+                        popup.querySelector(
+                            ".donation-payment-heading"
+                        );
+
+
+                    const description =
+                        popup.querySelector(
+                            ".donation-payment-description"
+                        );
+
+
+                    const paymentMessage =
+                        popup.querySelector(
+                            ".donation-payment-message"
+                        );
+
+
+                    const verificationStatus =
+                        popup.querySelector(
+                            ".donation-verification-status"
+                        );
+
+
+                    if (statusLabel) {
+
+                        statusLabel.textContent =
+                            "PAYMENT SUBMITTED";
+
+                    }
+
+
+                    if (heading) {
+
+                        heading.textContent =
+                            "Verifying Your Payment";
+
+                    }
+
+
+                    if (description) {
+
+                        description.textContent =
+                            "Please wait while we verify your payment.";
+
+                    }
+
+
+                    if (paymentMessage) {
+
+                        paymentMessage.style.display =
+                            "none";
+
+                    }
+
+
+                    if (verificationStatus) {
+
+                        verificationStatus.style.display =
+                            "block";
+
+                    }
+
+
+                    try {
+
+                        /* =================================
+                           UPDATE DONATION STAGE
+                        ================================= */
+
+                        const response =
+                            await fetch(
+                                `${API_BASE_URL}/api/donations/${encodeURIComponent(
+                                    donation.reference
+                                )}/stage`,
+                                {
+                                    method:
+                                        "PATCH",
+
+                                    headers: {
+                                        "Content-Type":
+                                            "application/json"
+                                    },
+
+                                    body:
+                                        JSON.stringify({
+
+                                            donationStage:
+                                                "verification"
+
+                                        })
+
+                                }
+                            );
+
+
+                        const data =
+                            await response.json();
+
+
+                        if (!response.ok) {
+
+                            throw new Error(
+                                data.error ||
+                                "Unable to update donation stage."
+                            );
+
+                        }
+
+
+                        console.log(
+                            "DONATION STAGE UPDATED:",
+                            data
+                        );
+
+
+                        /*
+                         * Use the donation returned
+                         * by the backend.
+                         */
+
+                        const updatedDonation =
+                            data.donation ||
+                            {
+
+                                ...donation,
+
+                                donationStage:
+                                    "verification"
+
+                            };
+
+
+                        /*
+                         * Keep the same donation
+                         * reference.
+                         */
+
+                        localStorage.setItem(
+                            "tnpPendingDonationReference",
+                            updatedDonation.reference
+                        );
+
+
+                        /*
+                         * IMPORTANT:
+                         *
+                         * We DO NOT close this popup.
+                         *
+                         * We DO NOT create another
+                         * verification popup.
+                         *
+                         * The same popup remains open
+                         * while the payment is verified.
+                         */
+
+                        donation =
+                            updatedDonation;
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Unable to submit donation for verification:",
+                            error
+                        );
+
+
+                        /*
+                         * Return the SAME popup
+                         * to payment mode if the
+                         * stage update failed.
+                         */
+
+                        if (statusLabel) {
+
+                            statusLabel.textContent =
+                                "DONATION CREATED";
+
+                        }
+
+
+                        if (heading) {
+
+                            heading.textContent =
+                                "Complete Your Donation";
+
+                        }
+
+
+                        if (description) {
+
+                            description.textContent =
+                                "Your donation is currently pending.";
+
+                        }
+
+
+                        if (paymentMessage) {
+
+                            paymentMessage.style.display =
+                                "";
+
+                        }
+
+
+                        if (verificationStatus) {
+
+                            verificationStatus.style.display =
+                                "none";
+
+                        }
+
+
+                        sentButton.disabled =
+                            false;
+
+
+                        sentButton.textContent =
+                            "I've Sent the Money";
+
+
+                        alert(
+                            error.message ||
+                            "We could not submit your donation for verification. Please try again."
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
     }
 
 
     /* =========================================
-       UPDATE REFERENCE
+       DONATION REFERENCE
     ========================================= */
 
     const reference =
@@ -1337,16 +1911,380 @@ function showDonationPayment(donation) {
 
 
     /* =========================================
+       PAYMENT METHOD
+    ========================================= */
+
+    const paymentMethod =
+        popup.querySelector(
+            ".donation-payment-method"
+        );
+
+
+    const paymentTitle =
+        popup.querySelector(
+            ".donation-payment-title"
+        );
+
+
+    const paymentMessage =
+        popup.querySelector(
+            ".donation-payment-message"
+        );
+
+
+    if (
+        paymentMethod
+    ) {
+
+        if (
+            donation.paymentMethod ===
+            "bank_transfer"
+        ) {
+
+            paymentMethod.textContent =
+                "Bank Transfer";
+
+        } else if (
+            donation.paymentMethod ===
+            "card"
+        ) {
+
+            paymentMethod.textContent =
+                "Card Payment";
+
+        } else {
+
+            paymentMethod.textContent =
+                "Pending";
+
+        }
+
+    }
+
+
+    /* =========================================
+       PAYMENT METHOD CONTENT
+    ========================================= */
+
+    if (
+        donation.paymentMethod ===
+        "bank_transfer"
+    ) {
+
+        if (paymentTitle) {
+
+            paymentTitle.textContent =
+                "Bank Transfer";
+
+        }
+
+
+        if (paymentMessage) {
+
+            paymentMessage.textContent =
+                "Your bank transfer instructions will appear here.";
+
+        }
+
+    } else if (
+        donation.paymentMethod ===
+        "card"
+    ) {
+
+        if (paymentTitle) {
+
+            paymentTitle.textContent =
+                "Card Payment";
+
+        }
+
+
+        if (paymentMessage) {
+
+            paymentMessage.textContent =
+                "Your card payment option will appear here.";
+
+        }
+
+    }
+
+
+    /* =========================================
+       RESTORE DONATION STAGE
+    ========================================= */
+
+    const statusLabel =
+        popup.querySelector(
+            ".donation-status-label"
+        );
+
+
+    const heading =
+        popup.querySelector(
+            ".donation-payment-heading"
+        );
+
+
+    const description =
+        popup.querySelector(
+            ".donation-payment-description"
+        );
+
+
+    const verificationStatus =
+        popup.querySelector(
+            ".donation-verification-status"
+        );
+
+
+    const sentButton =
+        popup.querySelector(
+            ".donation-sent-button"
+        );
+
+
+    if (
+        donation.donationStage ===
+        "verification"
+    ) {
+
+        /*
+         * Reopening an existing donation
+         * that is already under verification.
+         */
+
+        if (statusLabel) {
+
+            statusLabel.textContent =
+                "PAYMENT SUBMITTED";
+
+        }
+
+
+        if (heading) {
+
+            heading.textContent =
+                "Verifying Your Payment";
+
+        }
+
+
+        if (description) {
+
+            description.textContent =
+                "Please wait while we verify your payment.";
+
+        }
+
+
+        if (paymentMessage) {
+
+            paymentMessage.style.display =
+                "none";
+
+        }
+
+
+        if (verificationStatus) {
+
+            verificationStatus.style.display =
+                "block";
+
+        }
+
+
+        if (sentButton) {
+
+            sentButton.disabled =
+                true;
+
+            sentButton.textContent =
+                "Verifying...";
+
+        }
+
+    } else {
+
+        /*
+         * Normal payment state.
+         */
+
+        if (statusLabel) {
+
+            statusLabel.textContent =
+                "DONATION CREATED";
+
+        }
+
+
+        if (heading) {
+
+            heading.textContent =
+                "Complete Your Donation";
+
+        }
+
+
+        if (description) {
+
+            description.textContent =
+                "Your donation is currently pending.";
+
+        }
+
+
+        if (paymentMessage) {
+
+            paymentMessage.style.display =
+                "";
+
+        }
+
+
+        if (verificationStatus) {
+
+            verificationStatus.style.display =
+                "none";
+
+        }
+
+
+        if (sentButton) {
+
+            sentButton.disabled =
+                false;
+
+            sentButton.textContent =
+                "I've Sent the Money";
+
+        }
+
+    }
+
+
+    /* =========================================
+       DONATION COUNTDOWN
+       USE ORIGINAL expiresAt
+    ========================================= */
+
+    const countdownTime =
+        popup.querySelector(
+            ".donation-payment-countdown-time"
+        );
+
+
+    if (countdownTime) {
+
+        if (
+            popup.paymentCountdownInterval
+        ) {
+
+            clearInterval(
+                popup.paymentCountdownInterval
+            );
+
+        }
+
+
+        const updatePaymentCountdown =
+            function () {
+
+                const now =
+                    Date.now();
+
+
+                const expiresAt =
+                    new Date(
+                        donation.expiresAt
+                    ).getTime();
+
+
+                const remaining =
+                    expiresAt -
+                    now;
+
+
+                if (
+                    remaining <= 0
+                ) {
+
+                    countdownTime.textContent =
+                        "00:00";
+
+
+                    clearInterval(
+                        popup.paymentCountdownInterval
+                    );
+
+
+                    popup.paymentCountdownInterval =
+                        null;
+
+
+                    popup.classList.remove(
+                        "active"
+                    );
+
+
+                    document.body.style.overflow =
+                        "";
+
+
+                    return;
+
+                }
+
+
+                const totalSeconds =
+                    Math.floor(
+                        remaining /
+                        1000
+                    );
+
+
+                const minutes =
+                    Math.floor(
+                        totalSeconds /
+                        60
+                    );
+
+
+                const seconds =
+                    totalSeconds %
+                    60;
+
+
+                countdownTime.textContent =
+                    `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+            };
+
+
+        updatePaymentCountdown();
+
+
+        popup.paymentCountdownInterval =
+            setInterval(
+                updatePaymentCountdown,
+                1000
+            );
+
+    }
+
+
+    /* =========================================
        OPEN PAYMENT POPUP
     ========================================= */
 
     popup.classList.add(
         "active"
     );
+
+
     console.log(
-    "PAYMENT POPUP ACTIVE",
-    new Date().toLocaleTimeString()
-);
+        "PAYMENT POPUP ACTIVE",
+        new Date().toLocaleTimeString()
+    );
 
 
     document.body.style.overflow =
@@ -1354,11 +2292,9 @@ function showDonationPayment(donation) {
 
 }
 
-
 /* =====================================================
    DONATION CLOSED POPUP
 ===================================================== */
-
 
 function showDonationClosedPopup(
     charity
@@ -1508,7 +2444,105 @@ function showDonationClosedPopup(
 }
 
 
+async function registerDonationPush() {
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+        console.warn("Push notifications are not supported by this browser.");
+        return null;
+    }
 
+    try {
+        const permission = await Notification.requestPermission();
+
+        if (permission !== "granted") {
+            console.warn("Notification permission was not granted.");
+            return null;
+        }
+
+        const registration = await navigator.serviceWorker.ready;
+
+        const existingSubscription =
+            await registration.pushManager.getSubscription();
+
+        if (existingSubscription) {
+            return existingSubscription.toJSON();
+        }
+
+        const response = await fetch(
+            "http://localhost:3000/api/push/public-key"
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to retrieve the push public key.");
+        }
+
+        const { publicKey } = await response.json();
+
+        const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(publicKey)
+        });
+
+        return subscription.toJSON();
+
+    } catch (error) {
+        console.error("Push subscription failed:", error);
+        return null;
+    }
+}
+async function attachDonationPush(reference, subscription) {
+    if (!subscription || !reference) {
+        return false;
+    }
+
+    try {
+        const response = await fetch(
+            `http://localhost:3000/api/donations/${encodeURIComponent(reference)}/push-subscription`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    subscription
+                })
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Push subscription attachment failed: ${response.status}`
+            );
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error(
+            "Unable to attach push subscription to donation:",
+            error
+        );
+
+        return false;
+    }
+}
+function urlBase64ToUint8Array(base64String) {
+    const padding = "=".repeat(
+        (4 - (base64String.length % 4)) % 4
+    );
+
+    const base64 = (
+        base64String +
+        padding
+    )
+        .replace(/-/g, "+")
+        .replace(/_/g, "/");
+
+    const rawData = window.atob(base64);
+
+    return Uint8Array.from(
+        [...rawData].map(char => char.charCodeAt(0))
+    );
+}
 /* =====================================================
    PAGINATION
 ===================================================== */
