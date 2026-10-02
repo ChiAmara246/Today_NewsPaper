@@ -179,6 +179,87 @@ function showArticleSkeleton() {
     }
 }
 
+/* =========================
+   ARTICLE VIEWS
+   One view per device: the device keeps
+   a random id in its browser.
+========================= */
+
+function getVisitorId() {
+
+    const key = "tnpVisitorId";
+
+    try {
+
+        let visitorId =
+            localStorage.getItem(key);
+
+        if (!visitorId) {
+
+            visitorId =
+                crypto.randomUUID
+                    ? crypto.randomUUID()
+                    : Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 12);
+
+            localStorage.setItem(key, visitorId);
+
+        }
+
+        return visitorId;
+
+    } catch (error) {
+
+        return null;
+
+    }
+
+}
+
+
+async function registerArticleView(articleId, viewsElement) {
+
+    const visitorId = getVisitorId();
+
+    if (!visitorId) return;
+
+    try {
+
+        const response =
+        await fetch(
+            `${API_BASE_URL}/api/articles/${articleId}/view`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    visitorId
+                })
+            }
+        );
+
+        if (!response.ok) return;
+
+        const data =
+            await response.json();
+
+        if (viewsElement) {
+            viewsElement.textContent =
+                Number(data.views || 0).toLocaleString();
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Unable to register article view:",
+            error
+        );
+
+    }
+
+}
+
+
 async function loadArticle() {
 
     showArticleSkeleton();
@@ -217,6 +298,11 @@ const article =
         document.body.innerHTML = "Article not found";
         return;
     }
+
+    registerArticleView(
+        article.id,
+        viewsElement
+    );
 
     document.getElementById("headline").textContent =
         article.headline;

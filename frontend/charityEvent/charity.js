@@ -381,6 +381,10 @@ async function openDonationForm(activity) {
                 await response.json();
 
 
+            /*
+             * EXISTING DONATION FOUND
+             */
+
             if (
                 response.ok &&
                 data.exists &&
@@ -392,9 +396,7 @@ async function openDonationForm(activity) {
 
 
                 /*
-                 * Only reopen the pending donation
-                 * if it belongs to the campaign
-                 * the donor just selected.
+                 * SAME CAMPAIGN
                  */
 
                 if (
@@ -407,15 +409,8 @@ async function openDonationForm(activity) {
                 ) {
 
                     /*
-                     * The backend already checked that
-                     * the donation is pending and has
-                     * not expired.
+                     * PAYMENT STAGE
                      */
-
-
-                    /* =================================
-                       PAYMENT STAGE
-                       ================================= */
 
                     if (
                         donation.donationStage ===
@@ -431,9 +426,9 @@ async function openDonationForm(activity) {
                     }
 
 
-                    /* =================================
-                       VERIFICATION STAGE
-                       ================================= */
+                    /*
+                     * VERIFICATION STAGE
+                     */
 
                     if (
                         donation.donationStage ===
@@ -448,29 +443,33 @@ async function openDonationForm(activity) {
 
                     }
 
-
-                    /*
-                     * If the stage is unknown, do not
-                     * trap the donor. Continue to the
-                     * normal donation form.
-                     */
-
                 }
 
+
+                /*
+                 * DIFFERENT CAMPAIGN
+                 *
+                 * IMPORTANT:
+                 * Do NOT delete the local reference.
+                 *
+                 * The donor may still have a valid
+                 * pending donation for another campaign.
+                 */
+
+            } else {
+
+                /*
+                 * Backend explicitly says that the
+                 * reference does not exist anymore.
+                 *
+                 * Only in this case do we remove it.
+                 */
+
+                localStorage.removeItem(
+                    "tnpPendingDonationReference"
+                );
+
             }
-
-
-            /*
-             * The reference is no longer valid,
-             * expired, completed, deleted, or belongs
-             * to another campaign.
-             *
-             * Remove the stale local reference.
-             */
-
-            localStorage.removeItem(
-                "tnpPendingDonationReference"
-            );
 
 
         } catch (error) {
@@ -481,9 +480,12 @@ async function openDonationForm(activity) {
             );
 
             /*
+             * Temporary lookup failure:
+             *
+             * Keep the reference.
+             *
              * Do not prevent the donor from opening
-             * the normal donation form if the pending
-             * donation lookup fails.
+             * the normal donation form.
              */
 
         }
@@ -638,41 +640,55 @@ async function openDonationForm(activity) {
                     </div>
 
 
+                    <!-- =================================
+                         DONATION AMOUNT
+                    ================================== -->
+
                     <div class="donation-field">
 
                         <label>
-                            Payment Method
+                            Amount
+                        </label>
+
+
+                        <div class="donation-amount-row">
+
+                            <span
+                                class="donation-currency-symbol"
+                            >
+                                $
+                            </span>
+
+
+                            <input
+                                type="number"
+                                name="amount"
+                                min="1"
+                                step="0.01"
+                                placeholder="Enter amount"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================
+                         DONATION CURRENCY
+                    ================================== -->
+
+                    <div class="donation-field">
+
+                        <label>
+                            Currency
                         </label>
 
 
                         <select
-                            name="paymentMethod"
+                            name="currency"
                             required
-                        >
-
-                            <option
-                                value=""
-                                selected
-                                disabled
-                            >
-                                Select payment method
-                            </option>
-
-
-                            <option
-                                value="bank_transfer"
-                            >
-                                Bank Transfer
-                            </option>
-
-
-                            <option
-                                value="card"
-                            >
-                                Card Payment
-                            </option>
-
-                        </select>
+                        ></select>
 
                     </div>
 
@@ -681,7 +697,7 @@ async function openDonationForm(activity) {
                         type="submit"
                         class="donation-submit"
                     >
-                        Continue
+                        Continue to Checkout
                     </button>
 
                 </form>
@@ -694,6 +710,25 @@ async function openDonationForm(activity) {
         document.body.appendChild(
             donationModal
         );
+
+
+        /* =========================================
+           POPULATE CURRENCIES
+        ========================================= */
+
+        const currencySelect =
+            donationModal.querySelector(
+                'select[name="currency"]'
+            );
+
+
+        if (currencySelect) {
+
+            populateDonationCurrencies(
+                currencySelect
+            );
+
+        }
 
 
         /* =========================================
@@ -716,8 +751,10 @@ async function openDonationForm(activity) {
                 window.intlTelInput(
                     phoneInput,
                     {
+
                         initialCountry:
                             "auto",
+
 
                         geoIpLookup:
                             function (
@@ -754,8 +791,10 @@ async function openDonationForm(activity) {
 
                             },
 
+
                         separateDialCode:
                             true,
+
 
                         preferredCountries: [
                             "ng",
@@ -766,8 +805,10 @@ async function openDonationForm(activity) {
                             "us"
                         ],
 
+
                         utilsScript:
                             "https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/utils.js"
+
                     }
                 );
 
@@ -921,6 +962,42 @@ async function openDonationForm(activity) {
     if (form) {
 
         form.reset();
+
+    }
+
+
+    /* =========================================
+       RESET CURRENCY
+    ========================================= */
+
+    const currencySelect =
+        donationModal.querySelector(
+            'select[name="currency"]'
+        );
+
+
+    if (currencySelect) {
+
+        currencySelect.value =
+            "USD";
+
+    }
+
+
+    /* =========================================
+       RESET CURRENCY SYMBOL
+    ========================================= */
+
+    const currencySymbol =
+        donationModal.querySelector(
+            ".donation-currency-symbol"
+        );
+
+
+    if (currencySymbol) {
+
+        currencySymbol.textContent =
+            "$";
 
     }
 
@@ -1098,6 +1175,521 @@ async function openDonationForm(activity) {
 
 }
 
+/* =====================================================
+   CURRENCY SYMBOL
+===================================================== */
+
+function getCurrencySymbol(currencyCode) {
+
+    try {
+
+        const parts =
+            new Intl.NumberFormat(
+                "en",
+                {
+                    style: "currency",
+                    currency: currencyCode,
+                    currencyDisplay: "narrowSymbol"
+                }
+            ).formatToParts(0);
+
+
+        const symbolPart =
+            parts.find(
+                part =>
+                    part.type === "currency"
+            );
+
+
+        return symbolPart
+            ? symbolPart.value
+            : currencyCode;
+
+    } catch (error) {
+
+        return currencyCode;
+
+    }
+
+}
+
+/* =====================================================
+   POPULATE DONATION CURRENCIES
+===================================================== */
+
+function populateDonationCurrencies(currencySelect) {
+
+    /*
+     * Currencies accepted by Flutterwave.
+     * Keep in sync with FLW_CURRENCIES in server.js.
+     */
+
+    const currencies = [
+
+        "NGN",
+        "USD",
+        "EUR",
+        "GBP",
+        "CAD",
+        "GHS",
+        "KES",
+        "UGX",
+        "TZS",
+        "RWF",
+        "ZAR",
+        "XAF",
+        "XOF",
+        "ZMW",
+        "MWK",
+        "EGP"
+
+    ];
+
+
+    let currencyNames = null;
+
+    try {
+
+        currencyNames =
+            new Intl.DisplayNames(
+                ["en"],
+                {
+                    type: "currency"
+                }
+            );
+
+    } catch (error) {
+
+        currencyNames = null;
+
+    }
+
+
+    currencySelect.innerHTML =
+        currencies
+            .map(code => {
+
+                const name =
+                    currencyNames
+                        ? currencyNames.of(code)
+                        : code;
+
+                return `
+                    <option value="${code}">
+                        ${code} (${getCurrencySymbol(code)}) - ${name}
+                    </option>
+                `;
+
+            })
+            .join("");
+
+
+    currencySelect.value =
+        "USD";
+
+
+    /* =========================================
+       UPDATE SYMBOL ON CHANGE
+    ========================================= */
+
+    const donationForm =
+        currencySelect.closest("form");
+
+
+    const currencySymbol =
+        donationForm
+            ? donationForm.querySelector(
+                ".donation-currency-symbol"
+            )
+            : null;
+
+
+    currencySelect.addEventListener(
+        "change",
+        () => {
+
+            if (currencySymbol) {
+
+                currencySymbol.textContent =
+                    getCurrencySymbol(
+                        currencySelect.value
+                    );
+
+            }
+
+        }
+    );
+
+}
+
+/* =====================================================
+   PAYMENT VERIFICATION
+   Asks the backend to confirm the payment
+   with Flutterwave.
+===================================================== */
+
+async function showDonationVerification(
+    donation,
+    transactionId = null
+) {
+
+    let popup =
+        document.getElementById(
+            "donationVerificationPopup"
+        );
+
+
+    if (!popup) {
+
+        popup =
+            document.createElement(
+                "div"
+            );
+
+
+        popup.id =
+            "donationVerificationPopup";
+
+
+        popup.className =
+            "donation-payment-popup";
+
+
+        popup.innerHTML = `
+
+            <div class="donation-modal-content">
+
+                <button
+                    type="button"
+                    class="donation-close"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+
+                <div class="donation-header">
+
+                    <span class="donation-label">
+                        PAYMENT VERIFICATION
+                    </span>
+
+
+                    <h2 class="donation-verification-title"></h2>
+
+
+                    <p class="donation-verification-text"></p>
+
+                </div>
+
+
+                <div class="donation-payment-details">
+
+                    <button
+                        type="button"
+                        class="donation-checkout-button donation-verification-button"
+                    ></button>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        document.body.appendChild(
+            popup
+        );
+
+
+        const closeVerification =
+            () => {
+
+                popup.classList.remove(
+                    "active"
+                );
+
+                document.body.style.overflow =
+                    "";
+
+            };
+
+
+        popup.querySelector(
+            ".donation-close"
+        ).addEventListener(
+            "click",
+            closeVerification
+        );
+
+
+        popup.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    popup
+                ) {
+
+                    closeVerification();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    const title =
+        popup.querySelector(
+            ".donation-verification-title"
+        );
+
+
+    const text =
+        popup.querySelector(
+            ".donation-verification-text"
+        );
+
+
+    const button =
+        popup.querySelector(
+            ".donation-verification-button"
+        );
+
+
+    const showState =
+        (titleText, bodyText, buttonText, onClick) => {
+
+            title.textContent =
+                titleText;
+
+            text.textContent =
+                bodyText;
+
+            button.style.display =
+                buttonText ? "" : "none";
+
+            button.textContent =
+                buttonText || "";
+
+            button.onclick =
+                onClick || null;
+
+        };
+
+
+    showState(
+        "Verifying your payment...",
+        "Please wait while we confirm your payment with Flutterwave."
+    );
+
+
+    popup.classList.add(
+        "active"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/donations/${encodeURIComponent(
+                    donation.reference
+                )}/verify`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        transactionId
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Unable to verify payment."
+            );
+
+        }
+
+
+        /* =========================================
+           PAYMENT CONFIRMED
+        ========================================= */
+
+        if (
+            data.paymentStatus ===
+            "completed"
+        ) {
+
+            localStorage.removeItem(
+                "tnpPendingDonationReference"
+            );
+
+
+            clearCharityReminder(
+                data.donation.charityId
+            );
+
+
+            showState(
+                "Thank you for your donation!",
+                `Your payment of ${data.donation.currency} ${Number(
+                    data.donation.amount
+                ).toFixed(2)} has been confirmed.`,
+                "Close",
+                () => {
+
+                    popup.classList.remove(
+                        "active"
+                    );
+
+                    document.body.style.overflow =
+                        "";
+
+                }
+            );
+
+            return;
+
+        }
+
+
+        /* =========================================
+           PAYMENT STILL PROCESSING
+        ========================================= */
+
+        if (
+            data.paymentStatus ===
+            "pending"
+        ) {
+
+            showState(
+                "Payment is being confirmed",
+                "Flutterwave has not confirmed your payment yet. Please check again in a moment.",
+                "Check Again",
+                () => showDonationVerification(
+                    donation,
+                    transactionId
+                )
+            );
+
+            return;
+
+        }
+
+
+        /* =========================================
+           PAYMENT NOT RECEIVED
+        ========================================= */
+
+        showState(
+            "Payment not completed",
+            "We could not confirm your payment. You can try again before your donation expires.",
+            "Try Again",
+            () => {
+
+                popup.classList.remove(
+                    "active"
+                );
+
+                showDonationPayment(
+                    data.donation
+                );
+
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Payment verification error:",
+            error
+        );
+
+
+        showState(
+            "Verification failed",
+            "We could not reach the server. Please check again.",
+            "Check Again",
+            () => showDonationVerification(
+                donation,
+                transactionId
+            )
+        );
+
+    }
+
+}
+
+/* =====================================================
+   FLUTTERWAVE REDIRECT
+   Flutterwave returns to this page with
+   ?status=...&tx_ref=...&transaction_id=...
+===================================================== */
+
+function handleFlutterwaveRedirect() {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const reference =
+        params.get("tx_ref");
+
+
+    if (!reference) {
+
+        return;
+
+    }
+
+
+    const transactionId =
+        params.get("transaction_id");
+
+
+    /*
+     * Remove the payment details from the URL
+     * so a page refresh does not verify again.
+     */
+
+    window.history.replaceState(
+        {},
+        "",
+        window.location.pathname
+    );
+
+
+    showDonationVerification(
+        {
+            reference
+        },
+        transactionId
+    );
+
+}
 
 /* =====================================================
    CLOSE DONATION MODAL
@@ -1155,6 +1747,7 @@ function closeDonationModal(modal) {
    SUBMIT DONATION
 ===================================================== */
 
+
 async function submitDonation(
     form,
     activity,
@@ -1195,11 +1788,21 @@ async function submitDonation(
         ).trim();
 
 
-    const paymentMethod =
+    const amount =
+        Number(
+            formData.get("amount")
+        );
+
+
+    const currency =
         String(
-            formData.get("paymentMethod") || ""
+            formData.get("currency") || "USD"
         ).trim();
 
+
+    /* =========================================
+       BASIC VALIDATION
+    ========================================= */
 
     if (
         !donorName ||
@@ -1215,10 +1818,24 @@ async function submitDonation(
     }
 
 
-    if (!paymentMethod) {
+    if (
+        !amount ||
+        amount <= 0
+    ) {
 
         alert(
-            "Please select a payment method."
+            "Please enter a valid donation amount."
+        );
+
+        return;
+
+    }
+
+
+    if (!currency) {
+
+        alert(
+            "Please select a currency."
         );
 
         return;
@@ -1275,8 +1892,11 @@ async function submitDonation(
                         message:
                             message,
 
-                        paymentMethod:
-                            paymentMethod
+                        amount:
+                            amount,
+
+                        currency:
+                            currency
 
                     })
                 }
@@ -1301,10 +1921,23 @@ async function submitDonation(
             "DONATION CREATED:",
             data
         );
-        localStorage.setItem(
-    "tnpPendingDonationReference",
-    data.donation.reference
-);
+
+
+        /* =========================================
+           SAVE PENDING DONATION REFERENCE
+        ========================================= */
+
+        if (
+            data.donation &&
+            data.donation.reference
+        ) {
+
+            localStorage.setItem(
+                "tnpPendingDonationReference",
+                data.donation.reference
+            );
+
+        }
 
 
         /* =========================================
@@ -1367,11 +2000,13 @@ async function submitDonation(
             false;
 
         submitButton.textContent =
-            "Continue";
+            "Continue to Checkout";
 
     }
 
 }
+
+
 
 /* =====================================================
    PAYMENT INSTRUCTIONS
@@ -1426,25 +2061,20 @@ function showDonationPayment(donation) {
 
                 <div class="donation-header">
 
-                    <span
-                        class="donation-label donation-status-label"
-                    >
+                    <span class="donation-label">
                         DONATION CREATED
                     </span>
 
 
-                    <h2
-                        class="donation-payment-heading"
-                    >
+                    <h2>
                         Complete Your Donation
                     </h2>
 
 
-                    <p
-                        class="donation-payment-description"
-                    >
-                        Your donation is currently
-                        pending.
+                    <p>
+                        Your donation is ready.
+                        Continue to secure checkout
+                        to complete your payment.
                     </p>
 
 
@@ -1466,9 +2096,7 @@ function showDonationPayment(donation) {
                 </div>
 
 
-                <div
-                    class="donation-payment-details"
-                >
+                <div class="donation-payment-details">
 
                     <p>
                         <strong>
@@ -1484,63 +2112,35 @@ function showDonationPayment(donation) {
 
                     <p>
                         <strong>
-                            Payment Method
+                            Amount
                         </strong>
                     </p>
 
 
                     <p
-                        class="donation-payment-method"
+                        class="donation-amount"
                     ></p>
 
 
-                    <div
-                        class="donation-transfer-instructions"
-                    >
-
-                        <h3
-                            class="donation-payment-title"
-                        >
+                    <p>
+                        <strong>
                             Payment
-                        </h3>
+                        </strong>
+                    </p>
 
 
-                        <p
-                            class="donation-payment-message"
-                        >
-                            Your payment instructions
-                            will appear here.
-                        </p>
+                    <p>
+                        Secure checkout powered by
+                        Flutterwave.
+                    </p>
 
 
-                        <div
-                            class="donation-verification-status"
-                            style="display: none;"
-                        >
-
-                            <div
-                                class="donation-verification-spinner"
-                                aria-hidden="true"
-                            ></div>
-
-
-                            <p
-                                class="donation-verification-text"
-                            >
-                                Verifying your payment...
-                            </p>
-
-                        </div>
-
-
-                        <button
-                            type="button"
-                            class="donation-sent-button"
-                        >
-                            I've Sent the Money
-                        </button>
-
-                    </div>
+                    <button
+                        type="button"
+                        class="donation-checkout-button"
+                    >
+                        Continue to Checkout
+                    </button>
 
                 </div>
 
@@ -1610,275 +2210,48 @@ function showDonationPayment(donation) {
 
 
         /* =========================================
-           I'VE SENT THE MONEY
+           CONTINUE TO CHECKOUT
         ========================================= */
 
-        const sentButton =
+        const checkoutButton =
             popup.querySelector(
-                ".donation-sent-button"
+                ".donation-checkout-button"
             );
 
 
-        if (sentButton) {
+        if (checkoutButton) {
 
-            sentButton.addEventListener(
+            checkoutButton.addEventListener(
                 "click",
-                async () => {
+                () => {
+
+                    /*
+                     * Use the donation currently shown,
+                     * not the one from the first opening.
+                     */
+
+                    const currentDonation =
+                        popup.currentDonation ||
+                        donation;
+
 
                     console.log(
-                        "DONATION PAYMENT SUBMITTED FOR VERIFICATION:",
-                        donation.reference
+                        "OPENING FLUTTERWAVE CHECKOUT:",
+                        currentDonation.reference
                     );
 
 
-                    /*
-                     * Prevent repeated clicks.
-                     */
+                    if (
+                        currentDonation.checkoutUrl
+                    ) {
 
-                    sentButton.disabled =
-                        true;
+                        window.location.href =
+                            currentDonation.checkoutUrl;
 
-
-                    sentButton.textContent =
-                        "Verifying...";
-
-
-                    /*
-                     * Change the SAME popup
-                     * into verification mode.
-                     */
-
-                    const statusLabel =
-                        popup.querySelector(
-                            ".donation-status-label"
-                        );
-
-
-                    const heading =
-                        popup.querySelector(
-                            ".donation-payment-heading"
-                        );
-
-
-                    const description =
-                        popup.querySelector(
-                            ".donation-payment-description"
-                        );
-
-
-                    const paymentMessage =
-                        popup.querySelector(
-                            ".donation-payment-message"
-                        );
-
-
-                    const verificationStatus =
-                        popup.querySelector(
-                            ".donation-verification-status"
-                        );
-
-
-                    if (statusLabel) {
-
-                        statusLabel.textContent =
-                            "PAYMENT SUBMITTED";
-
-                    }
-
-
-                    if (heading) {
-
-                        heading.textContent =
-                            "Verifying Your Payment";
-
-                    }
-
-
-                    if (description) {
-
-                        description.textContent =
-                            "Please wait while we verify your payment.";
-
-                    }
-
-
-                    if (paymentMessage) {
-
-                        paymentMessage.style.display =
-                            "none";
-
-                    }
-
-
-                    if (verificationStatus) {
-
-                        verificationStatus.style.display =
-                            "block";
-
-                    }
-
-
-                    try {
-
-                        /* =================================
-                           UPDATE DONATION STAGE
-                        ================================= */
-
-                        const response =
-                            await fetch(
-                                `${API_BASE_URL}/api/donations/${encodeURIComponent(
-                                    donation.reference
-                                )}/stage`,
-                                {
-                                    method:
-                                        "PATCH",
-
-                                    headers: {
-                                        "Content-Type":
-                                            "application/json"
-                                    },
-
-                                    body:
-                                        JSON.stringify({
-
-                                            donationStage:
-                                                "verification"
-
-                                        })
-
-                                }
-                            );
-
-
-                        const data =
-                            await response.json();
-
-
-                        if (!response.ok) {
-
-                            throw new Error(
-                                data.error ||
-                                "Unable to update donation stage."
-                            );
-
-                        }
-
-
-                        console.log(
-                            "DONATION STAGE UPDATED:",
-                            data
-                        );
-
-
-                        /*
-                         * Use the donation returned
-                         * by the backend.
-                         */
-
-                        const updatedDonation =
-                            data.donation ||
-                            {
-
-                                ...donation,
-
-                                donationStage:
-                                    "verification"
-
-                            };
-
-
-                        /*
-                         * Keep the same donation
-                         * reference.
-                         */
-
-                        localStorage.setItem(
-                            "tnpPendingDonationReference",
-                            updatedDonation.reference
-                        );
-
-
-                        /*
-                         * IMPORTANT:
-                         *
-                         * We DO NOT close this popup.
-                         *
-                         * We DO NOT create another
-                         * verification popup.
-                         *
-                         * The same popup remains open
-                         * while the payment is verified.
-                         */
-
-                        donation =
-                            updatedDonation;
-
-
-                    } catch (error) {
-
-                        console.error(
-                            "Unable to submit donation for verification:",
-                            error
-                        );
-
-
-                        /*
-                         * Return the SAME popup
-                         * to payment mode if the
-                         * stage update failed.
-                         */
-
-                        if (statusLabel) {
-
-                            statusLabel.textContent =
-                                "DONATION CREATED";
-
-                        }
-
-
-                        if (heading) {
-
-                            heading.textContent =
-                                "Complete Your Donation";
-
-                        }
-
-
-                        if (description) {
-
-                            description.textContent =
-                                "Your donation is currently pending.";
-
-                        }
-
-
-                        if (paymentMessage) {
-
-                            paymentMessage.style.display =
-                                "";
-
-                        }
-
-
-                        if (verificationStatus) {
-
-                            verificationStatus.style.display =
-                                "none";
-
-                        }
-
-
-                        sentButton.disabled =
-                            false;
-
-
-                        sentButton.textContent =
-                            "I've Sent the Money";
-
+                    } else {
 
                         alert(
-                            error.message ||
-                            "We could not submit your donation for verification. Please try again."
+                            "The payment checkout is not available yet. Please try again."
                         );
 
                     }
@@ -1889,6 +2262,10 @@ function showDonationPayment(donation) {
         }
 
     }
+
+
+    popup.currentDonation =
+        donation;
 
 
     /* =========================================
@@ -1911,253 +2288,53 @@ function showDonationPayment(donation) {
 
 
     /* =========================================
-       PAYMENT METHOD
+       DONATION AMOUNT
     ========================================= */
 
-    const paymentMethod =
+    const amount =
         popup.querySelector(
-            ".donation-payment-method"
+            ".donation-amount"
         );
 
 
-    const paymentTitle =
-        popup.querySelector(
-            ".donation-payment-title"
-        );
+    if (amount) {
+
+        const donationAmount =
+            Number(
+                donation.amount
+            );
 
 
-    const paymentMessage =
-        popup.querySelector(
-            ".donation-payment-message"
-        );
+        const currency =
+            donation.currency ||
+            "USD";
 
 
-    if (
-        paymentMethod
-    ) {
-
-        if (
-            donation.paymentMethod ===
-            "bank_transfer"
-        ) {
-
-            paymentMethod.textContent =
-                "Bank Transfer";
-
-        } else if (
-            donation.paymentMethod ===
-            "card"
-        ) {
-
-            paymentMethod.textContent =
-                "Card Payment";
-
-        } else {
-
-            paymentMethod.textContent =
-                "Pending";
-
-        }
+        amount.textContent =
+            `${currency} ${donationAmount.toFixed(2)}`;
 
     }
 
 
     /* =========================================
-       PAYMENT METHOD CONTENT
+       CHECKOUT BUTTON
     ========================================= */
 
-    if (
-        donation.paymentMethod ===
-        "bank_transfer"
-    ) {
-
-        if (paymentTitle) {
-
-            paymentTitle.textContent =
-                "Bank Transfer";
-
-        }
-
-
-        if (paymentMessage) {
-
-            paymentMessage.textContent =
-                "Your bank transfer instructions will appear here.";
-
-        }
-
-    } else if (
-        donation.paymentMethod ===
-        "card"
-    ) {
-
-        if (paymentTitle) {
-
-            paymentTitle.textContent =
-                "Card Payment";
-
-        }
-
-
-        if (paymentMessage) {
-
-            paymentMessage.textContent =
-                "Your card payment option will appear here.";
-
-        }
-
-    }
-
-
-    /* =========================================
-       RESTORE DONATION STAGE
-    ========================================= */
-
-    const statusLabel =
+    const checkoutButton =
         popup.querySelector(
-            ".donation-status-label"
+            ".donation-checkout-button"
         );
 
 
-    const heading =
-        popup.querySelector(
-            ".donation-payment-heading"
-        );
+    if (checkoutButton) {
 
+        checkoutButton.disabled =
+            !donation.checkoutUrl;
 
-    const description =
-        popup.querySelector(
-            ".donation-payment-description"
-        );
-
-
-    const verificationStatus =
-        popup.querySelector(
-            ".donation-verification-status"
-        );
-
-
-    const sentButton =
-        popup.querySelector(
-            ".donation-sent-button"
-        );
-
-
-    if (
-        donation.donationStage ===
-        "verification"
-    ) {
-
-        /*
-         * Reopening an existing donation
-         * that is already under verification.
-         */
-
-        if (statusLabel) {
-
-            statusLabel.textContent =
-                "PAYMENT SUBMITTED";
-
-        }
-
-
-        if (heading) {
-
-            heading.textContent =
-                "Verifying Your Payment";
-
-        }
-
-
-        if (description) {
-
-            description.textContent =
-                "Please wait while we verify your payment.";
-
-        }
-
-
-        if (paymentMessage) {
-
-            paymentMessage.style.display =
-                "none";
-
-        }
-
-
-        if (verificationStatus) {
-
-            verificationStatus.style.display =
-                "block";
-
-        }
-
-
-        if (sentButton) {
-
-            sentButton.disabled =
-                true;
-
-            sentButton.textContent =
-                "Verifying...";
-
-        }
-
-    } else {
-
-        /*
-         * Normal payment state.
-         */
-
-        if (statusLabel) {
-
-            statusLabel.textContent =
-                "DONATION CREATED";
-
-        }
-
-
-        if (heading) {
-
-            heading.textContent =
-                "Complete Your Donation";
-
-        }
-
-
-        if (description) {
-
-            description.textContent =
-                "Your donation is currently pending.";
-
-        }
-
-
-        if (paymentMessage) {
-
-            paymentMessage.style.display =
-                "";
-
-        }
-
-
-        if (verificationStatus) {
-
-            verificationStatus.style.display =
-                "none";
-
-        }
-
-
-        if (sentButton) {
-
-            sentButton.disabled =
-                false;
-
-            sentButton.textContent =
-                "I've Sent the Money";
-
-        }
+        checkoutButton.textContent =
+            donation.checkoutUrl
+                ? "Continue to Checkout"
+                : "Preparing Checkout...";
 
     }
 
@@ -2468,7 +2645,7 @@ async function registerDonationPush() {
         }
 
         const response = await fetch(
-            "http://localhost:3000/api/push/public-key"
+            `${API_BASE_URL}/api/push/public-key`
         );
 
         if (!response.ok) {
@@ -2489,6 +2666,557 @@ async function registerDonationPush() {
         return null;
     }
 }
+
+/* =====================================================
+   CHARITY REMINDER
+   The visitor chooses how often to be reminded.
+   Reminders stop when donations close
+   or when the visitor donates.
+===================================================== */
+
+const REMINDER_LABELS = {
+
+    month: "Every month",
+    week: "Every week",
+    day: "Every day",
+    "12h": "Every 12 hours",
+    hour: "Every hour"
+
+};
+
+
+/*
+ * Same rules as getAllowedReminderFrequencies
+ * in server.js.
+ */
+
+function getReminderFrequencies(charity) {
+
+    const HOUR =
+        60 * 60 * 1000;
+
+    const DAY =
+        24 * HOUR;
+
+
+    const remaining =
+        new Date(charity.date).getTime() -
+        4 * HOUR -
+        Date.now();
+
+
+    if (remaining >= 30 * DAY) {
+        return ["month", "week", "day", "12h"];
+    }
+
+    if (remaining >= 7 * DAY) {
+        return ["week", "day", "12h"];
+    }
+
+    if (remaining >= DAY) {
+        return ["day", "12h", "hour"];
+    }
+
+    if (remaining > 0) {
+        return ["hour"];
+    }
+
+    return [];
+
+}
+
+
+function getSavedReminder(charityId) {
+
+    try {
+
+        const saved =
+            JSON.parse(
+                localStorage.getItem(
+                    `tnpCharityReminder_${charityId}`
+                )
+            );
+
+        /* Older saved reminders had no frequency */
+
+        return saved && saved.frequency && saved.endpoint
+            ? saved
+            : null;
+
+    } catch (error) {
+
+        return null;
+
+    }
+
+}
+
+
+function setReminderButtonState(
+    reminderButton,
+    isActive
+) {
+
+    if (!reminderButton) {
+        return;
+    }
+
+
+    reminderButton.classList.toggle(
+        "active",
+        isActive
+    );
+
+    reminderButton.innerHTML =
+        isActive
+            ? `<i class="fa-solid fa-bell"></i>`
+            : `<i class="fa-regular fa-bell"></i>`;
+
+    const label =
+        isActive
+            ? "Reminder enabled"
+            : "Set reminder";
+
+    reminderButton.setAttribute(
+        "aria-label",
+        label
+    );
+
+    reminderButton.setAttribute(
+        "title",
+        label
+    );
+
+}
+
+
+/*
+ * Called after a confirmed donation:
+ * the server already stopped the reminders.
+ */
+
+function clearCharityReminder(charityId) {
+
+    localStorage.removeItem(
+        `tnpCharityReminder_${charityId}`
+    );
+
+
+    document
+        .querySelectorAll(
+            `.charity-reminder[data-charity-id="${charityId}"]`
+        )
+        .forEach(button =>
+            setReminderButtonState(
+                button,
+                false
+            )
+        );
+
+}
+
+
+function openReminderPicker(
+    charity,
+    reminderButton
+) {
+
+    const frequencies =
+        getReminderFrequencies(charity);
+
+
+    if (!frequencies.length) {
+
+        showDonationClosedPopup(
+            charity
+        );
+
+        return;
+
+    }
+
+
+    const saved =
+        getSavedReminder(charity.id);
+
+
+    const selected =
+        saved &&
+        frequencies.includes(saved.frequency)
+            ? saved.frequency
+            : frequencies[0];
+
+
+    let popup =
+        document.getElementById(
+            "charityReminderPopup"
+        );
+
+
+    if (!popup) {
+
+        popup =
+            document.createElement(
+                "div"
+            );
+
+        popup.id =
+            "charityReminderPopup";
+
+        popup.className =
+            "donation-payment-popup";
+
+        document.body.appendChild(
+            popup
+        );
+
+    }
+
+
+    popup.innerHTML = `
+
+        <div class="donation-modal-content">
+
+            <button
+                type="button"
+                class="donation-close"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+
+            <div class="donation-header">
+
+                <span class="donation-label">
+                    DONATION REMINDER
+                </span>
+
+                <h2 class="charity-reminder-title"></h2>
+
+                <p>
+                    How often would you like to be reminded
+                    until donations close?
+                </p>
+
+            </div>
+
+
+            <form class="charity-reminder-form">
+
+                <div class="charity-reminder-options">
+
+                    ${frequencies.map(frequency => `
+                        <label class="charity-reminder-option">
+                            <input
+                                type="radio"
+                                name="frequency"
+                                value="${frequency}"
+                                ${frequency === selected ? "checked" : ""}
+                            >
+                            <span>${REMINDER_LABELS[frequency]}</span>
+                        </label>
+                    `).join("")}
+
+                </div>
+
+
+                <p class="charity-reminder-error" hidden></p>
+
+
+                <button
+                    type="submit"
+                    class="donation-submit"
+                >
+                    ${saved ? "Update Reminder" : "Turn On Reminder"}
+                </button>
+
+
+                ${saved ? `
+                    <button
+                        type="button"
+                        class="charity-reminder-off"
+                    >
+                        Turn Off Reminder
+                    </button>
+                ` : ""}
+
+            </form>
+
+        </div>
+
+    `;
+
+
+    popup.querySelector(
+        ".charity-reminder-title"
+    ).textContent =
+        charity.activityHeadline;
+
+
+    const errorText =
+        popup.querySelector(
+            ".charity-reminder-error"
+        );
+
+
+    const closePicker =
+        () => {
+
+            popup.classList.remove(
+                "active"
+            );
+
+            document.body.style.overflow =
+                "";
+
+        };
+
+
+    const showError =
+        message => {
+
+            errorText.textContent =
+                message;
+
+            errorText.hidden =
+                false;
+
+        };
+
+
+    popup.querySelector(
+        ".donation-close"
+    ).addEventListener(
+        "click",
+        closePicker
+    );
+
+
+    popup.onclick =
+        event => {
+
+            if (event.target === popup) {
+                closePicker();
+            }
+
+        };
+
+
+    /* =========================================
+       TURN ON / UPDATE
+    ========================================= */
+
+    const form =
+        popup.querySelector(
+            ".charity-reminder-form"
+        );
+
+
+    form.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            const submitButton =
+                form.querySelector(
+                    'button[type="submit"]'
+                );
+
+            submitButton.disabled =
+                true;
+
+
+            try {
+
+                const frequency =
+                    new FormData(form).get(
+                        "frequency"
+                    );
+
+
+                const subscription =
+                    await registerDonationPush();
+
+
+                if (!subscription) {
+
+                    throw new Error(
+                        "Please allow notifications in your browser to receive reminders."
+                    );
+
+                }
+
+
+                const response =
+                    await fetch(
+                        `${API_BASE_URL}/api/charities/${encodeURIComponent(charity.id)}/reminders`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                subscription,
+                                frequency
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Unable to save your reminder."
+                    );
+
+                }
+
+
+                localStorage.setItem(
+                    `tnpCharityReminder_${charity.id}`,
+                    JSON.stringify({
+                        charityId:
+                            charity.id,
+                        frequency,
+                        endpoint:
+                            subscription.endpoint
+                    })
+                );
+
+
+                setReminderButtonState(
+                    reminderButton,
+                    true
+                );
+
+
+                closePicker();
+
+            } catch (error) {
+
+                console.error(
+                    "Unable to save charity reminder:",
+                    error
+                );
+
+                showError(
+                    error.message
+                );
+
+            } finally {
+
+                submitButton.disabled =
+                    false;
+
+            }
+
+        }
+    );
+
+
+    /* =========================================
+       TURN OFF
+    ========================================= */
+
+    const offButton =
+        popup.querySelector(
+            ".charity-reminder-off"
+        );
+
+
+    if (offButton) {
+
+        offButton.addEventListener(
+            "click",
+            async () => {
+
+                offButton.disabled =
+                    true;
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `${API_BASE_URL}/api/charities/${encodeURIComponent(charity.id)}/reminders`,
+                            {
+                                method: "DELETE",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    endpoint:
+                                        saved.endpoint
+                                })
+                            }
+                        );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Unable to turn off your reminder."
+                        );
+
+                    }
+
+
+                    localStorage.removeItem(
+                        `tnpCharityReminder_${charity.id}`
+                    );
+
+
+                    setReminderButtonState(
+                        reminderButton,
+                        false
+                    );
+
+
+                    closePicker();
+
+                } catch (error) {
+
+                    showError(
+                        error.message
+                    );
+
+                } finally {
+
+                    offButton.disabled =
+                        false;
+
+                }
+
+            }
+        );
+
+    }
+
+
+    popup.classList.add(
+        "active"
+    );
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
 async function attachDonationPush(reference, subscription) {
     if (!subscription || !reference) {
         return false;
@@ -2496,7 +3224,7 @@ async function attachDonationPush(reference, subscription) {
 
     try {
         const response = await fetch(
-            `http://localhost:3000/api/donations/${encodeURIComponent(reference)}/push-subscription`,
+            `${API_BASE_URL}/api/donations/${encodeURIComponent(reference)}/push-subscription`,
             {
                 method: "POST",
                 headers: {
@@ -2547,12 +3275,7 @@ function urlBase64ToUint8Array(base64String) {
    PAGINATION
 ===================================================== */
 
-function renderCharityPagination(
-    container,
-    totalItems,
-    currentPage,
-    onPageChange
-) {
+function renderCharityPagination(container, totalItems, currentPage, onPageChange) {
 
     const totalPages =
         Math.ceil(
@@ -2712,16 +3435,11 @@ function renderCharityPagination(
 
 }
 
-
 /* =====================================================
    RENDER CHARITY CARDS
 ===================================================== */
 
-function renderCharityCards(
-    charities,
-    container,
-    showDonate
-) {
+function renderCharityCards(charities, container, showDonate) {
 
     if (!charities.length) {
 
@@ -2753,6 +3471,7 @@ function renderCharityCards(
             card.innerHTML = `
 
                 <img
+                    loading="lazy"
                     src="${getImagePath(
                         charity.img
                     )}"
@@ -2813,7 +3532,47 @@ function renderCharityCards(
                 </div>
 
             `;
+            
+            /* =============================================
+            REMINDER
+            ============================================= */
 
+            const reminderButton =
+                card.querySelector(
+                    ".charity-reminder"
+                );
+
+            if (reminderButton) {
+
+                reminderButton.dataset.charityId =
+                    charity.id;
+
+                /* Restore existing state */
+
+                setReminderButtonState(
+                    reminderButton,
+                    Boolean(
+                        getSavedReminder(
+                            charity.id
+                        )
+                    )
+                );
+
+                reminderButton.addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        openReminderPicker(
+                            charity,
+                            reminderButton
+                        );
+
+                    }
+                    );
+                }
 
             /* =============================================
                DONATE
@@ -2911,19 +3670,13 @@ function renderCharityCards(
 
 }
 
-
 /* =====================================================
    FORMAT DATE
 ===================================================== */
 
-function formatCharityDate(
-    dateString
-) {
+function formatCharityDate(dateString) {
 
-    const date =
-        new Date(
-            dateString
-        );
+    const date = new Date(dateString);
 
 
     if (
@@ -2953,7 +3706,6 @@ function formatCharityDate(
 
 }
 
-
 /* =====================================================
    INITIALIZE
 ===================================================== */
@@ -2963,6 +3715,8 @@ document.addEventListener(
     () => {
 
         loadCharity();
+
+        handleFlutterwaveRedirect();
 
     }
 );

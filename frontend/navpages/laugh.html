@@ -20,23 +20,24 @@
           : "images/";
 
         const logoFile = isDarkMode
-          ? "logoDarkMode.PNG"
-          : "logoDefaultMode.PNG";
+          ? "logoDarkMode.jpg"
+          : "logoDefaultMode.jpg";
 
         // Create a preload link for the correct logo
         const preload = document.createElement("link");
         preload.rel = "preload";
         preload.as = "image";
         preload.href = logoPath + logoFile;
+        preload.fetchPriority = "high";
 
         document.head.appendChild(preload);
 
       })();
     </script>
     <link rel="stylesheet" type="text/css" href="autrepage.css">
-    <link rel="stylesheet" type="text/css" href="../index.css">
-    <script src="https://unpkg.com/lucide@latest" defer></script>
-    <script src="../index.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="../index.css?v=20261002">
+    <script src="https://unpkg.com/lucide@1.48.0/dist/umd/lucide.min.js" defer></script>
+    <script src="../index.js?v=20261002" defer></script>
   </head>
   <body data-category="Laugh">
     <div class="subnav">
@@ -64,7 +65,7 @@
     </div>
 
     <header>
-      <img id="logo" alt="Today Newspaper">
+      <img id="logo" alt="Today Newspaper" fetchpriority="high">
 
       <script>
       (function () {
@@ -79,8 +80,8 @@
 
         logo.src = logoPath + (
           isDarkMode
-            ? "logoDarkMode.PNG"
-            : "logoDefaultMode.PNG"
+            ? "logoDarkMode.jpg"
+            : "logoDefaultMode.jpg"
         );
 
       })();

@@ -237,6 +237,8 @@ card.classList.add("side-card");
 }
 
 const image = document.createElement("img");
+image.loading = "lazy";
+image.decoding = "async";
 image.src = getImagePath(article.img);
 image.alt = article.headline;
 
@@ -901,8 +903,8 @@ function updateLogo() {
   const isDarkMode = root.classList.contains("dark-mode");
 
   logo.src = isDarkMode
-    ? getImagePath("logoDarkMode.PNG")
-    : getImagePath("logoDefaultMode.PNG");
+    ? getImagePath("logoDarkMode.jpg")
+    : getImagePath("logoDefaultMode.jpg");
 }
 
 
@@ -1081,35 +1083,13 @@ if (whatsapp && whatsappPopup) {
    SLIDER SYSTEM
 ========================= */
 
-const news = [
-    {
-      img: getImagePath("slider/bnimage1.png"),
-      title: "FG Introduces National Textbook Ranking System, Implementation Begins September",
-        desc: "The system is intended to create a nationwide framework for assessing and ranking textbooks used in Nigerian schools.",
-        categoryTag: "Breaking News"
-    },
+/*
+ * Filled from /api/breaking: articles marked
+ * "breaking": true in backend/data/index.json.
+ * Image and headline come from the same article.
+ */
 
-    {
-      img: getImagePath("slider/bnimage2.png"),
-      title: "FG Launches ₦365m National Laureate Programme for Nigerian Students",
-        desc: "The Federal Government has commenced the 2026 Tertiary Institutions National Laureate Programme, with a ₦365 million prize attached to the programme. Institutions have been directed to establish selection committees.",
-        categoryTag: "Breaking News"
-    },
-
-    {
-      img: getImagePath("slider/bnimage3.png"),
-      title: "FG Unveils New Autism Education Reforms, Targets Specialist Workforce",
-        desc: "Education Minister Tunji Alausa recently announced a major initiative aimed at transforming autism care and developing Nigeria’s specialist workforce.",
-        categoryTag: "Breaking News"
-    },
-
-    {
-        img: getImagePath("slider/bnimage4.png"),
-        title: "JAMB’s New Admission Rules for 2026/27 Academic Session: UTME Exemption for Select Courses",
-        desc: "JAMB Announces New Admission Rules, UTME Exemption Takes Effect for Selected Courses",
-        categoryTag: "Breaking News"
-    }
-];
+let news = [];
 
 
 /* =========================
@@ -1141,6 +1121,11 @@ const nextButton = document.getElementById("next");
    SHOW SLIDE
 ========================= */
 
+let slideRequest = 0;
+
+/* Slide currently visible on screen (used by the click) */
+let shownIndex = 0;
+
 function showSlide(newIndex) {
 
     if (!news.length || !slide) return;
@@ -1151,70 +1136,125 @@ function showSlide(newIndex) {
     const current = news[targetIndex];
 
     /*
-     * PRELOAD IMAGE FIRST
-     *
-     * This prevents the headline from
-     * changing before the new image is ready.
+     * Move the index right away so fast clicks
+     * go to the next slide each time.
+     */
+
+    index = targetIndex;
+
+    updateDots();
+
+
+    /*
+     * Only the latest request may update the slide.
+     */
+
+    const request =
+        ++slideRequest;
+
+
+    const applySlide =
+        function (hasImage) {
+
+            if (request !== slideRequest) return;
+
+            /*
+             * Image and text change in the same frame.
+             */
+
+            requestAnimationFrame(() => {
+
+                shownIndex = targetIndex;
+
+                if (hasImage) {
+                    slide.src = current.img;
+                }
+
+                if (categoryTag) {
+                    categoryTag.textContent =
+                        current.categoryTag;
+                }
+
+                if (title) {
+                    title.textContent =
+                        current.title;
+                }
+
+                if (desc) {
+                    desc.textContent =
+                        current.desc;
+                }
+
+                if (slider) {
+
+                    if (hasImage) {
+                        slider.classList.add("has-image");
+                    }
+
+                    slider.classList.add("is-ready");
+
+                    slider.classList.remove("is-changing");
+
+                }
+
+            });
+
+        };
+
+
+    /*
+     * Fade out while the next image loads
+     * and is fully decoded.
+     */
+
+    const isFirstSlide =
+        !slider || !slider.classList.contains("is-ready");
+
+    if (!isFirstSlide) {
+        slider.classList.add("is-changing");
+    }
+
+
+    /* Let the fade-out finish (except for the first slide) */
+
+    const fadeOut =
+        new Promise(resolve =>
+            setTimeout(resolve, isFirstSlide ? 0 : 250)
+        );
+
+
+    /*
+     * Wait for the image to load. decode() is only a bonus:
+     * some browsers (Safari) reject it even when the image
+     * is fine, so a failed decode must not block the image.
      */
 
     const image = new Image();
 
-    image.onload = function () {
+    const loaded =
+        new Promise(resolve => {
 
-        index = targetIndex;
+            image.onload = () => {
 
-        /*
-         * Update EVERYTHING together.
-         */
+                const decoded =
+                    typeof image.decode === "function"
+                        ? image.decode().catch(() => {})
+                        : Promise.resolve();
 
-        slide.src = current.img;
+                decoded.then(() => resolve(true));
 
-        if (categoryTag) {
-            categoryTag.textContent =
-                current.categoryTag;
-        }
+            };
 
-        if (title) {
-            title.textContent =
-                current.title;
-        }
+            image.onerror = () => resolve(false);
 
-        if (desc) {
-            desc.textContent =
-                current.desc;
-        }
-
-        updateDots();
-    };
-
-    image.onerror = function () {
-
-        /*
-         * If the image fails, still show
-         * the corresponding story.
-         */
-
-        index = targetIndex;
-
-        if (categoryTag) {
-            categoryTag.textContent =
-                current.categoryTag;
-        }
-
-        if (title) {
-            title.textContent =
-                current.title;
-        }
-
-        if (desc) {
-            desc.textContent =
-                current.desc;
-        }
-
-        updateDots();
-    };
+        });
 
     image.src = current.img;
+
+    Promise.all([
+        loaded,
+        fadeOut
+    ]).then(([hasImage]) => applySlide(hasImage));
 }
 
 
@@ -1278,32 +1318,11 @@ function restartAutoSlide() {
    BUTTONS
 ========================= */
 
-if (prevButton) {
-
-    prevButton.addEventListener("click", (event) => {
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        prevSlide();
-
-    });
-
-}
-
-
-if (nextButton) {
-
-    nextButton.addEventListener("click", (event) => {
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        nextSlide();
-
-    });
-
-}
+/*
+ * The buttons already call prevSlide() / nextSlide()
+ * through their onclick attribute in the HTML.
+ * A second listener here made every click run twice.
+ */
 
 
 /* =========================
@@ -1474,29 +1493,124 @@ if (slider) {
 
 
 /* =========================
-   PRELOAD ALL IMAGES
+   LOAD BREAKING NEWS
 ========================= */
 
-news.forEach((item) => {
+async function loadBreakingNews() {
 
-    const image =
-        new Image();
+    if (!slider) return;
 
-    image.src =
-        item.img;
+    try {
 
-});
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/breaking`
+            );
+
+        if (!response.ok) {
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+        }
+
+        const data =
+            await response.json();
+
+        news =
+            (data.articles || []).map(article => ({
+                id: article.id,
+                img: getImagePath(article.img),
+                title: article.headline,
+                desc: article.summary,
+                categoryTag: "Breaking News"
+            }));
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load breaking news:",
+            error
+        );
+
+    }
+
+
+    /* Nothing to show: hide the slider */
+
+    if (!news.length) {
+        slider.hidden = true;
+        return;
+    }
+
+
+    /* Preload all slider images */
+
+    news.forEach(item => {
+        const image = new Image();
+        image.src = item.img;
+    });
+
+
+    showSlide(0);
+
+    createDots();
+
+    startAutoSlide();
+
+}
+
+
+/* =========================
+   OPEN ARTICLE ON CLICK
+   (not after a swipe or drag)
+========================= */
+
+let slideMoved = false;
+
+if (slider) {
+
+    slider.addEventListener(
+        "pointerdown",
+        event => {
+            slideMoved = false;
+            slider.pointerStartX = event.clientX;
+        }
+    );
+
+    slider.addEventListener(
+        "pointerup",
+        event => {
+            slideMoved =
+                Math.abs(event.clientX - (slider.pointerStartX || 0)) > 10;
+        }
+    );
+
+    slider.addEventListener(
+        "click",
+        event => {
+
+            if (
+                slideMoved ||
+                event.target.closest(".btn") ||
+                slider.classList.contains("is-changing") ||
+                !news[shownIndex]
+            ) {
+                return;
+            }
+
+            openArticle(news[shownIndex].id);
+
+        }
+    );
+
+}
 
 
 /* =========================
    INITIALIZE
 ========================= */
 
-showSlide(0);
-
-createDots();
-
-startAutoSlide();
+loadBreakingNews();
 
 
 /* =========================
@@ -2847,6 +2961,21 @@ if (pagination) {
 
 async function loadHomePage() {
 
+    // Skeletons in every section right away
+    [
+        ["topnewsGrid", 3],
+        ["newsGridEducation", 3],
+        ["newsGridPolitics", 3],
+        ["newsGridToday", 3],
+        ["newsGridEditor", 4]
+    ].forEach(([id, count]) => {
+        const grid = document.getElementById(id);
+        if (grid) {
+            showLoadingCards(grid, count);
+        }
+    });
+
+
     try {
 
         // =====================================
@@ -2984,7 +3113,7 @@ function sidebarCarousel() {
   images.forEach(image => {
     const slide = document.createElement("div");
     slide.className = "slide";
-    slide.innerHTML = `<img src="${getImagePath(`team/${image}`)}" alt="Today Newspaper Team">`;
+    slide.innerHTML = `<img loading="lazy" src="${getImagePath(`team/${image}`)}" alt="Today Newspaper Team">`;
     track.appendChild(slide);
   });
 
@@ -3800,3 +3929,7 @@ articles.forEach(article => {
 setArticleGridLayout(grid);
 
 }
+
+
+// JS skeletons have taken over from the CSS placeholders
+document.documentElement.classList.add("js-loaded");

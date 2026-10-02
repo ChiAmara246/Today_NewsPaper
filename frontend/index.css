@@ -4764,3 +4764,147 @@ footer {
       .about-us{
         padding: 10px;
       }
+
+
+/* =========================================================
+   MOBILE READABILITY (home page)
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  /* Smaller header so articles appear sooner */
+  header {
+    padding: 6px 16px;
+    gap: 0;
+  }
+
+  header img {
+    width: 190px;
+    height: auto;
+  }
+
+  /* Readable dates */
+  .date {
+    color: var(--text-muted);
+    font-size: .75rem;
+  }
+
+  /* Card text */
+  .grid .cardContent h3 {
+    font-size: 1.02rem;
+    line-height: 1.35;
+  }
+
+  .grid .cardContent p {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* "see more →" on one line */
+  .h2 span {
+    width: auto;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* Ad label above the logo, not on top of it */
+  .mobile-sticky-area .uniPub {
+    padding-top: 18px;
+    background: var(--surface);
+  }
+
+  .mobile-sticky-area .uniPub::before {
+    top: 4px;
+    opacity: .7;
+  }
+
+  .mobile-sticky-area .uniPub img {
+    object-fit: contain;
+  }
+}
+
+
+/* =========================================================
+   LOADING PLACEHOLDERS (before content arrives)
+   ========================================================= */
+
+/* Shared shimmer */
+.slider:not(.has-image),
+html:not(.js-loaded) .grid:empty {
+  background-image: linear-gradient(
+    90deg,
+    #ececec 0%,
+    #f7f7f7 50%,
+    #ececec 100%
+  );
+  background-size: 300% 100%;
+  animation: loading 1.4s linear infinite;
+}
+
+html.dark-mode .slider:not(.has-image),
+html.dark-mode:not(.js-loaded) .grid:empty {
+  background-image: linear-gradient(
+    90deg,
+    #1d252d 0%,
+    #26303a 50%,
+    #1d252d 100%
+  );
+}
+
+/* Slider: hide the image until it has loaded */
+.slider:not(.has-image) #slide {
+  visibility: hidden;
+}
+
+/* Slider: hide the red tag and the grey bar until they have text */
+.slider:not(.is-ready) .categoryTag,
+.slider:not(.is-ready) .headline,
+.categoryTag:empty {
+  display: none;
+}
+
+/* Sections: grey block until the JS skeleton cards take over */
+html:not(.js-loaded) .grid:empty {
+  min-height: 260px;
+  border-radius: var(--radius);
+}
+
+/* Logo: keep its space so the page does not jump */
+header img {
+  aspect-ratio: 700 / 293;
+}
+
+/* Card photos: grey while they load */
+.card img {
+  background-color: #ececec;
+}
+
+html.dark-mode .card img {
+  background-color: #1d252d;
+}
+
+.hero-card img {
+  background-color: #ececec;
+}
+
+html.dark-mode .hero-card img {
+  background-color: #1d252d;
+}
+
+/* Slider: image and text fade together */
+#slide,
+.slider .headline,
+.slider .categoryTag {
+  transition: opacity .25s ease;
+}
+
+.slider.is-changing #slide,
+.slider.is-changing .headline,
+.slider.is-changing .categoryTag {
+  opacity: 0;
+}
+
+/* Slider opens the article on click */
+.slider.is-ready {
+  cursor: pointer;
+}
