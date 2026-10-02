@@ -155,3 +155,44 @@ ol li{
         margin-bottom: 20px;
     }
 }
+
+
+/* Pagination in tune with the navigation */
+
+#pagination button {
+
+    border: 1px solid var(--border);
+
+    border-radius: 4px;
+
+}
+
+
+#pagination button:hover {
+
+    border-color: #b08a4a;
+
+    color: #b08a4a;
+
+}
+
+
+#currentPage,
+.active-page {
+
+    border-radius: 4px !important;
+
+    background: var(--primary) !important;
+
+    color: #ffffff !important;
+
+    box-shadow: inset 0 -2px 0 #c9a45c !important;
+
+}
+
+
+.Dots {
+
+    color: var(--text-muted);
+
+}

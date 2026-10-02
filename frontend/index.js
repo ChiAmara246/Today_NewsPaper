@@ -3933,3 +3933,27 @@ setArticleGridLayout(grid);
 
 // JS skeletons have taken over from the CSS placeholders
 document.documentElement.classList.add("js-loaded");
+
+
+/* Phones: the logo header sticks above the nav.
+   The nav sits right under it, so keep its height in a variable. */
+
+function syncStickyHeaderHeight() {
+
+  const header = document.querySelector("header");
+
+  if (!header) return;
+
+  document.documentElement.style.setProperty(
+    "--tnp-header-h",
+    `${header.offsetHeight}px`
+  );
+}
+
+syncStickyHeaderHeight();
+
+window.addEventListener("resize", syncStickyHeaderHeight);
+
+window.addEventListener("load", syncStickyHeaderHeight);
+
+document.getElementById("logo")?.addEventListener("load", syncStickyHeaderHeight);

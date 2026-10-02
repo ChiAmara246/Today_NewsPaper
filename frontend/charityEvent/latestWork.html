@@ -141,72 +141,22 @@
     </div>
     
     <main>
-      <div class="container0">
+      <div class="container0 cw-layout">
         <div class="container">
 
-          <section class="charity-section">
-
-            <div>
-                <h1>Upcoming</h1>
-                <div id="upcomingCharity" class="charity-container"></div>
-            </div>
-
-
-            <div>
-                <h1>Latest</h1>
-                <div id="latestCharity" class="charity-container"></div>
-            </div>
-
-        </section>
+          <article id="charityDetail" class="cw-detail" aria-live="polite">
+            <p class="cw-loading">Loading activity…</p>
+          </article>
 
         </div>
         <section id="searchResults" class="hidden"></section>
-        <div class="aside">
+        <div class="aside lw-aside">
 
-          <aside id="frameBox">
-            <h3>Today Newspaper Team</h3>
-            <div class="carousel">
-              <div class="track"></div>
-            </div>
+          <aside id="thanksTicker" class="lw-side" hidden>
+            <h3>Thank you</h3>
+            <div class="lw-side-body"></div>
           </aside>
 
-          <aside id="ePaper">
-            <h6>ePaper</h6>
-            <div class="epaper-carousel" id="epaperTrigger">
-                <img id="epaperImage" src="" alt="Today Newspaper ePaper">
-            </div>
-            </aside>
-
-            <div class="mobile-sticky-area">
-
-              <aside id="whatsapp">
-                <a href="https://chat.whatsapp.com/JRep0h9StkDKcaHAel0TeN?mode=gi_t" rel="noopener noreferrer" target="_blank">
-                  <img src="../images/images-8.jpeg" alt="Join us on WhatsApp">
-                </a>
-              </aside>
-
-              <!-- WhatsApp Popup -->
-              <div id="whatsappPopup" class="whatsapp-popup">
-
-                <div class="whatsapp-popup-card">
-
-                  <button id="closeWhatsappPopup" class="whatsapp-close" aria-label="Close popup">
-                    &times;
-                  </button>
-
-                  <div class="whatsapp-icon">
-                    <i class="fa-brands fa-whatsapp"></i>
-                  </div>
-
-                  <p>
-                    Sorry, this whatsapp community is filled.
-                  </p>
-
-                </div>
-
-              </div>
-
-            </div>
         </div>
       </div>
     </main>

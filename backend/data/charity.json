@@ -28,11 +28,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -40,7 +41,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 2,
@@ -71,11 +99,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -83,7 +112,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 3,
@@ -114,11 +170,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -126,7 +183,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 4,
@@ -155,13 +239,14 @@
       }
     ],
     "fundraising": {
-      "raised": 0,
-      "goal": 500000,
-      "currency": "NGN"
+      "raised": 1104500,
+      "goal": 1000000,
+      "currency": "NGN",
+      "updatedAt": "2026-09-26T10:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -169,7 +254,420 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Babcock University",
+        "logo": "babcockLogo.jpeg",
+        "url": "https://babcock.edu.ng",
+        "contribution": "Provided transport for volunteers",
+        "main": true
+      },
+      {
+        "name": "Nile University",
+        "logo": "",
+        "url": "",
+        "contribution": "Donated 300 books"
+      },
+      {
+        "name": "Lagos Women Network",
+        "logo": "",
+        "url": "",
+        "contribution": "Hosted the workshop"
+      }
+    ],
+    "updates": [],
+    "gallery": [
+      {
+        "img": "African-trade-officials-business-representatives.jpeg",
+        "caption": "Photo de test 1"
+      },
+      {
+        "img": "EditCNG.jpeg",
+        "caption": "Photo de test 2"
+      },
+      {
+        "img": "Education-stakeholders.jpeg",
+        "caption": "Photo de test 3"
+      },
+      {
+        "img": "FIFA-president_internationnal-football-meeting.jpeg",
+        "caption": "Photo de test 4"
+      },
+      {
+        "img": "Federal-education-officials-conducting.jpeg",
+        "caption": "Photo de test 5"
+      },
+      {
+        "img": "Firefighters-Federal-Fire-Service-bank.jpeg",
+        "caption": "Photo de test 6"
+      },
+      {
+        "img": "Lagos-school-pupils.jpeg",
+        "caption": "Photo de test 7"
+      },
+      {
+        "img": "NNPC+crude+oil.jpeg",
+        "caption": "Photo de test 8"
+      },
+      {
+        "img": "Nigerian-oil-workers-monitoring-crude-production-equipment.png",
+        "caption": "Photo de test 9"
+      },
+      {
+        "img": "Nigerian-pupils-classroom.jpeg",
+        "caption": "Photo de test 10"
+      },
+      {
+        "img": "Nigerian-pupils-public-school-classroom.jpeg",
+        "caption": "Photo de test 11"
+      },
+      {
+        "img": "Nigerian-secondary-school-students.jpeg",
+        "caption": "Photo de test 12"
+      },
+      {
+        "img": "Nigerian-students-using-computers.jpeg",
+        "caption": "Photo de test 13"
+      },
+      {
+        "img": "Nigerian-students-using-digital-devices.jpeg",
+        "caption": "Photo de test 14"
+      },
+      {
+        "img": "Nigerian-technical-education.jpeg",
+        "caption": "Photo de test 15"
+      },
+      {
+        "img": "Nigerian-university-researchers.jpeg",
+        "caption": "Photo de test 16"
+      },
+      {
+        "img": "Oyo-State-pupils.jpeg",
+        "caption": "Photo de test 17"
+      },
+      {
+        "img": "President-Tinubu+security-officials.jpeg",
+        "caption": "Photo de test 18"
+      },
+      {
+        "img": "Students-competing-NEPL:Seplat2026.jpeg",
+        "caption": "Photo de test 19"
+      },
+      {
+        "img": "Students-smartphones-computers.png",
+        "caption": "Photo de test 20"
+      }
+    ],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [
+      {
+        "name": "Ada Okafor",
+        "role": "Coordinator",
+        "thanks": {
+          "text": "Thank you Ada for organising everything so well. I felt welcome from the first day.",
+          "from": "Mama Bisi Adewale",
+          "age": "42 years old"
+        }
+      },
+      {
+        "name": "Tunde Bakare",
+        "role": "Photographer",
+        "thanks": {
+          "text": "Thank you Tunde for the photos of my dresses. I use them to sell on Instagram.",
+          "from": "Joy Uzor",
+          "age": "33 years old"
+        }
+      },
+      {
+        "name": "Chinedu Eze",
+        "role": "Logistics",
+        "thanks": {
+          "text": "Thank you Chinedu for setting up our sewing machines every morning.",
+          "from": "Adaeze Obi",
+          "age": "21 years old"
+        }
+      },
+      {
+        "name": "Musa Ibrahim",
+        "role": "Driver",
+        "thanks": {
+          "text": "Thank you Musa for driving us from Ikorodu every day.",
+          "from": "Grace Effiong",
+          "age": "27 years old"
+        }
+      },
+      {
+        "name": "Blessing Udo",
+        "role": "Trainer",
+        "thanks": {
+          "text": "Thank you Blessing for teaching me to sew with patience. I was so scared at first.",
+          "from": "Ruth Akpan",
+          "age": "19 years old"
+        }
+      },
+      {
+        "name": "Yemi Alade",
+        "role": "Registration",
+        "thanks": {
+          "text": "Thank you Yemi for helping me fill the form. I cannot read well yet.",
+          "from": "Mama Ngozi Eze",
+          "age": "58 years old"
+        }
+      },
+      {
+        "name": "Fatima Garba",
+        "role": "Trainer",
+        "thanks": {
+          "text": "Thank you Fatima for the bead-making class. You made it so joyful.",
+          "from": "Hauwa Abdullahi",
+          "age": "31 years old"
+        }
+      },
+      {
+        "name": "Segun Ojo",
+        "role": "Security",
+        "thanks": {
+          "text": "Thank you Segun for keeping us safe going home in the evening.",
+          "from": "Comfort Etuk",
+          "age": "29 years old"
+        }
+      },
+      {
+        "name": "Amaka Nnaji",
+        "role": "Catering",
+        "thanks": {
+          "text": "Thank you Amaka for the delicious jollof every afternoon!",
+          "from": "Kaderi Yolande",
+          "age": "6 years old"
+        }
+      },
+      {
+        "name": "David Okoro",
+        "role": "Logistics",
+        "thanks": {
+          "text": "Thank you David for carrying all the fabric boxes for us.",
+          "from": "Folake Adeyinka",
+          "age": "36 years old"
+        }
+      },
+      {
+        "name": "Rukayat Adeyemi",
+        "role": "Translator",
+        "thanks": {
+          "text": "Thank you Rukayat for translating into Yoruba. I understood everything.",
+          "from": "Mama Tolu Ajayi",
+          "age": "47 years old"
+        }
+      },
+      {
+        "name": "Kelechi Ibe",
+        "role": "Media",
+        "thanks": {
+          "text": "Thank you Kelechi for filming my story. My children watched it with pride.",
+          "from": "Zainab Ahmed",
+          "age": "34 years old"
+        }
+      }
+    ],
+    "donors": [
+      {
+        "name": "Dangote Foundation",
+        "amount": 500000,
+        "thanks": {
+          "text": "Thank you Dangote Foundation for the 10 sewing machines. I now sew school uniforms for my whole street.",
+          "from": "Mama Bisi Adewale",
+          "age": "42 years old"
+        }
+      },
+      {
+        "name": "Chioma Okeke",
+        "amount": 25000,
+        "thanks": {
+          "text": "Thank you Chioma for paying my hairdressing kit. I did my first paid braids yesterday!",
+          "from": "Esther Nwachukwu",
+          "age": "23 years old"
+        }
+      },
+      {
+        "anonymous": true,
+        "amount": 150000,
+        "thanks": {
+          "text": "To the kind donor: thank you for my training fees. I could never have paid them alone.",
+          "from": "Hauwa Abdullahi",
+          "age": "31 years old"
+        }
+      },
+      {
+        "name": "Femi Adebayo",
+        "amount": 50000,
+        "thanks": {
+          "text": "Thank you Femi for the baking oven. I sell bread every morning before church.",
+          "from": "Folake Adeyinka",
+          "age": "36 years old"
+        }
+      },
+      {
+        "name": "Aisha Musa",
+        "amount": 30000,
+        "thanks": {
+          "text": "Thank you Aisha for the bead-making starter kit. My first necklace sold in one day!",
+          "from": "Ruth Akpan",
+          "age": "19 years old"
+        }
+      },
+      {
+        "name": "Bisi Ogunleye",
+        "amount": 10000,
+        "thanks": {
+          "text": "Thank you Bisi for my transport money. I came every day without missing a class.",
+          "from": "Grace Effiong",
+          "age": "27 years old"
+        }
+      },
+      {
+        "name": "John Danjuma",
+        "amount": 5000,
+        "thanks": {
+          "text": "Thank you John for the notebook and pens. I wrote down every recipe.",
+          "from": "Mama Ngozi Eze",
+          "age": "58 years old"
+        }
+      },
+      {
+        "name": "Ngozi Eze",
+        "amount": 20000,
+        "thanks": {
+          "text": "Thank you Ngozi for the childcare corner. My baby was safe while I learnt.",
+          "from": "Blessing Okafor",
+          "age": "24 years old"
+        }
+      },
+      {
+        "name": "Emeka Nwosu",
+        "amount": 15000,
+        "thanks": {
+          "text": "Thank you Emeka for the fabric. I made my first dress for my daughter.",
+          "from": "Joy Uzor",
+          "age": "33 years old"
+        }
+      },
+      {
+        "anonymous": true,
+        "amount": 7500,
+        "thanks": {
+          "text": "To whoever paid for lunch: thank you, we learnt better with full stomachs.",
+          "from": "Halima Garba",
+          "age": "45 years old"
+        }
+      },
+      {
+        "name": "Halima Bello",
+        "amount": 40000,
+        "thanks": {
+          "text": "Thank you Halima for the soap-making materials. My shop shelf is full now.",
+          "from": "Rukayat Bello",
+          "age": "38 years old"
+        }
+      },
+      {
+        "name": "Kunle Afolabi",
+        "amount": 12000,
+        "thanks": {
+          "text": "Thank you Kunle for my certificate. I framed it in my shop.",
+          "from": "Comfort Etuk",
+          "age": "29 years old"
+        }
+      },
+      {
+        "name": "Grace Etim",
+        "amount": 8000,
+        "thanks": {
+          "text": "Thank you Grace for the scissors and measuring tape. They are my treasures.",
+          "from": "Adaeze Obi",
+          "age": "21 years old"
+        }
+      },
+      {
+        "name": "Ibrahim Sani",
+        "amount": 100000,
+        "thanks": {
+          "text": "Thank you Ibrahim for the small business grant. I bought my first stock of fabric.",
+          "from": "Zainab Ahmed",
+          "age": "34 years old"
+        }
+      },
+      {
+        "name": "Funke Akindele",
+        "amount": 35000,
+        "thanks": {
+          "text": "Thank you Funke for the phone training. I now take orders on WhatsApp.",
+          "from": "Mama Tolu Ajayi",
+          "age": "47 years old"
+        }
+      },
+      {
+        "name": "Uche Obi",
+        "amount": 6000,
+        "thanks": {
+          "text": "Thank you Uche for the snacks for our children. They played while we worked.",
+          "from": "Kaderi Yolande",
+          "age": "6 years old"
+        }
+      },
+      {
+        "name": "Zainab Lawal",
+        "amount": 18000,
+        "thanks": {
+          "text": "Thank you Zainab for the hair dryer. My clients don't wait anymore.",
+          "from": "Amina Yusuf",
+          "age": "26 years old"
+        }
+      },
+      {
+        "anonymous": true,
+        "amount": 60000,
+        "thanks": {
+          "text": "To the kind donor: thank you for the generator fuel. We sewed even when NEPA took light.",
+          "from": "Patience Udoh",
+          "age": "40 years old"
+        }
+      },
+      {
+        "name": "Tolu Bankole",
+        "amount": 9000,
+        "thanks": {
+          "text": "Thank you Tolu for the apron and gloves. I feel like a real baker.",
+          "from": "Ifeoma Nnaji",
+          "age": "22 years old"
+        }
+      },
+      {
+        "name": "Patience Okon",
+        "amount": 4000,
+        "thanks": {
+          "text": "Thank you Patience. You were trained here last year and now you helped me. I will do the same.",
+          "from": "Mary Ekanem",
+          "age": "30 years old"
+        }
+      }
+    ],
+    "media": []
   },
   {
     "id": 5,
@@ -200,11 +698,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -212,7 +711,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 6,
@@ -243,11 +769,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -255,7 +782,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 7,
@@ -286,11 +840,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -298,7 +853,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 8,
@@ -329,11 +911,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -341,7 +924,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 9,
@@ -372,11 +982,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -384,7 +995,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 10,
@@ -415,11 +1053,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -427,7 +1066,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 11,
@@ -458,11 +1124,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -470,7 +1137,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 12,
@@ -501,11 +1195,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -513,7 +1208,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 13,
@@ -544,11 +1266,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -556,7 +1279,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 14,
@@ -587,11 +1337,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -599,7 +1350,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 15,
@@ -630,11 +1408,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -642,7 +1421,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 16,
@@ -673,11 +1479,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -685,7 +1492,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 17,
@@ -716,11 +1550,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -728,7 +1563,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 18,
@@ -759,11 +1621,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -771,7 +1634,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 19,
@@ -802,11 +1692,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -814,7 +1705,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 20,
@@ -845,11 +1763,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -857,7 +1776,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 21,
@@ -888,11 +1834,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -900,7 +1847,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 22,
@@ -931,11 +1905,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -943,7 +1918,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 23,
@@ -974,11 +1976,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -986,7 +1989,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 24,
@@ -1017,11 +2047,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1029,7 +2060,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 25,
@@ -1060,11 +2118,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1072,7 +2131,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 26,
@@ -1103,11 +2189,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1115,7 +2202,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 27,
@@ -1146,11 +2260,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1158,7 +2273,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 28,
@@ -1189,11 +2331,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1201,7 +2344,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 29,
@@ -1232,11 +2402,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1244,7 +2415,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 30,
@@ -1275,11 +2473,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1287,7 +2486,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 31,
@@ -1318,11 +2544,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1330,7 +2557,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 32,
@@ -1361,11 +2615,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1373,7 +2628,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 33,
@@ -1404,11 +2686,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1416,7 +2699,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 34,
@@ -1447,11 +2757,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1459,7 +2770,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 35,
@@ -1490,11 +2828,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1502,7 +2841,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 36,
@@ -1533,11 +2899,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1545,7 +2912,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 37,
@@ -1576,11 +2970,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1588,7 +2983,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 38,
@@ -1619,11 +3041,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1631,7 +3054,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 39,
@@ -1662,11 +3112,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1674,7 +3125,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 40,
@@ -1705,11 +3183,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1717,7 +3196,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 41,
@@ -1748,11 +3254,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1760,7 +3267,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 42,
@@ -1791,11 +3325,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1803,7 +3338,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 43,
@@ -1834,11 +3396,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1846,7 +3409,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 44,
@@ -1877,11 +3467,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1889,7 +3480,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 45,
@@ -1920,11 +3538,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1932,7 +3551,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 46,
@@ -1963,11 +3609,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -1975,7 +3622,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 47,
@@ -2006,11 +3680,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -2018,7 +3693,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 48,
@@ -2049,11 +3751,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -2061,7 +3764,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 49,
@@ -2092,11 +3822,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -2104,7 +3835,34 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   },
   {
     "id": 50,
@@ -2135,11 +3893,12 @@
     "fundraising": {
       "raised": 0,
       "goal": 500000,
-      "currency": "NGN"
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
       "type": "donate",
-      "label": "Donate",
+      "label": "Support this cause",
       "url": ""
     },
     "organiser": {
@@ -2147,6 +3906,33 @@
       "phone": "+234 000 000 0000",
       "email": "charity@todaynewspaper.com",
       "whatsapp": "2340000000000"
-    }
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": []
   }
 ]

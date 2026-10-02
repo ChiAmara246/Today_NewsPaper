@@ -1622,6 +1622,61 @@ app.get(
 
 
 /* =====================================================
+   PUBLIC DONOR WALL
+   Completed donations only. Never exposes email,
+   phone or payment details.
+===================================================== */
+
+app.get(
+    "/api/charities/:id/donors",
+    (req, res) => {
+
+        const charityId =
+            String(req.params.id);
+
+
+        const donors =
+            donations
+                .filter(donation =>
+                    String(donation.charityId) === charityId &&
+                    donation.status === "completed"
+                )
+                .map(donation => {
+
+                    const anonymous =
+                        donation.showName === false;
+
+                    return {
+                        name:
+                            anonymous ? "" : donation.donorName,
+                        anonymous,
+                        amount:
+                            Number(donation.amount) || 0,
+                        currency:
+                            donation.currency,
+                        thanks:
+                            donation.thanks &&
+                            donation.thanks.text
+                                ? {
+                                    text: String(donation.thanks.text),
+                                    from: String(donation.thanks.from || ""),
+                                    age: String(donation.thanks.age || "")
+                                }
+                                : null
+                    };
+
+                });
+
+
+        res.json({
+            donors
+        });
+
+    }
+);
+
+
+/* =====================================================
    SINGLE CHARITY
 ===================================================== */
 
@@ -1803,6 +1858,7 @@ app.post(
                 email,
                 phone,
                 message,
+                showName,
                 amount,
                 currency
             } = req.body;
@@ -1989,6 +2045,15 @@ app.post(
                     String(
                         message || ""
                     ).trim(),
+
+                /* Name shown on the thank-you wall unless unticked */
+                showName:
+                    showName !== false,
+
+                /* Thank-you note added after the campaign:
+                   { text, from, age } */
+                thanks:
+                    null,
 
                 amount:
                     Number(

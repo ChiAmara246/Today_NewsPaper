@@ -4908,3 +4908,902 @@ html.dark-mode .hero-card img {
 .slider.is-ready {
   cursor: pointer;
 }
+
+
+/* =========================================================
+   NAVIGATION — ELEGANT REFRESH
+   Navy bar, thin gold rule, small-caps links with a gold
+   underline, translucent search pill.
+   ========================================================= */
+
+nav {
+
+  gap: 18px;
+
+  min-height: 54px;
+
+  padding: 0 24px;
+
+  background:
+    linear-gradient(180deg, #05306b 0%, var(--primary) 100%);
+
+  border-bottom: 1px solid rgba(201, 164, 92, 0.55);
+
+  box-shadow: 0 6px 18px rgba(2, 26, 63, 0.18);
+
+}
+
+
+html.dark-mode nav {
+
+  background:
+    linear-gradient(180deg, #10305f 0%, #0c2955 100%);
+
+  border-bottom-color: rgba(216, 181, 106, 0.45);
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+
+}
+
+
+nav ul {
+
+  align-items: center;
+
+  gap: 2px;
+
+}
+
+
+nav a {
+
+  position: relative;
+
+  padding: 18px 12px;
+
+  border-radius: 0;
+
+  background: none;
+
+  color: rgba(255, 255, 255, 0.82);
+
+  font-size: 12.5px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.09em;
+
+  text-transform: uppercase;
+
+  transition: color 0.25s ease;
+
+}
+
+
+nav a::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 12px;
+
+  right: 12px;
+
+  bottom: 12px;
+
+  height: 2px;
+
+  background: #c9a45c;
+
+  transform: scaleX(0);
+
+  transform-origin: center;
+
+  transition: transform 0.3s ease;
+
+}
+
+
+nav a:hover,
+nav a:focus-visible,
+nav a.active {
+
+  background: none;
+
+  color: #ffffff;
+
+}
+
+
+nav a:hover::after,
+nav a:focus-visible::after,
+nav a.active::after {
+
+  transform: scaleX(1);
+
+}
+
+
+nav a:focus-visible {
+
+  outline: none;
+
+}
+
+
+/* Image links (e.g. the charity badge) keep no underline */
+
+nav a:has(img) {
+
+  padding: 8px 10px;
+
+}
+
+
+nav a:has(img)::after {
+
+  display: none;
+
+}
+
+
+nav a img {
+
+  display: block;
+
+  height: 30px;
+
+  border-radius: 6px;
+
+  transition: transform 0.25s ease;
+
+}
+
+
+nav a:has(img):hover img {
+
+  transform: scale(1.08);
+
+}
+
+
+/* Search pill */
+
+.search-box {
+
+  width: 230px;
+
+}
+
+
+.search-box input {
+
+  height: 36px;
+
+  padding: 0 42px 0 16px;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(255, 255, 255, 0.22);
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.10);
+
+  color: #ffffff;
+
+  font: inherit;
+
+  font-size: 13px;
+
+  letter-spacing: 0.02em;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease;
+
+}
+
+
+.search-box input::placeholder {
+
+  color: rgba(255, 255, 255, 0.6);
+
+}
+
+
+.search-box input:focus {
+
+  border-color: #c9a45c;
+
+  background: rgba(255, 255, 255, 0.16);
+
+}
+
+
+.search-box button {
+
+  width: 30px;
+
+  height: 30px;
+
+  background: transparent;
+
+  font-size: 14px;
+
+  opacity: 0.85;
+
+  transition: opacity 0.2s ease;
+
+}
+
+
+.search-box button:hover {
+
+  opacity: 1;
+
+}
+
+
+/* Mobile drawer */
+
+.dot {
+
+  display: none;
+
+  padding: 6px 2px;
+
+  color: #ffffff;
+
+  font-size: 22px;
+
+  line-height: 1;
+
+}
+
+
+.links {
+
+  width: min(280px, 85vw);
+
+  border-right: 1px solid rgba(201, 164, 92, 0.45);
+
+  border-radius: 0 0 14px 0;
+
+  background: var(--primary);
+
+  opacity: 1;
+
+  box-shadow: 12px 12px 34px rgba(2, 26, 63, 0.35);
+
+}
+
+
+html.dark-mode .links {
+
+  background: #0c2955;
+
+}
+
+
+.links a {
+
+  padding: 15px 20px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-left: 3px solid transparent;
+
+  border-radius: 0;
+
+  color: rgba(255, 255, 255, 0.86);
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.09em;
+
+  text-transform: uppercase;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+
+}
+
+
+.links a:hover,
+.links a.active {
+
+  border-left-color: #c9a45c;
+
+  background: rgba(255, 255, 255, 0.06);
+
+  color: #ffffff;
+
+}
+
+
+@media (max-width: 746px) {
+
+  nav {
+
+    min-height: 0;
+
+    padding: 10px 16px;
+
+  }
+
+
+  .dot {
+
+    display: block;
+
+  }
+
+
+  .search-box {
+
+    width: auto;
+
+    flex: 1;
+
+  }
+
+}
+
+
+/* =========================================================
+   NAVIGATION — ONE LINE ON DESKTOP, TWO ON TABLETS,
+   LOGO STICKS WITH THE NAV ON PHONES
+   ========================================================= */
+
+nav {
+
+  --nav-x: 12px;
+
+}
+
+
+nav a {
+
+  padding: 18px var(--nav-x);
+
+  white-space: nowrap;
+
+}
+
+
+nav a::after {
+
+  left: var(--nav-x);
+
+  right: var(--nav-x);
+
+}
+
+
+/* Desktop: everything on a single line */
+
+@media (min-width: 1025px) {
+
+  nav {
+
+    --nav-x: clamp(6px, 0.75vw, 12px);
+
+    flex-wrap: nowrap;
+
+    gap: clamp(8px, 1.2vw, 18px);
+
+    padding: 0 clamp(12px, 1.7vw, 24px);
+
+  }
+
+
+  nav ul {
+
+    flex-wrap: nowrap;
+
+    min-width: 0;
+
+  }
+
+
+  nav a {
+
+    font-size: clamp(10.5px, 0.88vw, 12.5px);
+
+    letter-spacing: clamp(0.02em, 0.07vw, 0.09em);
+
+  }
+
+
+  .search-box {
+
+    width: clamp(130px, 14vw, 230px);
+
+  }
+
+}
+
+
+/* Tablets: up to two lines */
+
+@media (min-width: 747px) and (max-width: 1024px) {
+
+  nav {
+
+    --nav-x: 10px;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    row-gap: 0;
+
+    padding: 4px 16px 8px;
+
+  }
+
+
+  /* Links and search share the same two lines */
+
+  nav ul {
+
+    display: contents;
+
+  }
+
+
+  nav a {
+
+    padding-top: 13px;
+
+    padding-bottom: 13px;
+
+    font-size: 12px;
+
+  }
+
+
+  nav a::after {
+
+    bottom: 7px;
+
+  }
+
+
+  .search-box {
+
+    width: 200px;
+
+    margin-left: 8px;
+
+  }
+
+}
+
+
+/* Phones: the logo stays stuck above the nav */
+
+@media (max-width: 746px) {
+
+  header {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1001;
+
+  }
+
+
+  nav {
+
+    top: var(--tnp-header-h, 0px);
+
+  }
+
+}
+
+
+/* =========================================================
+   SITE REFRESH — in tune with the navigation
+   Navy + gold, Playfair headlines, small-caps labels.
+   ========================================================= */
+
+:root {
+
+  --gold: #b08a4a;
+  --gold-soft: rgba(176, 138, 74, 0.18);
+  --serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+
+}
+
+
+html.dark-mode {
+
+  --gold: #d8b56a;
+  --gold-soft: rgba(216, 181, 106, 0.16);
+
+}
+
+
+/* ---------- Top bar ---------- */
+
+.subnav a,
+.subnav li {
+
+  font-size: 11px;
+
+  letter-spacing: 0.06em;
+
+}
+
+
+.subnav a:hover,
+.subnav a.active {
+
+  color: var(--gold);
+
+}
+
+
+/* ---------- Section titles ---------- */
+
+.h2 {
+
+  position: relative;
+
+  border-bottom: 1px solid var(--border);
+
+}
+
+
+.h2::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+
+  bottom: -1px;
+
+  width: 64px;
+
+  height: 2px;
+
+  background: var(--gold);
+
+}
+
+
+.h2 h2 {
+
+  padding-left: 0;
+
+  font-family: var(--serif);
+
+  font-size: 1.5rem;
+
+  font-weight: 600;
+
+  letter-spacing: 0;
+
+}
+
+
+.h2 h2::before {
+
+  display: none;
+
+}
+
+
+.h2 a {
+
+  color: var(--gold);
+
+  font-size: 0.7rem;
+
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+
+}
+
+
+.h2 a:hover {
+
+  color: var(--text);
+
+  opacity: 1;
+
+}
+
+
+/* ---------- Article cards ---------- */
+
+.card {
+
+  border-radius: 4px;
+
+  box-shadow: 0 1px 2px rgba(2, 26, 63, 0.04);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+
+}
+
+
+.card:hover {
+
+  transform: translateY(-3px);
+
+  border-color: var(--border-dark);
+
+  box-shadow: 0 14px 30px rgba(2, 26, 63, 0.10);
+
+}
+
+
+.grid .cardContent h3,
+.card h3 {
+
+  font-family: var(--serif);
+
+  font-weight: 600;
+
+  line-height: 1.3;
+
+  letter-spacing: 0;
+
+}
+
+
+.grid .card:hover .cardContent h3 {
+
+  color: var(--gold);
+
+}
+
+
+.grid .cardContent p {
+
+  color: var(--text-muted);
+
+}
+
+
+/* Category labels: navy small caps (the slider's red
+   "Breaking news" keeps its colour) */
+
+.categoryTag:not(#categoryTag) {
+
+  padding: 4px 9px;
+
+  border-left: 3px solid var(--gold);
+
+  border-radius: 2px;
+
+  background: var(--primary);
+
+  color: #ffffff;
+
+  font-size: 0.64rem;
+
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+
+}
+
+
+html.dark-mode .categoryTag:not(#categoryTag) {
+
+  background: var(--gold);
+
+  border-left-color: #ffffff;
+
+  color: #021a3f;
+
+}
+
+
+#categoryTag {
+
+  font-size: 0.68rem;
+
+  letter-spacing: 0.14em;
+
+}
+
+
+/* Dates: readable, with a gold dot */
+
+.date {
+
+  color: var(--text-muted);
+
+  font-size: 0.68rem;
+
+  letter-spacing: 0.1em;
+
+}
+
+
+.date::before {
+
+  background: var(--gold);
+
+}
+
+
+/* ---------- Slider ---------- */
+
+.headline {
+
+  padding: 60px 28px 26px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2, 26, 63, 0) 0%,
+      rgba(2, 26, 63, 0.65) 45%,
+      rgba(2, 26, 63, 0.92) 100%
+    );
+
+}
+
+
+.headline h1 {
+
+  font-family: var(--serif);
+
+  font-weight: 600;
+
+  letter-spacing: 0;
+
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+}
+
+
+.headline p {
+
+  color: rgba(255, 255, 255, 0.85);
+
+}
+
+
+.btn {
+
+  width: 44px;
+
+  height: 44px;
+
+  padding: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  border-radius: 50%;
+
+  background: rgba(2, 26, 63, 0.55);
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease;
+
+}
+
+
+.btn:hover {
+
+  border-color: #c9a45c;
+
+  background: rgba(2, 26, 63, 0.85);
+
+}
+
+
+/* ---------- Sidebar boxes ---------- */
+
+.aside > aside {
+
+  border-top: 3px solid var(--gold);
+
+  border-radius: 4px;
+
+}
+
+
+#frameBox h3,
+.most-read-header h2 {
+
+  font-family: var(--serif);
+
+  letter-spacing: 0;
+
+}
+
+
+.most-read-number {
+
+  color: var(--gold);
+
+  font-family: var(--serif);
+
+}
+
+
+.most-read-item:hover .most-read-content h3 {
+
+  color: var(--gold);
+
+}
+
+
+/* ---------- Footer ---------- */
+
+footer {
+
+  background:
+    linear-gradient(180deg, var(--primary) 0%, #021a3f 100%);
+
+  border-top: 1px solid rgba(201, 164, 92, 0.55);
+
+}
+
+
+html.dark-mode footer {
+
+  background:
+    linear-gradient(180deg, #0c2955 0%, #071a36 100%);
+
+}
+
+
+.footer-brand-text h2 {
+
+  font-family: var(--serif);
+
+}
+
+
+.footer-links h3 {
+
+  color: #c9a45c;
+
+}
+
+
+.footer-links a {
+
+  transition: color 0.2s ease, padding-left 0.2s ease;
+
+}
+
+
+.footer-links a:hover {
+
+  padding-left: 4px;
+
+  color: #c9a45c;
+
+}
+
+
+.footer-values span + span {
+
+  border-color: rgba(201, 164, 92, 0.5);
+
+}
