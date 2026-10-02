@@ -2136,3 +2136,1014 @@ html.dark-mode .donation-closed-popup-button:hover {
     background: var(--surface-soft);
 
 }
+
+
+/* =========================================================
+   CHARITY DETAIL PAGE (charitywork.html)
+   Navy • gold accent • Playfair Display headings
+========================================================= */
+
+.cw-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 3fr)
+        minmax(280px, 1fr);
+
+    gap: 28px;
+
+    margin: 0 auto;
+
+    padding: 30px 20px 60px;
+
+    max-width: 1400px;
+
+    box-sizing: border-box;
+
+}
+
+
+.cw-layout .aside {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+    margin: 0;
+
+}
+
+
+.cw-detail {
+
+    --cw-navy: #032456;
+    --cw-navy-deep: #021a3f;
+    --cw-gold: #c9a45c;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 24px;
+
+    min-width: 0;
+
+    color: var(--text);
+
+}
+
+
+.cw-detail h1,
+.cw-detail h2 {
+
+    font-family:
+        "Playfair Display",
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+}
+
+
+.cw-loading {
+
+    padding: 60px 0;
+
+    text-align: center;
+
+    color: var(--text-muted);
+
+}
+
+
+/* ---------- Back link ---------- */
+
+.cw-back {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    align-self: flex-start;
+
+    color: var(--text-muted);
+
+    font-size: 0.85rem;
+
+    font-weight: 600;
+
+    letter-spacing: 0.06em;
+
+    text-transform: uppercase;
+
+    text-decoration: none;
+
+    transition: color 0.2s ease;
+
+}
+
+
+.cw-back:hover {
+
+    color: var(--accent);
+
+}
+
+
+/* ---------- Hero ---------- */
+
+.cw-hero {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    min-height: 420px;
+
+    overflow: hidden;
+
+    border-radius: 4px;
+
+    background: var(--cw-navy);
+
+    isolation: isolate;
+
+}
+
+
+.cw-hero-image {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    z-index: -2;
+
+}
+
+
+.cw-hero::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: -1;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(2, 26, 63, 0.05) 25%,
+            rgba(2, 26, 63, 0.92) 100%
+        );
+
+}
+
+
+.cw-hero-heart {
+
+    display: none;
+
+}
+
+
+.cw-hero--banner {
+
+    background:
+        radial-gradient(
+            circle at 80% 30%,
+            rgba(201, 164, 92, 0.28),
+            transparent 55%
+        ),
+        linear-gradient(
+            135deg,
+            var(--cw-navy) 0%,
+            var(--cw-navy-deep) 100%
+        );
+
+}
+
+
+.cw-hero--banner .cw-hero-heart {
+
+    position: absolute;
+
+    top: 50%;
+
+    right: 8%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 150px;
+
+    height: 150px;
+
+    border: 2px solid var(--cw-gold);
+
+    border-radius: 50%;
+
+    color: var(--cw-gold);
+
+    font-size: 4rem;
+
+    transform: translateY(-60%);
+
+    z-index: -1;
+
+}
+
+
+.cw-hero-content {
+
+    width: 100%;
+
+    padding: 40px 36px 34px;
+
+    box-sizing: border-box;
+
+    color: #ffffff;
+
+}
+
+
+.cw-tag {
+
+    display: inline-block;
+
+    margin-bottom: 14px;
+
+    padding: 5px 12px;
+
+    background: var(--cw-gold);
+
+    color: var(--cw-navy-deep);
+
+    font-size: 0.7rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.14em;
+
+    text-transform: uppercase;
+
+}
+
+
+.cw-hero h1 {
+
+    margin: 0 0 16px;
+
+    max-width: 760px;
+
+    color: #ffffff;
+
+    font-size: clamp(1.8rem, 4vw, 3rem);
+
+    font-weight: 600;
+
+    line-height: 1.12;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+.cw-hero-meta {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px 26px;
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+
+    font-size: 0.95rem;
+
+    color: rgba(255, 255, 255, 0.88);
+
+}
+
+
+.cw-hero-meta li {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    min-width: 0;
+
+}
+
+
+.cw-hero-meta i {
+
+    color: var(--cw-gold);
+
+}
+
+
+/* ---------- Countdown + actions ---------- */
+
+.cw-strip {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 22px 26px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-left: 4px solid var(--accent);
+
+    border-radius: 4px;
+
+}
+
+
+.cw-countdown {
+
+    display: grid;
+
+    grid-template-columns: auto 1fr;
+
+    grid-template-areas:
+        "label label"
+        "value text";
+
+    align-items: baseline;
+
+    column-gap: 12px;
+
+    min-width: 0;
+
+}
+
+
+.cw-countdown-label {
+
+    grid-area: label;
+
+    margin-bottom: 4px;
+
+    color: var(--accent);
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.16em;
+
+    text-transform: uppercase;
+
+}
+
+
+.cw-countdown-value {
+
+    grid-area: value;
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+
+    font-size: 2.6rem;
+
+    font-weight: 700;
+
+    line-height: 1;
+
+    color: var(--text);
+
+}
+
+
+.cw-countdown-text {
+
+    grid-area: text;
+
+    color: var(--text-muted);
+
+}
+
+
+.cw-countdown--ended .cw-countdown-text {
+
+    grid-column: 1 / -1;
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+
+    font-size: 1.6rem;
+
+    font-weight: 600;
+
+    color: var(--text);
+
+}
+
+
+.cw-actions {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+}
+
+
+.cw-cta,
+.cw-share {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    min-height: 46px;
+
+    padding: 0 26px;
+
+    box-sizing: border-box;
+
+    border-radius: 2px;
+
+    font-family:
+        "Inter",
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 0.8rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.1em;
+
+    text-transform: uppercase;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease;
+
+}
+
+
+.cw-cta {
+
+    border: 1px solid var(--cw-navy);
+
+    background: var(--cw-navy);
+
+    color: #ffffff;
+
+}
+
+
+.cw-cta:hover:not(:disabled) {
+
+    background: var(--cw-gold);
+
+    border-color: var(--cw-gold);
+
+    color: var(--cw-navy-deep);
+
+    transform: translateY(-2px);
+
+}
+
+
+.cw-cta:disabled {
+
+    opacity: 0.45;
+
+    cursor: not-allowed;
+
+}
+
+
+.cw-share {
+
+    border: 1px solid var(--border-dark);
+
+    background: transparent;
+
+    color: var(--text);
+
+}
+
+
+.cw-share i {
+
+    color: #25d366;
+
+    font-size: 1.1rem;
+
+}
+
+
+.cw-share:hover {
+
+    border-color: #25d366;
+
+    transform: translateY(-2px);
+
+}
+
+
+/* ---------- Sections ---------- */
+
+.cw-section {
+
+    padding: 28px 30px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 4px;
+
+}
+
+
+.cw-section h2 {
+
+    margin: 0 0 18px;
+
+    padding-left: 14px;
+
+    border-left: 4px solid var(--accent);
+
+    color: var(--text);
+
+    font-size: 1.45rem;
+
+    font-weight: 600;
+
+    line-height: 1.25;
+
+}
+
+
+.cw-description p {
+
+    margin: 0 0 14px;
+
+    color: var(--text-secondary);
+
+    font-size: 1.02rem;
+
+    line-height: 1.75;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+.cw-description p:last-child {
+
+    margin-bottom: 0;
+
+}
+
+
+/* ---------- Schedule ---------- */
+
+.cw-schedule {
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+
+}
+
+
+.cw-schedule li {
+
+    display: grid;
+
+    grid-template-columns: 90px minmax(0, 1fr);
+
+    gap: 18px;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid var(--border);
+
+}
+
+
+.cw-schedule li:last-child {
+
+    border-bottom: 0;
+
+}
+
+
+.cw-schedule-time {
+
+    color: var(--accent);
+
+    font-weight: 700;
+
+    font-variant-numeric: tabular-nums;
+
+}
+
+
+.cw-schedule-activity {
+
+    color: var(--text-secondary);
+
+    overflow-wrap: anywhere;
+
+}
+
+
+/* ---------- Fundraising ---------- */
+
+.cw-fundraising-head {
+
+    display: flex;
+
+    align-items: baseline;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+}
+
+
+.cw-fundraising-percent {
+
+    color: var(--accent);
+
+    font-weight: 700;
+
+    font-size: 1.1rem;
+
+}
+
+
+.cw-progress {
+
+    height: 12px;
+
+    overflow: hidden;
+
+    background: var(--surface-soft);
+
+    border-radius: 999px;
+
+}
+
+
+.cw-progress span {
+
+    display: block;
+
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--cw-navy),
+            var(--cw-gold)
+        );
+
+    border-radius: inherit;
+
+    transition: width 0.6s ease;
+
+}
+
+
+.cw-fundraising-amounts {
+
+    margin: 12px 0 0;
+
+    color: var(--text-muted);
+
+}
+
+
+.cw-fundraising-amounts strong {
+
+    color: var(--text);
+
+    font-size: 1.1rem;
+
+}
+
+
+/* ---------- Organiser ---------- */
+
+.cw-organiser {
+
+    border-top: 4px solid var(--cw-navy);
+
+}
+
+
+.cw-organiser-name {
+
+    margin: 0 0 12px;
+
+    font-weight: 700;
+
+    font-size: 1.05rem;
+
+}
+
+
+.cw-organiser ul {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+
+}
+
+
+.cw-organiser li {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    min-width: 0;
+
+}
+
+
+.cw-organiser i {
+
+    width: 18px;
+
+    color: var(--accent);
+
+    text-align: center;
+
+}
+
+
+.cw-organiser a {
+
+    color: var(--text-secondary);
+
+    text-decoration: none;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+.cw-organiser a:hover {
+
+    color: var(--accent);
+
+}
+
+
+/* ---------- Clickable upcoming cards ---------- */
+
+.charity-card-link {
+
+    cursor: pointer;
+
+}
+
+
+.charity-card-link:focus-visible {
+
+    outline: 3px solid var(--accent);
+
+    outline-offset: 3px;
+
+}
+
+
+/* ---------- Dark mode ---------- */
+
+html.dark-mode .cw-detail {
+
+    --cw-gold: #d8b56a;
+
+}
+
+
+html.dark-mode .cw-hero {
+
+    border: 1px solid var(--border);
+
+}
+
+
+html.dark-mode .cw-cta {
+
+    background: var(--cw-gold);
+
+    border-color: var(--cw-gold);
+
+    color: #021a3f;
+
+}
+
+
+html.dark-mode .cw-cta:hover:not(:disabled) {
+
+    background: transparent;
+
+    color: var(--cw-gold);
+
+}
+
+
+html.dark-mode .cw-organiser {
+
+    border-top-color: var(--cw-gold);
+
+}
+
+
+html.dark-mode .cw-progress span {
+
+    background:
+        linear-gradient(
+            90deg,
+            #b89554,
+            var(--cw-gold)
+        );
+
+}
+
+
+/* ---------- Tablet & phone ---------- */
+
+@media (max-width: 900px) {
+
+    .cw-layout {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 30px;
+
+        padding: 20px 16px 40px;
+
+    }
+
+
+    .cw-hero {
+
+        min-height: 340px;
+
+    }
+
+
+    .cw-hero-content {
+
+        padding: 30px 22px 24px;
+
+    }
+
+
+    .cw-hero--banner .cw-hero-heart {
+
+        top: 28px;
+
+        right: 22px;
+
+        width: 84px;
+
+        height: 84px;
+
+        font-size: 2.2rem;
+
+        transform: none;
+
+    }
+
+
+    .cw-strip {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        padding: 20px;
+
+    }
+
+
+    .cw-actions {
+
+        flex-direction: column;
+
+    }
+
+
+    .cw-cta,
+    .cw-share {
+
+        width: 100%;
+
+    }
+
+
+    .cw-section {
+
+        padding: 22px 20px;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .cw-hero {
+
+        min-height: 300px;
+
+    }
+
+
+    .cw-hero-meta {
+
+        flex-direction: column;
+
+        font-size: 0.9rem;
+
+    }
+
+
+    .cw-schedule li {
+
+        grid-template-columns: 64px minmax(0, 1fr);
+
+        gap: 12px;
+
+    }
+
+}

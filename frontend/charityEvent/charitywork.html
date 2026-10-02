@@ -34,11 +34,32 @@
 
       })();
     </script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", async () => {
+          try {
+            const registration = await navigator.serviceWorker.register("../sw.js");
+
+            console.log(
+              "Donation push service worker registered:",
+              registration.scope
+            );
+          } catch (error) {
+            console.error(
+              "Donation push service worker registration failed:",
+              error
+            );
+          }
+        });
+      }
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css">
     <link rel="stylesheet" type="text/css" href="../index.css?v=20261002">
-    <link rel="stylesheet" type="text/css" href="charite.css?v=20261002b">
+    <link rel="stylesheet" type="text/css" href="charite.css?v=20261002c">
     <script src="https://unpkg.com/lucide@1.48.0/dist/umd/lucide.min.js" defer></script>
     <script src="../index.js?v=20261002" defer></script>
-    <script src="charity.js?v=20261002" defer></script>
+    <script src="charity.js?v=20261002b" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   </head>
   <body>
     <div class="subnav">
@@ -120,18 +141,12 @@
     </div>
     
     <main>
-      <div class="container0">
+      <div class="container0 cw-layout">
         <div class="container">
 
-          <section>
-            <h2>Upcoming events</h2>
-
-          </section>
-
-          <section>
-            <h2>Latest events</h2>
-
-          </section>
+          <article id="charityDetail" class="cw-detail" aria-live="polite">
+            <p class="cw-loading">Loading activity…</p>
+          </article>
 
         </div>
         <section id="searchResults" class="hidden"></section>
@@ -252,6 +267,6 @@
       </div>
 
     </footer>
-
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
   </body>
 </html>

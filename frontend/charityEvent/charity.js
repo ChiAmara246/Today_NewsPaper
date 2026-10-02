@@ -3590,66 +3590,11 @@ function renderCharityCards(charities, container, showDonate) {
 
                     donateButton.addEventListener(
                         "click",
-                        function () {
+                        function (event) {
 
-                            const eventDate =
-                                new Date(
-                                    charity.date
-                                );
+                            event.stopPropagation();
 
-
-                            if (
-                                Number.isNaN(
-                                    eventDate.getTime()
-                                )
-                            ) {
-
-                                console.error(
-                                    "Invalid charity event date:",
-                                    charity.date
-                                );
-
-                                return;
-                            }
-
-
-                            /*
-                               Donations close
-                               exactly 4 hours
-                               before the activity.
-                            */
-
-                            const donationCloseTime =
-                                new Date(
-                                    eventDate.getTime() -
-                                    (
-                                        4 *
-                                        60 *
-                                        60 *
-                                        1000
-                                    )
-                                );
-
-
-                            const now =
-                                new Date();
-
-
-                            if (
-                                now >=
-                                donationCloseTime
-                            ) {
-
-                                showDonationClosedPopup(
-                                    charity
-                                );
-
-                                return;
-
-                            }
-
-
-                            openDonationForm(
+                            handleDonateClick(
                                 charity
                             );
 
@@ -3657,6 +3602,62 @@ function renderCharityCards(charities, container, showDonate) {
                     );
 
                 }
+
+
+                /* =========================================
+                   OPEN DETAIL PAGE
+                   Click anywhere on an upcoming card.
+                ========================================= */
+
+                card.classList.add(
+                    "charity-card-link"
+                );
+
+                card.tabIndex = 0;
+
+                card.setAttribute(
+                    "role",
+                    "link"
+                );
+
+                card.setAttribute(
+                    "aria-label",
+                    `View details: ${charity.activityHeadline}`
+                );
+
+
+                const openDetail =
+                    function () {
+
+                        window.location.href =
+                            getCharityDetailUrl(
+                                charity
+                            );
+
+                    };
+
+
+                card.addEventListener(
+                    "click",
+                    openDetail
+                );
+
+
+                card.addEventListener(
+                    "keydown",
+                    function (event) {
+
+                        if (
+                            event.target === card &&
+                            event.key === "Enter"
+                        ) {
+
+                            openDetail();
+
+                        }
+
+                    }
+                );
 
             }
 
@@ -3669,6 +3670,662 @@ function renderCharityCards(charities, container, showDonate) {
     );
 
 }
+
+/* =====================================================
+   DONATE CLICK
+   Shared by the cards and the detail page.
+===================================================== */
+
+function handleDonateClick(charity) {
+
+    const eventDate =
+        new Date(
+            charity.date
+        );
+
+
+    if (
+        Number.isNaN(
+            eventDate.getTime()
+        )
+    ) {
+
+        console.error(
+            "Invalid charity event date:",
+            charity.date
+        );
+
+        return;
+    }
+
+
+    /*
+       Donations close
+       exactly 4 hours
+       before the activity.
+    */
+
+    const donationCloseTime =
+        new Date(
+            eventDate.getTime() -
+            (
+                4 *
+                60 *
+                60 *
+                1000
+            )
+        );
+
+
+    if (
+        new Date() >=
+        donationCloseTime
+    ) {
+
+        showDonationClosedPopup(
+            charity
+        );
+
+        return;
+
+    }
+
+
+    openDonationForm(
+        charity
+    );
+
+}
+
+
+/* =====================================================
+   CHARITY DETAIL PAGE
+   charitywork.html?id=<charity id>
+===================================================== */
+
+function getCharityDetailUrl(charity) {
+
+    return `charitywork.html?id=${encodeURIComponent(
+        charity.id
+    )}`;
+
+}
+
+
+function escapeCharityHtml(value) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
+}
+
+
+async function loadCharityDetail(container) {
+
+    const charityId =
+        new URLSearchParams(
+            window.location.search
+        ).get("id");
+
+
+    if (!charityId) {
+
+        renderCharityDetailError(
+            container,
+            "No activity was selected."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/charities/${encodeURIComponent(
+                    charityId
+                )}`
+            );
+
+
+        if (response.status === 404) {
+
+            renderCharityDetailError(
+                container,
+                "This activity could not be found."
+            );
+
+            return;
+        }
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP error: ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        renderCharityDetail(
+            container,
+            data.charity
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load charity activity:",
+            error
+        );
+
+        renderCharityDetailError(
+            container,
+            "Unable to load this activity. Please try again later."
+        );
+
+    }
+
+}
+
+
+function renderCharityDetailError(container, message) {
+
+    container.innerHTML = `
+        <div class="charity-error">
+            <p>${escapeCharityHtml(message)}</p>
+        </div>
+        <a class="cw-back" href="charityEvents.html">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            All charity events
+        </a>
+    `;
+
+}
+
+
+function getCharityCountdown(eventDate) {
+
+    const now =
+        new Date();
+
+
+    if (eventDate <= now) {
+
+        return {
+            ended: true,
+            value: "",
+            text: "Event ended"
+        };
+
+    }
+
+
+    const startOfToday =
+        new Date(now);
+
+    startOfToday.setHours(0, 0, 0, 0);
+
+
+    const startOfEventDay =
+        new Date(eventDate);
+
+    startOfEventDay.setHours(0, 0, 0, 0);
+
+
+    const days =
+        Math.round(
+            (startOfEventDay - startOfToday) /
+            (24 * 60 * 60 * 1000)
+        );
+
+
+    if (days === 0) {
+
+        return {
+            ended: false,
+            value: "Today",
+            text: "The event takes place today"
+        };
+
+    }
+
+
+    return {
+        ended: false,
+        value: String(days),
+        text: days === 1
+            ? "day left until the event"
+            : "days left until the event"
+    };
+
+}
+
+
+function formatCharityMoney(amount, currency) {
+
+    try {
+
+        return new Intl.NumberFormat(
+            "en-NG",
+            {
+                style: "currency",
+                currency: currency || "NGN",
+                maximumFractionDigits: 0
+            }
+        ).format(
+            Number(amount) || 0
+        );
+
+    } catch {
+
+        return `${currency || ""} ${Number(amount) || 0}`.trim();
+
+    }
+
+}
+
+
+function renderCharityDetail(container, charity) {
+
+    const eventDate =
+        new Date(
+            charity.date
+        );
+
+
+    const hasDate =
+        !Number.isNaN(
+            eventDate.getTime()
+        );
+
+
+    const countdown =
+        hasDate
+            ? getCharityCountdown(eventDate)
+            : { ended: false, value: "—", text: "Date to be announced" };
+
+
+    const dateText =
+        hasDate
+            ? eventDate.toLocaleString(
+                "en-NG",
+                {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            )
+            : "Date unavailable";
+
+
+    const title =
+        escapeCharityHtml(
+            charity.activityHeadline
+        );
+
+
+    document.title =
+        `${charity.activityHeadline} | Today Newspaper`;
+
+
+    /* ---------- Description ---------- */
+
+    const paragraphs =
+        Array.isArray(charity.description)
+            ? charity.description
+            : charity.description
+                ? [charity.description]
+                : [];
+
+
+    const descriptionHtml =
+        paragraphs.length
+            ? paragraphs
+                .map(text => `<p>${escapeCharityHtml(text)}</p>`)
+                .join("")
+            : "<p>More details will be shared soon.</p>";
+
+
+    /* ---------- Schedule ---------- */
+
+    const schedule =
+        Array.isArray(charity.schedule)
+            ? charity.schedule
+            : [];
+
+
+    const scheduleHtml =
+        schedule.length
+            ? `
+                <section class="cw-section">
+                    <h2>Schedule</h2>
+                    <ol class="cw-schedule">
+                        ${schedule.map(item => `
+                            <li>
+                                <span class="cw-schedule-time">${escapeCharityHtml(item.time)}</span>
+                                <span class="cw-schedule-activity">${escapeCharityHtml(item.activity)}</span>
+                            </li>
+                        `).join("")}
+                    </ol>
+                </section>
+              `
+            : "";
+
+
+    /* ---------- Fundraising ---------- */
+
+    const fundraising =
+        charity.fundraising;
+
+
+    const hasFundraising =
+        fundraising &&
+        Number(fundraising.goal) > 0;
+
+
+    const percent =
+        hasFundraising
+            ? Math.min(
+                100,
+                Math.round(
+                    (Number(fundraising.raised) || 0) /
+                    Number(fundraising.goal) *
+                    100
+                )
+            )
+            : 0;
+
+
+    const fundraisingHtml =
+        hasFundraising
+            ? `
+                <section class="cw-section cw-fundraising">
+                    <div class="cw-fundraising-head">
+                        <h2>Fundraising</h2>
+                        <span class="cw-fundraising-percent">${percent}%</span>
+                    </div>
+                    <div
+                        class="cw-progress"
+                        role="progressbar"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        aria-valuenow="${percent}"
+                        aria-label="Fundraising progress"
+                    >
+                        <span style="width: ${percent}%"></span>
+                    </div>
+                    <p class="cw-fundraising-amounts">
+                        <strong>${escapeCharityHtml(formatCharityMoney(fundraising.raised, fundraising.currency))}</strong>
+                        raised of
+                        ${escapeCharityHtml(formatCharityMoney(fundraising.goal, fundraising.currency))}
+                    </p>
+                </section>
+              `
+            : "";
+
+
+    /* ---------- Organiser ---------- */
+
+    const organiser =
+        charity.organiser || {};
+
+
+    const organiserLines = [];
+
+
+    if (organiser.phone) {
+
+        organiserLines.push(`
+            <li>
+                <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                <a href="tel:${escapeCharityHtml(organiser.phone.replace(/\s+/g, ""))}">${escapeCharityHtml(organiser.phone)}</a>
+            </li>
+        `);
+
+    }
+
+
+    if (organiser.email) {
+
+        organiserLines.push(`
+            <li>
+                <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                <a href="mailto:${escapeCharityHtml(organiser.email)}">${escapeCharityHtml(organiser.email)}</a>
+            </li>
+        `);
+
+    }
+
+
+    if (organiser.whatsapp) {
+
+        organiserLines.push(`
+            <li>
+                <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+                <a href="https://wa.me/${escapeCharityHtml(String(organiser.whatsapp).replace(/\D/g, ""))}" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+            </li>
+        `);
+
+    }
+
+
+    const organiserHtml =
+        organiser.name || organiserLines.length
+            ? `
+                <section class="cw-section cw-organiser">
+                    <h2>Organised by</h2>
+                    ${organiser.name ? `<p class="cw-organiser-name">${escapeCharityHtml(organiser.name)}</p>` : ""}
+                    <ul>${organiserLines.join("")}</ul>
+                </section>
+              `
+            : "";
+
+
+    /* ---------- Call to action ---------- */
+
+    const cta =
+        charity.cta || { type: "donate", label: "Donate" };
+
+
+    const ctaType =
+        ["register", "donate", "contact"].includes(cta.type)
+            ? cta.type
+            : "donate";
+
+
+    const ctaLabel =
+        cta.label ||
+        {
+            register: "Register",
+            donate: "Donate",
+            contact: "Contact us"
+        }[ctaType];
+
+
+    const ctaHref =
+        cta.url ||
+        (
+            ctaType === "contact" && organiser.email
+                ? `mailto:${organiser.email}`
+                : ""
+        );
+
+
+    const ctaDisabled =
+        countdown.ended &&
+        ctaType !== "contact";
+
+
+    const ctaHtml =
+        ctaDisabled
+            ? `<button type="button" class="cw-cta" disabled>${escapeCharityHtml(ctaLabel)}</button>`
+            : ctaType === "donate" || !ctaHref
+                ? `<button type="button" class="cw-cta" data-action="${ctaType}">${escapeCharityHtml(ctaLabel)}</button>`
+                : `<a class="cw-cta" href="${escapeCharityHtml(ctaHref)}"${/^https?:/.test(ctaHref) ? ' target="_blank" rel="noopener noreferrer"' : ""}>${escapeCharityHtml(ctaLabel)}</a>`;
+
+
+    const shareText =
+        `${charity.activityHeadline} — ${window.location.href}`;
+
+
+    /* ---------- Hero ---------- */
+
+    const heroMedia =
+        charity.img
+            ? `<img class="cw-hero-image" src="${escapeCharityHtml(getImagePath(charity.img))}" alt="">`
+            : "";
+
+
+    container.innerHTML = `
+
+        <a class="cw-back" href="charityEvents.html">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            All charity events
+        </a>
+
+
+        <header class="cw-hero${charity.img ? "" : " cw-hero--banner"}">
+
+            ${heroMedia}
+
+            <div class="cw-hero-heart" aria-hidden="true">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+
+            <div class="cw-hero-content">
+
+                ${charity.label ? `<span class="cw-tag">${escapeCharityHtml(charity.label)}</span>` : ""}
+
+                <h1>${title}</h1>
+
+                <ul class="cw-hero-meta">
+                    <li>
+                        <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                        <time${hasDate ? ` datetime="${escapeCharityHtml(charity.date)}"` : ""}>${escapeCharityHtml(dateText)}</time>
+                    </li>
+                    ${charity.location ? `
+                        <li>
+                            <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                            <span>${escapeCharityHtml(charity.location)}</span>
+                        </li>
+                    ` : ""}
+                </ul>
+
+            </div>
+
+        </header>
+
+
+        <div class="cw-strip">
+
+            <div class="cw-countdown${countdown.ended ? " cw-countdown--ended" : ""}">
+                <span class="cw-countdown-label">Countdown</span>
+                ${countdown.value ? `<span class="cw-countdown-value">${escapeCharityHtml(countdown.value)}</span>` : ""}
+                <span class="cw-countdown-text">${escapeCharityHtml(countdown.text)}</span>
+            </div>
+
+            <div class="cw-actions">
+                ${ctaHtml}
+                <a
+                    class="cw-share"
+                    href="https://wa.me/?text=${encodeURIComponent(shareText)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+                    Share on WhatsApp
+                </a>
+            </div>
+
+        </div>
+
+
+        ${fundraisingHtml}
+
+
+        <section class="cw-section">
+            <h2>About this event</h2>
+            <div class="cw-description">${descriptionHtml}</div>
+        </section>
+
+
+        ${scheduleHtml}
+
+
+        ${organiserHtml}
+
+    `;
+
+
+    /* ---------- Behaviour ---------- */
+
+    const heroImage =
+        container.querySelector(".cw-hero-image");
+
+
+    if (heroImage) {
+
+        heroImage.addEventListener(
+            "error",
+            function () {
+
+                heroImage.remove();
+
+                container
+                    .querySelector(".cw-hero")
+                    .classList.add("cw-hero--banner");
+
+            }
+        );
+
+    }
+
+
+    const ctaButton =
+        container.querySelector(".cw-cta[data-action]");
+
+
+    if (ctaButton) {
+
+        ctaButton.addEventListener(
+            "click",
+            function () {
+
+                if (ctaButton.dataset.action === "donate") {
+
+                    handleDonateClick(charity);
+
+                } else {
+
+                    container
+                        .querySelector(".cw-organiser")
+                        ?.scrollIntoView({ behavior: "smooth" });
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
 
 /* =====================================================
    FORMAT DATE
@@ -3714,7 +4371,23 @@ document.addEventListener(
     "DOMContentLoaded",
     () => {
 
-        loadCharity();
+        const detailContainer =
+            document.getElementById(
+                "charityDetail"
+            );
+
+
+        if (detailContainer) {
+
+            loadCharityDetail(
+                detailContainer
+            );
+
+        } else {
+
+            loadCharity();
+
+        }
 
         handleFlutterwaveRedirect();
 
