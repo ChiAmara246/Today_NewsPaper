@@ -3,7 +3,7 @@
     "id": 1,
     "img": "charity1.jpg",
     "activityHeadline": "Community Food Support Programme",
-    "date": "2026-09-05T00:00:00+01:00",
+    "date": "2026-11-07T10:00:00+01:00",
     "donateUrl": "#",
     "label": "Charity Event",
     "location": "Venue to be announced, City",
@@ -68,13 +68,15 @@
     "beforeAfter": null,
     "volunteers": [],
     "donors": [],
-    "media": []
+    "media": [],
+    "theme": "food",
+    "announcedAt": "2026-09-30T09:00:00+01:00"
   },
   {
     "id": 2,
     "img": "charity2.jpg",
     "activityHeadline": "Back-to-School Support for Children",
-    "date": "2026-09-11T21:00:00+01:00",
+    "date": "2026-11-21T09:00:00+01:00",
     "donateUrl": "#",
     "label": "Charity Event",
     "location": "Venue to be announced, City",
@@ -139,13 +141,86 @@
     "beforeAfter": null,
     "volunteers": [],
     "donors": [],
-    "media": []
+    "media": [],
+    "theme": "education"
   },
   {
     "id": 3,
     "img": "charity3.jpg",
     "activityHeadline": "Clean Water and Sanitation Initiative",
-    "date": "2026-09-18T02:00:00+01:00",
+    "date": "2026-12-05T09:00:00+01:00",
+    "donateUrl": "#",
+    "label": "Charity Event",
+    "location": "Venue to be announced, City",
+    "description": [
+      "Write the full description of this event here. Explain who it helps and why it matters.",
+      "Add a second paragraph with what will happen on the day and how people can get involved."
+    ],
+    "schedule": [
+      {
+        "time": "09:00",
+        "activity": "Arrival and welcome"
+      },
+      {
+        "time": "10:00",
+        "activity": "Main activity"
+      },
+      {
+        "time": "12:00",
+        "activity": "Closing remarks"
+      }
+    ],
+    "fundraising": {
+      "raised": 0,
+      "goal": 500000,
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
+    },
+    "cta": {
+      "type": "donate",
+      "label": "Support this cause",
+      "url": ""
+    },
+    "organiser": {
+      "name": "Today Newspaper Foundation",
+      "phone": "+234 000 000 0000",
+      "email": "charity@todaynewspaper.com",
+      "whatsapp": "2340000000000"
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": [],
+    "theme": "water"
+  },
+  {
+    "id": 4,
+    "img": "charity4.jpg",
+    "activityHeadline": "Women Empowerment and Skills Workshop",
+    "date": "2026-12-19T10:00:00+01:00",
     "donateUrl": "#",
     "label": "Charity Event",
     "location": "Venue to be announced, City",
@@ -213,10 +288,154 @@
     "media": []
   },
   {
-    "id": 4,
-    "img": "charity4.jpg",
-    "activityHeadline": "Women Empowerment and Skills Workshop",
-    "date": "2026-09-25T03:00:00+01:00",
+    "id": 5,
+    "img": "charity5.jpg",
+    "activityHeadline": "Children's Educational Support Drive",
+    "date": "2027-01-16T09:00:00+01:00",
+    "donateUrl": "#",
+    "label": "Charity Event",
+    "location": "Venue to be announced, City",
+    "description": [
+      "Write the full description of this event here. Explain who it helps and why it matters.",
+      "Add a second paragraph with what will happen on the day and how people can get involved."
+    ],
+    "schedule": [
+      {
+        "time": "09:00",
+        "activity": "Arrival and welcome"
+      },
+      {
+        "time": "10:00",
+        "activity": "Main activity"
+      },
+      {
+        "time": "12:00",
+        "activity": "Closing remarks"
+      }
+    ],
+    "fundraising": {
+      "raised": 0,
+      "goal": 500000,
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
+    },
+    "cta": {
+      "type": "donate",
+      "label": "Support this cause",
+      "url": ""
+    },
+    "organiser": {
+      "name": "Today Newspaper Foundation",
+      "phone": "+234 000 000 0000",
+      "email": "charity@todaynewspaper.com",
+      "whatsapp": "2340000000000"
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": [],
+    "theme": "education"
+  },
+  {
+    "id": 6,
+    "img": "charity6.jpg",
+    "activityHeadline": "Community Health Awareness Campaign",
+    "date": "2027-02-06T09:00:00+01:00",
+    "donateUrl": "#",
+    "label": "Charity Event",
+    "location": "Venue to be announced, City",
+    "description": [
+      "Write the full description of this event here. Explain who it helps and why it matters.",
+      "Add a second paragraph with what will happen on the day and how people can get involved."
+    ],
+    "schedule": [
+      {
+        "time": "09:00",
+        "activity": "Arrival and welcome"
+      },
+      {
+        "time": "10:00",
+        "activity": "Main activity"
+      },
+      {
+        "time": "12:00",
+        "activity": "Closing remarks"
+      }
+    ],
+    "fundraising": {
+      "raised": 0,
+      "goal": 500000,
+      "currency": "NGN",
+      "updatedAt": "2026-10-02T09:00:00+01:00"
+    },
+    "cta": {
+      "type": "donate",
+      "label": "Support this cause",
+      "url": ""
+    },
+    "organiser": {
+      "name": "Today Newspaper Foundation",
+      "phone": "+234 000 000 0000",
+      "email": "charity@todaynewspaper.com",
+      "whatsapp": "2340000000000"
+    },
+    "mapQuery": "",
+    "volunteerUrl": "",
+    "partners": [
+      {
+        "name": "Partner name",
+        "logo": ""
+      }
+    ],
+    "updates": [],
+    "gallery": [],
+    "recap": [],
+    "results": {
+      "stats": [],
+      "impact": [],
+      "spending": [],
+      "reportUrl": ""
+    },
+    "story": {
+      "before": [],
+      "during": [],
+      "after": []
+    },
+    "testimonials": [],
+    "beforeAfter": null,
+    "volunteers": [],
+    "donors": [],
+    "media": [],
+    "theme": "health"
+  },
+  {
+    "id": 7,
+    "img": "charity7.jpg",
+    "activityHeadline": "Youth Skills Development Programme",
+    "date": "2026-08-21T06:00:00+01:00",
     "donateUrl": "#",
     "label": "Charity Event",
     "location": "Venue to be announced, City",
@@ -667,219 +886,6 @@
         }
       }
     ],
-    "media": []
-  },
-  {
-    "id": 5,
-    "img": "charity5.jpg",
-    "activityHeadline": "Children's Educational Support Drive",
-    "date": "2026-10-02T04:00:00+01:00",
-    "donateUrl": "#",
-    "label": "Charity Event",
-    "location": "Venue to be announced, City",
-    "description": [
-      "Write the full description of this event here. Explain who it helps and why it matters.",
-      "Add a second paragraph with what will happen on the day and how people can get involved."
-    ],
-    "schedule": [
-      {
-        "time": "09:00",
-        "activity": "Arrival and welcome"
-      },
-      {
-        "time": "10:00",
-        "activity": "Main activity"
-      },
-      {
-        "time": "12:00",
-        "activity": "Closing remarks"
-      }
-    ],
-    "fundraising": {
-      "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
-      "updatedAt": "2026-10-02T09:00:00+01:00"
-    },
-    "cta": {
-      "type": "donate",
-      "label": "Support this cause",
-      "url": ""
-    },
-    "organiser": {
-      "name": "Today Newspaper Foundation",
-      "phone": "+234 000 000 0000",
-      "email": "charity@todaynewspaper.com",
-      "whatsapp": "2340000000000"
-    },
-    "mapQuery": "",
-    "volunteerUrl": "",
-    "partners": [
-      {
-        "name": "Partner name",
-        "logo": ""
-      }
-    ],
-    "updates": [],
-    "gallery": [],
-    "recap": [],
-    "results": {
-      "stats": [],
-      "impact": [],
-      "spending": [],
-      "reportUrl": ""
-    },
-    "story": {
-      "before": [],
-      "during": [],
-      "after": []
-    },
-    "testimonials": [],
-    "beforeAfter": null,
-    "volunteers": [],
-    "donors": [],
-    "media": []
-  },
-  {
-    "id": 6,
-    "img": "charity6.jpg",
-    "activityHeadline": "Community Health Awareness Campaign",
-    "date": "2026-08-28T05:00:00+01:00",
-    "donateUrl": "#",
-    "label": "Charity Event",
-    "location": "Venue to be announced, City",
-    "description": [
-      "Write the full description of this event here. Explain who it helps and why it matters.",
-      "Add a second paragraph with what will happen on the day and how people can get involved."
-    ],
-    "schedule": [
-      {
-        "time": "09:00",
-        "activity": "Arrival and welcome"
-      },
-      {
-        "time": "10:00",
-        "activity": "Main activity"
-      },
-      {
-        "time": "12:00",
-        "activity": "Closing remarks"
-      }
-    ],
-    "fundraising": {
-      "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
-      "updatedAt": "2026-10-02T09:00:00+01:00"
-    },
-    "cta": {
-      "type": "donate",
-      "label": "Support this cause",
-      "url": ""
-    },
-    "organiser": {
-      "name": "Today Newspaper Foundation",
-      "phone": "+234 000 000 0000",
-      "email": "charity@todaynewspaper.com",
-      "whatsapp": "2340000000000"
-    },
-    "mapQuery": "",
-    "volunteerUrl": "",
-    "partners": [
-      {
-        "name": "Partner name",
-        "logo": ""
-      }
-    ],
-    "updates": [],
-    "gallery": [],
-    "recap": [],
-    "results": {
-      "stats": [],
-      "impact": [],
-      "spending": [],
-      "reportUrl": ""
-    },
-    "story": {
-      "before": [],
-      "during": [],
-      "after": []
-    },
-    "testimonials": [],
-    "beforeAfter": null,
-    "volunteers": [],
-    "donors": [],
-    "media": []
-  },
-  {
-    "id": 7,
-    "img": "charity7.jpg",
-    "activityHeadline": "Youth Skills Development Programme",
-    "date": "2026-08-21T06:00:00+01:00",
-    "donateUrl": "#",
-    "label": "Charity Event",
-    "location": "Venue to be announced, City",
-    "description": [
-      "Write the full description of this event here. Explain who it helps and why it matters.",
-      "Add a second paragraph with what will happen on the day and how people can get involved."
-    ],
-    "schedule": [
-      {
-        "time": "09:00",
-        "activity": "Arrival and welcome"
-      },
-      {
-        "time": "10:00",
-        "activity": "Main activity"
-      },
-      {
-        "time": "12:00",
-        "activity": "Closing remarks"
-      }
-    ],
-    "fundraising": {
-      "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
-      "updatedAt": "2026-10-02T09:00:00+01:00"
-    },
-    "cta": {
-      "type": "donate",
-      "label": "Support this cause",
-      "url": ""
-    },
-    "organiser": {
-      "name": "Today Newspaper Foundation",
-      "phone": "+234 000 000 0000",
-      "email": "charity@todaynewspaper.com",
-      "whatsapp": "2340000000000"
-    },
-    "mapQuery": "",
-    "volunteerUrl": "",
-    "partners": [
-      {
-        "name": "Partner name",
-        "logo": ""
-      }
-    ],
-    "updates": [],
-    "gallery": [],
-    "recap": [],
-    "results": {
-      "stats": [],
-      "impact": [],
-      "spending": [],
-      "reportUrl": ""
-    },
-    "story": {
-      "before": [],
-      "during": [],
-      "after": []
-    },
-    "testimonials": [],
-    "beforeAfter": null,
-    "volunteers": [],
-    "donors": [],
     "media": []
   },
   {

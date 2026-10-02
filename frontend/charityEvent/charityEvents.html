@@ -55,10 +55,12 @@
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css">
     <link rel="stylesheet" type="text/css" href="../index.css?v=20261002r">
-    <link rel="stylesheet" type="text/css" href="charite.css?v=20261002s">
+    <link rel="stylesheet" type="text/css" href="charite.css?v=20261003b">
     <script src="https://unpkg.com/lucide@1.48.0/dist/umd/lucide.min.js" defer></script>
     <script src="../index.js?v=20261002p" defer></script>
-    <script src="charity.js?v=20261002s" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js" defer></script>
+    <script src="charity.js?v=20261003a" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   </head>
   <body>
@@ -144,24 +146,73 @@
       <div class="container0">
         <div class="container">
 
-          <section class="charity-section">
+          <div class="cp-page">
 
-            <div>
-                <h1>Upcoming</h1>
-                <div id="upcomingCharity" class="charity-container"></div>
+            <!-- 1. Impact figures -->
+            <div class="cp-topline">
+              <section class="cp-impact" id="cpImpact" aria-label="Our impact"></section>
+              <div class="cp-search-slot" id="cpSearchSlot"></div>
             </div>
 
+            <!-- 2. Agenda + front page -->
+            <div class="cp-row cp-row--top">
 
-            <div>
-                <h1>Latest</h1>
-                <div id="latestCharity" class="charity-container"></div>
+              <section class="cp-col cp-agenda" aria-labelledby="cpAgendaTitle">
+                <header class="cp-rubric">
+                  <h2 id="cpAgendaTitle">Agenda</h2>
+                  <span id="cpAgendaCount"></span>
+                </header>
+                <div id="upcomingCharity" class="cp-agenda-list"></div>
+              </section>
+
+              <section class="cp-col cp-front" aria-labelledby="cpFrontTitle">
+                <header class="cp-rubric">
+                  <h2 id="cpFrontTitle">Front page</h2>
+                  <span>Next campaign</span>
+                </header>
+                <div id="cpFront"></div>
+              </section>
+
             </div>
 
-        </section>
+            <!-- 3. Archives + readers' letters -->
+            <div class="cp-row cp-row--bottom">
+
+              <section class="cp-col cp-archives" aria-labelledby="cpArchivesTitle">
+                <header class="cp-rubric">
+                  <h2 id="cpArchivesTitle">Archives</h2>
+                  <span>Our past actions</span>
+                </header>
+                <div class="cp-filters" id="cpFilters" role="group" aria-label="Filter by year"></div>
+                <div id="latestCharity" class="cp-archive-list"></div>
+              </section>
+
+              <section class="cp-col cp-letters" aria-labelledby="cpLettersTitle">
+                <header class="cp-rubric">
+                  <h2 id="cpLettersTitle">Readers' letters</h2>
+                  <span>💡 Your ideas</span>
+                </header>
+                <p class="cp-letters-intro">Propose ($1) · vote ❤ for free · 5,000 votes = campaign</p>
+                <div id="cpIdeas"></div>
+              </section>
+
+            </div>
+
+            <!-- 4. Thank you band -->
+            <section class="cp-thanks" id="cpThanks" aria-label="Thank you" hidden></section>
+
+            <!-- 5. Partners -->
+            <section class="cp-partners" id="cpPartners" hidden></section>
+
+          </div>
 
         </div>
         <section id="searchResults" class="hidden"></section>
-        <div class="aside">
+        
+      </div>
+    </main>
+    <!--<footer>
+      <div class="aside">
 
           <aside id="frameBox">
             <h3>Today Newspaper Team</h3>
@@ -185,7 +236,7 @@
                 </a>
               </aside>
 
-              <!-- WhatsApp Popup -->
+              <!- WhatsApp Popup --
               <div id="whatsappPopup" class="whatsapp-popup">
 
                 <div class="whatsapp-popup-card">
@@ -208,11 +259,7 @@
 
             </div>
         </div>
-      </div>
-    </main>
-    <footer>
-
-      <!-- Brand -->
+      <!- Brand --
       <div class="footer-brand">
 
         <img src="../images/tnp-icon.png" alt="Today Newspaper" class="footer-icon">
@@ -226,7 +273,7 @@
 
       </div>
 
-      <!-- Navigation -->
+      <!- Navigation --
       <div class="footer-navigation">
 
         <div class="footer-links">
@@ -258,7 +305,7 @@
 
       </div>
 
-      <!-- Values -->
+      <! Values --
       <div class="footer-values">
 
         <span>Integrity</span>
@@ -268,7 +315,7 @@
 
       </div>
 
-      <!-- Copyright -->
+      <!- Copyright --
       <div class="footer-bottom">
 
         <p>
@@ -277,7 +324,7 @@
 
       </div>
 
-    </footer>
+    </footer> -->
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
   </body>
 </html>

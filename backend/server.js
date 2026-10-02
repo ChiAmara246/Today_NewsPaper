@@ -1622,6 +1622,509 @@ app.get(
 
 
 /* =====================================================
+   READERS' IDEAS (idea box)
+   Only approved ideas are public. One vote per device,
+   and a daily vote limit per IP address.
+===================================================== */
+
+const ideasPath =
+    path.join(__dirname, "data", "ideas.json");
+
+const ideaVotesPath =
+    path.join(__dirname, "data", "idea-votes.json");
+
+
+function readJsonFile(filePath, fallback) {
+
+    try {
+
+        return JSON.parse(
+            fs.readFileSync(filePath, "utf8")
+        );
+
+    } catch {
+
+        return fallback;
+
+    }
+
+}
+
+
+let ideas =
+    readJsonFile(ideasPath, []);
+
+let ideaVotes =
+    readJsonFile(ideaVotesPath, []);
+
+
+const IDEA_GOAL_VOTES = 5000;
+
+const IDEA_VOTES_PER_IP_PER_DAY = 30;
+
+
+function saveIdeas() {
+
+    fs.writeFileSync(ideasPath, JSON.stringify(ideas, null, 2));
+
+    fs.writeFileSync(ideaVotesPath, JSON.stringify(ideaVotes, null, 2));
+
+}
+
+
+/* Render (and most hosts) add the visitor's IP as the LAST entry
+   of X-Forwarded-For; earlier entries can be faked by the client. */
+
+function getClientIp(req) {
+
+    const forwarded =
+        String(req.headers["x-forwarded-for"] || "")
+            .split(",")
+            .map(part => part.trim())
+            .filter(Boolean);
+
+
+    return forwarded.length
+        ? forwarded[forwarded.length - 1]
+        : req.socket.remoteAddress || "";
+
+}
+
+
+function isValidDeviceId(value) {
+
+    return /^[A-Za-z0-9-]{16,64}$/.test(String(value || ""));
+
+}
+
+
+function publicIdea(idea, deviceId) {
+
+    return {
+        id: idea.id,
+        title: idea.title,
+        location: idea.location,
+        category: idea.category,
+        why: idea.why,
+        author: idea.anonymous ? "" : idea.author,
+        anonymous: Boolean(idea.anonymous),
+        votes: Number(idea.votes) || 0,
+        goal: IDEA_GOAL_VOTES,
+        chosen: (Number(idea.votes) || 0) >= IDEA_GOAL_VOTES,
+        votedByMe:
+            Boolean(deviceId) &&
+            ideaVotes.some(vote =>
+                vote.ideaId === idea.id &&
+                vote.deviceId === deviceId
+            )
+    };
+
+}
+
+
+app.get(
+    "/api/ideas",
+    (req, res) => {
+
+        const deviceId =
+            isValidDeviceId(req.query.deviceId)
+                ? String(req.query.deviceId)
+                : "";
+
+
+        res.json({
+
+            goal: IDEA_GOAL_VOTES,
+
+            ideas:
+                ideas
+                    .filter(idea => idea.status === "approved")
+                    .sort((a, b) => (b.votes || 0) - (a.votes || 0))
+                    .map(idea => publicIdea(idea, deviceId))
+
+        });
+
+    }
+);
+
+
+app.post(
+    "/api/ideas/:id/vote",
+    (req, res) => {
+
+        const deviceId =
+            String((req.body && req.body.deviceId) || "");
+
+
+        if (!isValidDeviceId(deviceId)) {
+
+            return res.status(400).json({
+                error: "A valid device id is required."
+            });
+
+        }
+
+
+        const idea =
+            ideas.find(item =>
+                String(item.id) === String(req.params.id) &&
+                item.status === "approved"
+            );
+
+
+        if (!idea) {
+
+            return res.status(404).json({
+                error: "Idea not found."
+            });
+
+        }
+
+
+        const alreadyVoted =
+            ideaVotes.some(vote =>
+                vote.ideaId === idea.id &&
+                vote.deviceId === deviceId
+            );
+
+
+        if (alreadyVoted) {
+
+            return res.json({
+                idea: publicIdea(idea, deviceId)
+            });
+
+        }
+
+
+        const ip =
+            getClientIp(req);
+
+        const dayAgo =
+            Date.now() - 24 * 60 * 60 * 1000;
+
+        const votesFromIp =
+            ideaVotes.filter(vote =>
+                vote.ip === ip &&
+                new Date(vote.createdAt).getTime() > dayAgo
+            ).length;
+
+
+        if (votesFromIp >= IDEA_VOTES_PER_IP_PER_DAY) {
+
+            return res.status(429).json({
+                error: "Too many votes from this network today. Please try again tomorrow."
+            });
+
+        }
+
+
+        ideaVotes.push({
+            ideaId: idea.id,
+            deviceId,
+            ip,
+            createdAt: new Date().toISOString()
+        });
+
+        idea.votes =
+            (Number(idea.votes) || 0) + 1;
+
+        saveIdeas();
+
+
+        res.json({
+            idea: publicIdea(idea, deviceId)
+        });
+
+    }
+);
+
+
+app.delete(
+    "/api/ideas/:id/vote",
+    (req, res) => {
+
+        const deviceId =
+            String(
+                (req.body && req.body.deviceId) ||
+                req.query.deviceId ||
+                ""
+            );
+
+
+        if (!isValidDeviceId(deviceId)) {
+
+            return res.status(400).json({
+                error: "A valid device id is required."
+            });
+
+        }
+
+
+        const idea =
+            ideas.find(item =>
+                String(item.id) === String(req.params.id) &&
+                item.status === "approved"
+            );
+
+
+        if (!idea) {
+
+            return res.status(404).json({
+                error: "Idea not found."
+            });
+
+        }
+
+
+        const before =
+            ideaVotes.length;
+
+        ideaVotes =
+            ideaVotes.filter(vote =>
+                !(vote.ideaId === idea.id && vote.deviceId === deviceId)
+            );
+
+
+        if (ideaVotes.length < before) {
+
+            idea.votes =
+                Math.max(0, (Number(idea.votes) || 0) - 1);
+
+            saveIdeas();
+
+        }
+
+
+        res.json({
+            idea: publicIdea(idea, deviceId)
+        });
+
+    }
+);
+
+
+/* =====================================================
+   PROPOSE AN IDEA — $1, paid with Flutterwave
+   The idea is created as "awaiting_payment", becomes
+   "pending" once paid, and is published only when the
+   newsroom sets it to "approved".
+===================================================== */
+
+const IDEA_FEE = { amount: 1, currency: "USD" };
+
+const IDEA_CATEGORIES = [
+    "Education", "Water", "Health", "Food",
+    "Christmas", "Environment", "Skills", "Other"
+];
+
+
+function cleanText(value, max) {
+
+    return String(value || "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, max);
+
+}
+
+
+app.post(
+    "/api/ideas/proposals",
+    async (req, res) => {
+
+        const body =
+            req.body || {};
+
+
+        const title = cleanText(body.title, 90);
+        const location = cleanText(body.location, 80);
+        const category = IDEA_CATEGORIES.includes(body.category) ? body.category : "";
+        const why = cleanText(body.why, 400);
+        const anonymous = body.anonymous === true;
+        const author = anonymous ? "" : cleanText(body.name, 60);
+        const email = cleanText(body.email, 120);
+
+
+        if (!title || !location || !category || !why) {
+
+            return res.status(400).json({
+                error: "Please fill in the title, place, category and why."
+            });
+
+        }
+
+
+        if (!anonymous && !author) {
+
+            return res.status(400).json({
+                error: "Please enter your name or choose to stay anonymous."
+            });
+
+        }
+
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+
+            return res.status(400).json({
+                error: "Please enter a valid email for your payment receipt."
+            });
+
+        }
+
+
+        if (body.acceptNonRefundable !== true) {
+
+            return res.status(400).json({
+                error: "Please confirm that this donation is non-refundable."
+            });
+
+        }
+
+
+        const idea = {
+            id: ideas.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0) + 1,
+            title,
+            location,
+            category,
+            why,
+            author,
+            anonymous,
+            votes: 0,
+            status: "awaiting_payment",
+            reference: `TNP-IDEA-${Date.now()}`,
+            email,
+            fee: IDEA_FEE,
+            createdAt: new Date().toISOString()
+        };
+
+
+        try {
+
+            idea.checkoutUrl =
+                await createFlutterwaveCheckout({
+                    reference: idea.reference,
+                    amount: IDEA_FEE.amount,
+                    currency: IDEA_FEE.currency,
+                    email,
+                    donorName: author || "Anonymous reader",
+                    phone: "",
+                    activityHeadline: `Idea proposal: ${title}`
+                });
+
+        } catch (error) {
+
+            console.error("Idea checkout error:", error.message);
+
+            return res.status(502).json({
+                error: "Unable to start the payment. Please try again."
+            });
+
+        }
+
+
+        ideas.push(idea);
+
+        saveIdeas();
+
+
+        res.status(201).json({
+            reference: idea.reference,
+            checkoutUrl: idea.checkoutUrl
+        });
+
+    }
+);
+
+
+/* Checks the payment with Flutterwave (never trust the browser) */
+
+async function verifyIdeaPayment(idea, transactionId) {
+
+    if (idea.status !== "awaiting_payment") {
+        return idea.status;
+    }
+
+
+    const transaction =
+        await fetchFlutterwaveTransaction(idea.reference, transactionId);
+
+
+    const matches =
+        transaction &&
+        transaction.tx_ref === idea.reference &&
+        transaction.currency === IDEA_FEE.currency &&
+        Number(transaction.amount) >= IDEA_FEE.amount;
+
+
+    if (matches && transaction.status === "successful") {
+
+        idea.status = "pending";
+
+        idea.paidAt = new Date().toISOString();
+
+        idea.transactionId = transaction.id;
+
+        saveIdeas();
+
+        return "pending";
+
+    }
+
+
+    return transaction && transaction.status === "pending"
+        ? "awaiting_payment"
+        : "failed";
+
+}
+
+
+app.post(
+    "/api/ideas/proposals/:reference/verify",
+    async (req, res) => {
+
+        const idea =
+            ideas.find(item => item.reference === req.params.reference);
+
+
+        if (!idea) {
+
+            return res.status(404).json({
+                error: "Proposal not found."
+            });
+
+        }
+
+
+        try {
+
+            const status =
+                await verifyIdeaPayment(
+                    idea,
+                    req.body && req.body.transactionId
+                );
+
+
+            res.json({
+                status,
+                title: idea.title
+            });
+
+        } catch (error) {
+
+            console.error("Idea verification error:", error.message);
+
+            res.status(502).json({
+                error: "We could not check the payment yet. Please try again."
+            });
+
+        }
+
+    }
+);
+
+
+/* =====================================================
    PUBLIC DONOR WALL
    Completed donations only. Never exposes email,
    phone or payment details.
@@ -2502,6 +3005,31 @@ app.post(
 
 
         if (!donation) {
+
+            /* Idea proposals use the same webhook */
+
+            const idea =
+                ideas.find(item => item.reference === event.data.tx_ref);
+
+
+            if (idea) {
+
+                try {
+
+                    const status =
+                        await verifyIdeaPayment(idea, event.data.id);
+
+                    console.log(`Webhook: ${idea.reference} → ${status}`);
+
+                } catch (error) {
+
+                    console.error("Webhook idea verification error:", error.message);
+
+                }
+
+                return;
+            }
+
 
             console.log(
                 `Webhook: donation not found for ${event.data.tx_ref}`

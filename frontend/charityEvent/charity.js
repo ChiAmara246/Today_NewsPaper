@@ -156,6 +156,10 @@ async function loadCharity() {
 
         renderLatestCharity();
 
+        renderCharityHome(
+            charities
+        );
+
 
     } catch (error) {
 
@@ -187,166 +191,8 @@ async function loadCharity() {
 }
 
 
-/* =====================================================
-   RENDER UPCOMING
-===================================================== */
-
-function renderUpcomingCharity() {
-
-    const container =
-        document.getElementById(
-            "upcomingCharity"
-        );
 
 
-    if (!container) {
-        return;
-    }
-
-
-    container.innerHTML =
-        "";
-
-
-    if (
-        !upcomingCharityData.length
-    ) {
-
-        container.innerHTML = `
-            <div class="charity-empty">
-                <p>
-                    No upcoming activities available.
-                </p>
-            </div>
-        `;
-
-        return;
-    }
-
-
-    const start =
-        (
-            upcomingCharityPage -
-            1
-        ) *
-        CHARITY_PER_PAGE;
-
-
-    const end =
-        start +
-        CHARITY_PER_PAGE;
-
-
-    const pageItems =
-        upcomingCharityData.slice(
-            start,
-            end
-        );
-
-
-    renderCharityCards(
-        pageItems,
-        container,
-        true
-    );
-
-
-    renderCharityPagination(
-        container,
-        upcomingCharityData.length,
-        upcomingCharityPage,
-        page => {
-
-            upcomingCharityPage =
-                page;
-
-            renderUpcomingCharity();
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   RENDER LATEST
-===================================================== */
-
-function renderLatestCharity() {
-
-    const container =
-        document.getElementById(
-            "latestCharity"
-        );
-
-
-    if (!container) {
-        return;
-    }
-
-
-    container.innerHTML =
-        "";
-
-
-    if (
-        !latestCharityData.length
-    ) {
-
-        container.innerHTML = `
-            <div class="charity-empty">
-                <p>
-                    No latest activities available.
-                </p>
-            </div>
-        `;
-
-        return;
-    }
-
-
-    const start =
-        (
-            latestCharityPage -
-            1
-        ) *
-        CHARITY_PER_PAGE;
-
-
-    const end =
-        start +
-        CHARITY_PER_PAGE;
-
-
-    const pageItems =
-        latestCharityData.slice(
-            start,
-            end
-        );
-
-
-    renderCharityCards(
-        pageItems,
-        container,
-        false
-    );
-
-
-    renderCharityPagination(
-        container,
-        latestCharityData.length,
-        latestCharityPage,
-        page => {
-
-            latestCharityPage =
-                page;
-
-            renderLatestCharity();
-
-        }
-    );
-
-}
 
 
 /* =====================================================
@@ -1682,6 +1528,18 @@ function handleFlutterwaveRedirect() {
 
     const transactionId =
         params.get("transaction_id");
+
+
+    /* Idea proposals () have their own confirmation */
+
+    if (reference.startsWith("TNP-IDEA-")) {
+
+        window.history.replaceState({}, "", window.location.pathname);
+
+        showIdeaProposalVerification(reference, transactionId);
+
+        return;
+    }
 
 
     /*
@@ -6389,6 +6247,8 @@ function initCharityNav() {
 
         bar.classList.toggle("cw-navbar--open", open);
 
+        document.documentElement.classList.toggle("cw-nav-open", open);
+
         nav.setAttribute("aria-expanded", String(open));
 
         nav.setAttribute("aria-label", open ? "Hide the menu" : "Show the menu");
@@ -6481,6 +6341,20 @@ function initCharityNav() {
 
 
     initCharitySearch(bar.querySelector(".cw-search"));
+
+
+    /* Charity home: the search sits next to the impact figures */
+
+    const slot =
+        document.getElementById("cpSearchSlot");
+
+    if (slot) {
+
+        slot.appendChild(bar.querySelector(".cw-search"));
+
+        bar.classList.add("cw-navbar--empty");
+
+    }
 
 
     bar.classList.add("cw-navbar--open");
@@ -6643,6 +6517,1944 @@ function initCharitySearch(form) {
             }
         }
     );
+
+}
+
+
+/* =====================================================
+   CHARITY HOME — laid out like a newspaper front page
+   Front page poster + agenda (upcoming), archives (past),
+   impact figures, readers' ideas, thank-you band, partners.
+===================================================== */
+
+const CHARITY_AGENDA_MAX = 5;
+
+const CHARITY_STAMP_DAYS = 7;
+
+const CHARITY_WHATSAPP_URL =
+    "https://chat.whatsapp.com/JRep0h9StkDKcaHAel0TeN?mode=gi_t";
+
+
+let latestCharityYear = "all";
+
+let charityIdeas = [];
+
+
+
+const CHARITY_THEME_ART = {
+
+    education: `
+        <path d="M60 34c-12-8-28-10-42-8v62c14-2 30 0 42 8 12-8 28-10 42-8V26c-14-2-30 0-42 8z"/>
+        <path d="M60 34v62"/>
+        <path d="M28 44c8-1 16 0 22 3M28 56c8-1 16 0 22 3M28 68c8-1 16 0 22 3M70 47c6-3 14-4 22-3M70 59c6-3 14-4 22-3M70 71c6-3 14-4 22-3"/>`,
+
+    water: `
+        <path d="M60 14C46 38 30 56 30 74a30 30 0 0 0 60 0c0-18-16-36-30-60z"/>
+        <path d="M45 76a15 15 0 0 0 15 15"/>`,
+
+    health: `
+        <path d="M48 22h24v26h26v24H72v26H48V72H22V48h26z"/>
+        <circle cx="60" cy="60" r="52" stroke-dasharray="3 7"/>`,
+
+    food: `
+        <path d="M16 60h88a44 32 0 0 1-88 0z"/>
+        <path d="M40 100h40"/>
+        <path d="M46 48c-5-7 5-11 0-18M60 48c-5-7 5-11 0-18M74 48c-5-7 5-11 0-18"/>`,
+
+    christmas: `
+        <rect x="22" y="50" width="76" height="50" rx="2"/>
+        <rect x="16" y="38" width="88" height="14" rx="2"/>
+        <path d="M60 38v62"/>
+        <path d="M60 38c-6-14-26-16-24-4 1 6 14 6 24 4zM60 38c6-14 26-16 24-4-1 6-14 6-24 4z"/>`,
+
+    heart: `
+        <path d="M60 100S18 74 18 46a21 21 0 0 1 42-9 21 21 0 0 1 42 9c0 28-42 54-42 54z"/>
+        <path d="M60 86S32 68 32 48" stroke-dasharray="2 6"/>`
+
+};
+
+
+function charityThemeArt(theme) {
+
+    return `
+        <svg class="cp-art" viewBox="0 0 120 120" fill="none" stroke="currentColor"
+             stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            ${CHARITY_THEME_ART[theme] || CHARITY_THEME_ART.heart}
+        </svg>
+    `;
+
+}
+
+
+function charityFirstSentence(charity) {
+
+    const text =
+        asCharityArray(charity.description)[0] || "";
+
+
+    const match =
+        String(text).match(/^.*?[.!?](\s|$)/);
+
+
+    return (match ? match[0] : text).trim();
+
+}
+
+
+function charityShortDate(date) {
+
+    const value =
+        new Date(date);
+
+
+    return Number.isNaN(value.getTime())
+        ? ""
+        : value.toLocaleDateString(
+            "en-GB",
+            { day: "numeric", month: "short", year: "numeric" }
+        );
+
+}
+
+
+function charityAbsoluteUrl(charity) {
+
+    return new URL(
+        getCharityDetailUrl(charity),
+        window.location.href
+    ).href;
+
+}
+
+
+function charityQrSvg(url) {
+
+    if (typeof window.qrcode !== "function") {
+        return "";
+    }
+
+
+    try {
+
+        const qr =
+            window.qrcode(0, "M");
+
+        qr.addData(url);
+
+        qr.make();
+
+
+        return qr.createSvgTag({
+            cellSize: 4,
+            margin: 0,
+            scalable: true
+        });
+
+    } catch {
+
+        return "";
+
+    }
+
+}
+
+
+function charityPosterStamp(charity) {
+
+    const daysLeft =
+        getCharityDaysLeft(charity.date);
+
+
+    if (daysLeft >= 0 && daysLeft < CHARITY_STAMP_DAYS) {
+        return "Last days";
+    }
+
+
+    const announced =
+        new Date(charity.announcedAt);
+
+
+    if (
+        !Number.isNaN(announced.getTime()) &&
+        Date.now() - announced.getTime() < CHARITY_STAMP_DAYS * 24 * 60 * 60 * 1000
+    ) {
+        return "New";
+    }
+
+
+    return "";
+
+}
+
+
+function charityPartnerNames(charity) {
+
+    return asCharityArray(charity.partners)
+        .map(partner => partner.name)
+        .filter(name => name && name.toLowerCase() !== "partner name");
+
+}
+
+
+/* format: responsive (16:9 → 4:5 on phones), square, story, wide, portrait */
+
+function buildCharityPoster(charity, format = "responsive") {
+
+    const e =
+        escapeCharityHtml;
+
+
+    if (charity.poster) {
+
+        return `
+            <div class="cp-poster cp-poster--${format} cp-poster--image">
+                <img src="${e(getImagePath(charity.poster))}" alt="Campaign poster: ${e(charity.activityHeadline)}">
+            </div>
+        `;
+
+    }
+
+
+    const year =
+        new Date(charity.date).getFullYear() || "";
+
+    const stamp =
+        charityPosterStamp(charity);
+
+    const partners =
+        charityPartnerNames(charity);
+
+    const lead =
+        charityFirstSentence(charity);
+
+
+    return `
+        <div class="cp-poster cp-poster--${format}">
+        <div class="cp-poster-inner">
+
+            <div class="cp-poster-top">
+                <span class="cp-poster-brand">Today Cares</span>
+                <span>Campaign ${e(year)}</span>
+            </div>
+
+            <div class="cp-poster-text">
+                ${charity.label ? `<span class="cp-poster-kicker">${e(charity.label)}</span>` : ""}
+                <h3 class="cp-poster-title">${e(charity.activityHeadline)}</h3>
+                <span class="cp-poster-rule" aria-hidden="true"></span>
+                ${lead ? `<p class="cp-poster-lead">${e(lead)}</p>` : ""}
+            </div>
+
+            <div class="cp-poster-art">
+                ${charityThemeArt(charity.theme)}
+                ${stamp ? `<span class="cp-stamp">${e(stamp)}</span>` : ""}
+            </div>
+
+            <div class="cp-poster-bottom">
+                <div class="cp-poster-when">
+                    <strong>${e(charityShortDate(charity.date))}</strong>
+                    ${charity.location ? `<span>${e(charity.location)}</span>` : ""}
+                </div>
+                <div class="cp-poster-cta">
+                    <div>
+                        <strong>Donate</strong>
+                        <span>${e(window.location.host || "todaynewspaper")}</span>
+                    </div>
+                    <div class="cp-poster-qr">${charityQrSvg(charityAbsoluteUrl(charity))}</div>
+                </div>
+            </div>
+
+            ${partners.length ? `<p class="cp-poster-partners">With ${e(partners.join(" · "))}</p>` : ""}
+
+        </div>
+        </div>
+    `;
+
+}
+
+
+/* ---------- Front page: the next campaign ---------- */
+
+function renderCharityFrontPage(charity) {
+
+    const front =
+        document.getElementById("cpFront");
+
+
+    if (!front) {
+        return;
+    }
+
+
+    if (!charity) {
+
+        front.innerHTML = `
+            <p class="cp-empty">
+                Our next action is being prepared.
+                <a href="${CHARITY_WHATSAPP_URL}" target="_blank" rel="noopener noreferrer">Join our WhatsApp</a>
+                to be the first to know.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    const e =
+        escapeCharityHtml;
+
+    const fundraising =
+        getCharityFundraising(charity);
+
+    const stage =
+        getCharityStage(charity.date);
+
+    const daysLeft =
+        getCharityDaysLeft(charity.date);
+
+    const detailUrl =
+        getCharityDetailUrl(charity);
+
+    const firstParagraph =
+        asCharityArray(charity.description)[0] || "";
+
+    const shareUrl =
+        `https://wa.me/?text=${encodeURIComponent(`${charity.activityHeadline} — ${charityAbsoluteUrl(charity)}`)}`;
+
+
+    front.innerHTML = `
+
+        <figure class="cp-poster-figure">
+            ${buildCharityPoster(charity, "responsive")}
+            <figcaption class="cp-caption">
+                Official campaign poster. Photos of the event will be published after
+                ${e(charityShortDate(charity.date))}. — Today Cares
+            </figcaption>
+        </figure>
+
+        <div class="cp-variants">
+            <span class="cp-variants-label">Also available:</span>
+            <button type="button" class="cp-variant" data-poster="square" aria-label="Download the Instagram poster (1:1)">
+                <span class="cp-variant-thumb cp-variant-thumb--square">${buildCharityPoster(charity, "square")}</span>
+                <span>1:1 Instagram</span>
+            </button>
+            <button type="button" class="cp-variant" data-poster="story" aria-label="Download the WhatsApp poster (9:16)">
+                <span class="cp-variant-thumb cp-variant-thumb--story">${buildCharityPoster(charity, "story")}</span>
+                <span>9:16 WhatsApp</span>
+            </button>
+            <div class="cp-variant-actions">
+                <button type="button" class="cp-btn cp-btn--outline" data-poster="main">⬇ Download poster</button>
+                <a class="cp-btn cp-btn--outline" href="${shareUrl}" target="_blank" rel="noopener noreferrer">💬 Share</a>
+            </div>
+        </div>
+
+        <div class="cp-front-details">
+
+            <div class="cp-front-story">
+                ${charity.label ? `<span class="cp-label">${e(charity.label)}</span>` : ""}
+                <h3 class="cp-front-title"><a href="${detailUrl}">${e(charity.activityHeadline)}</a></h3>
+                <p class="cp-smallcaps">
+                    ${e(charityShortDate(charity.date))}${charity.location ? ` · ${e(charity.location)}` : ""}
+                </p>
+                ${firstParagraph ? `<p class="cp-dropcap">${e(firstParagraph)}</p>` : ""}
+            </div>
+
+            <div class="cp-front-action">
+
+                <div class="cp-countdown">
+                    ${stage === "today"
+                        ? `<strong>Today</strong><span>The campaign happens today</span>`
+                        : `<strong>${daysLeft}</strong><span>${daysLeft === 1 ? "day left" : "days left"}</span>`}
+                </div>
+
+                ${fundraising ? `
+                    <div class="cp-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                         aria-valuenow="${Math.min(100, fundraising.percent)}" aria-label="Fundraising progress">
+                        <span style="width: ${Math.min(100, fundraising.percent)}%"></span>
+                    </div>
+                    <p class="cp-progress-text">
+                        <strong>${e(formatCharityMoney(fundraising.raised, fundraising.currency))}</strong>
+                        raised of ${e(formatCharityMoney(fundraising.goal, fundraising.currency))}
+                    </p>
+                ` : ""}
+
+                <button type="button" class="cp-btn cp-btn--navy" data-donate>Donate</button>
+
+                <div class="cp-front-row">
+                    <a class="cp-btn cp-btn--outline" href="${detailUrl}">View campaign</a>
+                    <button type="button" class="charity-reminder cp-reminder"></button>
+                </div>
+
+                <p class="cp-secure">🔒 Secure payment via Flutterwave</p>
+
+            </div>
+
+        </div>
+    `;
+
+
+    /* Donate: the existing donation journey */
+
+    front
+        .querySelector("[data-donate]")
+        .addEventListener("click", () => handleDonateClick(charity));
+
+
+    /* Reminder: the existing reminder picker */
+
+    const reminderButton =
+        front.querySelector(".cp-reminder");
+
+    reminderButton.dataset.charityId =
+        charity.id;
+
+    setReminderButtonState(
+        reminderButton,
+        Boolean(getSavedReminder(charity.id))
+    );
+
+    reminderButton.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            openReminderPicker(charity, reminderButton);
+
+        }
+    );
+
+
+    /* Poster downloads */
+
+    front
+        .querySelectorAll("[data-poster]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => downloadCharityPoster(charity, button.dataset.poster, button)
+            );
+
+        });
+
+}
+
+
+/* Renders the poster off-screen at full size and saves it as a PNG */
+
+async function downloadCharityPoster(charity, format, button) {
+
+    const fileName =
+        `${String(charity.activityHeadline || "campaign")
+            .replace(/[^a-z0-9]+/gi, "-")
+            .toLowerCase()}-${format}`;
+
+
+    if (charity.poster) {
+
+        const link =
+            document.createElement("a");
+
+        link.href = getImagePath(charity.poster);
+
+        link.download = fileName;
+
+        link.click();
+
+        return;
+    }
+
+
+    if (!window.htmlToImage) {
+
+        console.error("Poster export library not loaded.");
+
+        return;
+    }
+
+
+    const sizes = {
+        main: window.matchMedia("(max-width: 900px)").matches
+            ? ["portrait", 1080, 1350]
+            : ["wide", 1600, 900],
+        square: ["square", 1080, 1080],
+        story: ["story", 1080, 1920]
+    };
+
+
+    const [posterFormat, width, height] =
+        sizes[format] || sizes.main;
+
+
+    const stage =
+        document.createElement("div");
+
+    stage.className = "cp-export-stage";
+
+    stage.style.width = `${width}px`;
+
+    stage.innerHTML = buildCharityPoster(charity, posterFormat);
+
+    document.body.appendChild(stage);
+
+
+    const poster =
+        stage.firstElementChild;
+
+
+    const previous =
+        button.textContent;
+
+
+    button.disabled = true;
+
+
+    try {
+
+        const dataUrl =
+            await window.htmlToImage.toPng(
+                poster,
+                { width, height, pixelRatio: 1, cacheBust: true }
+            );
+
+
+        const link =
+            document.createElement("a");
+
+        link.href = dataUrl;
+
+        link.download = `${fileName}.png`;
+
+        link.click();
+
+    } catch (error) {
+
+        console.error("Poster export failed:", error);
+
+    } finally {
+
+        stage.remove();
+
+        button.disabled = false;
+
+        button.textContent = previous;
+
+    }
+
+}
+
+
+/* ---------- Agenda: next campaigns + ideas chosen by readers ---------- */
+
+function renderUpcomingCharity() {
+
+    const container =
+        document.getElementById(
+            "upcomingCharity"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    renderCharityFrontPage(
+        upcomingCharityData[0]
+    );
+
+
+    const e =
+        escapeCharityHtml;
+
+    const agenda =
+        upcomingCharityData.slice(1, 1 + CHARITY_AGENDA_MAX);
+
+    const chosen =
+        charityIdeas.filter(idea => idea.chosen);
+
+
+    const count =
+        document.getElementById("cpAgendaCount");
+
+    if (count) {
+        count.textContent =
+            chosen.length
+                ? `${agenda.length} + ${chosen.length} ⭐`
+                : String(agenda.length);
+    }
+
+
+    if (!agenda.length && !chosen.length) {
+
+        container.innerHTML = `
+            <p class="cp-empty">
+                Our next action is being prepared.
+                <a href="${CHARITY_WHATSAPP_URL}" target="_blank" rel="noopener noreferrer">Join our WhatsApp</a>
+                to be the first to know.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = `
+        <ol class="cp-agenda">
+
+            ${agenda.map(charity => {
+
+                const date = new Date(charity.date);
+                const fundraising = getCharityFundraising(charity);
+
+                const url = getCharityDetailUrl(charity);
+
+                return `
+                    <li class="cp-agenda-row" data-charity="${e(charity.id)}">
+                        <div class="cp-agenda-item">
+                            <a class="cp-agenda-date" href="${url}" tabindex="-1" aria-hidden="true">
+                                <strong>${date.getDate()}</strong>
+                                <span>${e(date.toLocaleDateString("en-GB", { month: "short" }))}</span>
+                            </a>
+                            <span class="cp-agenda-body">
+                                <a class="cp-agenda-title" href="${url}">${e(charity.activityHeadline)}</a>
+                                <span class="cp-agenda-meta">${e([charity.location, charity.label].filter(Boolean).join(" · "))}</span>
+                                ${fundraising ? `<span class="cp-mini-bar"><span style="width: ${Math.min(100, fundraising.percent)}%"></span></span>` : ""}
+                                <span class="cp-agenda-actions">
+                                    <button type="button" class="cp-btn cp-btn--navy cp-btn--sm" data-agenda-donate>Donate</button>
+                                    <button type="button" class="charity-reminder cp-reminder cp-reminder--sm"></button>
+                                </span>
+                            </span>
+                        </div>
+                    </li>
+                `;
+
+            }).join("")}
+
+            ${chosen.map(idea => `
+                <li>
+                    <div class="cp-agenda-item cp-agenda-item--chosen">
+                        <span class="cp-agenda-date">
+                            <strong>★</strong>
+                            <span>Soon</span>
+                        </span>
+                        <span class="cp-agenda-body">
+                            <span class="cp-chosen-badge">⭐ Chosen by the community</span>
+                            <span class="cp-agenda-title">${e(idea.title)}</span>
+                            <span class="cp-agenda-meta">${e([idea.location, idea.category].filter(Boolean).join(" · "))}</span>
+                        </span>
+                    </div>
+                </li>
+            `).join("")}
+
+        </ol>
+    `;
+
+
+    /* Donate + reminder: the existing journeys */
+
+    container
+        .querySelectorAll(".cp-agenda-row")
+        .forEach(row => {
+
+            const charity =
+                agenda.find(item => String(item.id) === row.dataset.charity);
+
+
+            if (!charity) {
+                return;
+            }
+
+
+            row
+                .querySelector("[data-agenda-donate]")
+                .addEventListener("click", () => handleDonateClick(charity));
+
+
+            const reminderButton =
+                row.querySelector(".cp-reminder");
+
+            reminderButton.dataset.charityId =
+                charity.id;
+
+            setReminderButtonState(
+                reminderButton,
+                Boolean(getSavedReminder(charity.id))
+            );
+
+            reminderButton.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+                    openReminderPicker(charity, reminderButton);
+
+                }
+            );
+
+        });
+
+}
+
+
+/* ---------- Archives: past campaigns by year ---------- */
+
+function renderLatestCharity() {
+
+    const container =
+        document.getElementById(
+            "latestCharity"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    renderCharityYearFilters();
+
+
+    const items =
+        latestCharityYear === "all"
+            ? latestCharityData
+            : latestCharityData.filter(charity =>
+                String(new Date(charity.date).getFullYear()) === latestCharityYear
+            );
+
+
+    if (!items.length) {
+
+        container.innerHTML = `
+            <div class="charity-empty">
+                <p>
+                    No past activities available.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const start =
+        (latestCharityPage - 1) * CHARITY_PER_PAGE;
+
+    const pageItems =
+        items.slice(start, start + CHARITY_PER_PAGE);
+
+
+    /* Group the page by year */
+
+    const years =
+        [...new Set(pageItems.map(charity => new Date(charity.date).getFullYear()))];
+
+
+    const e =
+        escapeCharityHtml;
+
+
+    container.innerHTML =
+        years.map(year => `
+            <section class="cp-year">
+                <h3 class="cp-year-title"><span>${year}</span></h3>
+                <div class="cp-archive-grid">
+                    ${pageItems
+                        .filter(charity => new Date(charity.date).getFullYear() === year)
+                        .map(charity => {
+
+                            const fundraising = getCharityFundraising(charity);
+                            const gallery = getCharityGallery(charity);
+                            const stat = asCharityArray(charity.results && charity.results.stats)[0];
+                            const lead = charityFirstSentence(charity);
+
+                            return `
+                                <article class="cp-archive-card">
+                                    <a href="${getCharityDetailUrl(charity)}">
+                                        <span class="cp-archive-photo">
+                                            <span class="cp-print cp-print--back" aria-hidden="true"></span>
+                                            <span class="cp-print cp-print--front" aria-hidden="true"></span>
+                                            <span class="cp-archive-image">
+                                                <img loading="lazy" src="${e(getImagePath(charity.img))}" alt="">
+                                            </span>
+                                            <span class="cp-badge">✓ ${fundraising && fundraising.raised > 0 ? `${fundraising.percent}%` : "Done"}</span>
+                                            ${gallery.length ? `<span class="cp-photos">📷 ${gallery.length} photos</span>` : ""}
+                                        </span>
+                                        <span class="cp-smallcaps">
+                                            ${e(charityShortDate(charity.date))}${charity.location ? ` · ${e(charity.location)}` : ""}
+                                        </span>
+                                        <span class="cp-archive-title">${e(charity.activityHeadline)}</span>
+                                        ${lead ? `<span class="cp-archive-lead">${e(lead)}</span>` : ""}
+                                        ${stat && stat.value ? `<span class="cp-archive-result">${e(stat.value)} ${e(stat.label || "")}</span>` : ""}
+                                    </a>
+                                </article>
+                            `;
+
+                        }).join("")}
+                </div>
+            </section>
+        `).join("");
+
+
+    /* Missing photo: navy placeholder instead of a broken image */
+
+    container
+        .querySelectorAll(".cp-archive-image img")
+        .forEach(img => {
+
+            img.addEventListener(
+                "error",
+                () => img.closest(".cp-archive-image").classList.add("is-missing")
+            );
+
+        });
+
+
+    renderCharityPagination(
+        container,
+        items.length,
+        latestCharityPage,
+        page => {
+
+            latestCharityPage =
+                page;
+
+            renderLatestCharity();
+
+            document
+                .getElementById("cpArchivesTitle")
+                ?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        }
+    );
+
+}
+
+
+function renderCharityYearFilters() {
+
+    const filters =
+        document.getElementById("cpFilters");
+
+
+    if (!filters) {
+        return;
+    }
+
+
+    const years =
+        [...new Set(
+            latestCharityData
+                .map(charity => new Date(charity.date).getFullYear())
+                .filter(Boolean)
+        )].sort((a, b) => b - a);
+
+
+    filters.innerHTML =
+        ["all", ...years.map(String)]
+            .map(year => `
+                <button type="button" class="cp-pill${year === latestCharityYear ? " is-active" : ""}"
+                        data-year="${year}" aria-pressed="${year === latestCharityYear}">
+                    ${year === "all" ? "All" : year}
+                </button>
+            `).join("");
+
+
+    filters
+        .querySelectorAll("[data-year]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    latestCharityYear = button.dataset.year;
+
+                    latestCharityPage = 1;
+
+                    renderLatestCharity();
+
+                }
+            );
+
+        });
+
+}
+
+
+/* ---------- Impact figures (from past campaigns) ---------- */
+
+function renderCharityImpact() {
+
+    const box =
+        document.getElementById("cpImpact");
+
+
+    if (!box) {
+        return;
+    }
+
+
+    const raised =
+        latestCharityData.reduce(
+            (sum, charity) => sum + ((getCharityFundraising(charity) || {}).raised || 0),
+            0
+        );
+
+    const volunteers =
+        latestCharityData.reduce(
+            (sum, charity) => sum + asCharityArray(charity.volunteers).length,
+            0
+        );
+
+    const partners =
+        new Set(
+            latestCharityData.flatMap(charityPartnerNames).map(name => name.toLowerCase())
+        ).size;
+
+
+    const figures = [
+        { value: raised, label: "Raised", money: true },
+        { value: latestCharityData.length, label: "Campaigns led" },
+        { value: volunteers, label: "Volunteers" },
+        { value: partners, label: "Partners" }
+    ];
+
+
+    const format = (figure, value) =>
+        figure.money
+            ? formatCharityMoneyShort(value, "NGN")
+            : Math.round(value).toLocaleString("en-NG");
+
+
+    box.innerHTML =
+        figures.map((figure, index) => `
+            <div class="cp-figure">
+                <strong data-figure="${index}">${format(figure, 0)}</strong>
+                <span>${figure.label}</span>
+            </div>
+        `).join("");
+
+
+    const numbers =
+        box.querySelectorAll("[data-figure]");
+
+
+    const reduceMotion =
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+
+    if (reduceMotion) {
+
+        numbers.forEach((node, i) => {
+            node.textContent = format(figures[i], figures[i].value);
+        });
+
+        return;
+    }
+
+
+    const duration = 1800;
+
+    const start = performance.now();
+
+
+    const tick = now => {
+
+        const progress =
+            Math.min(1, (now - start) / duration);
+
+        const eased =
+            1 - Math.pow(1 - progress, 3);
+
+
+        numbers.forEach((node, i) => {
+            node.textContent = format(figures[i], figures[i].value * eased);
+        });
+
+
+        if (progress < 1) {
+            requestAnimationFrame(tick);
+        }
+
+    };
+
+
+    requestAnimationFrame(tick);
+
+}
+
+
+/* ---------- Readers' ideas ---------- */
+
+let charityDeviceIdMemory = "";
+
+
+function getCharityDeviceId() {
+
+    const make = () =>
+        (window.crypto && crypto.randomUUID)
+            ? crypto.randomUUID()
+            : `d-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+
+
+    try {
+
+        let id =
+            localStorage.getItem("tnpDeviceId");
+
+
+        if (!id) {
+
+            id = make();
+
+            localStorage.setItem("tnpDeviceId", id);
+
+        }
+
+
+        return id;
+
+    } catch {
+
+        charityDeviceIdMemory =
+            charityDeviceIdMemory || make();
+
+        return charityDeviceIdMemory;
+
+    }
+
+}
+
+
+async function loadCharityIdeas() {
+
+    const box =
+        document.getElementById("cpIdeas");
+
+
+    if (!box) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/ideas?deviceId=${encodeURIComponent(getCharityDeviceId())}`
+            );
+
+
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+        }
+
+
+        const data =
+            await response.json();
+
+
+        charityIdeas =
+            Array.isArray(data.ideas) ? data.ideas : [];
+
+    } catch (error) {
+
+        console.error("Failed to load ideas:", error);
+
+        charityIdeas = [];
+
+    }
+
+
+    renderCharityIdeas();
+
+    renderUpcomingCharity();
+
+}
+
+
+function renderCharityIdeaItem(idea, index) {
+
+    const e =
+        escapeCharityHtml;
+
+
+    return `
+        <li class="cp-idea" data-idea="${idea.id}">
+            <span class="cp-idea-rank">${index + 1}</span>
+            <div class="cp-idea-body">
+                <h3 class="cp-idea-title">${e(idea.title)}</h3>
+                <p class="cp-idea-meta">${e(idea.anonymous || !idea.author ? "Anonymous" : idea.author)} · ${e([idea.location, idea.category].filter(Boolean).join(" · "))}</p>
+                <div class="cp-idea-bar"><span style="width: ${Math.min(100, idea.votes / idea.goal * 100)}%"></span></div>
+                <p class="cp-idea-count">${renderCharityIdeaCount(idea)}</p>
+            </div>
+            <button type="button" class="cp-heart${idea.votedByMe ? " is-voted" : ""}"
+                    aria-pressed="${idea.votedByMe}" aria-label="Vote for “${e(idea.title)}”">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 3 4.5 6.6 4.5c2.1 0 3.6 1.2 4.4 2.6.8-1.4 2.3-2.6 4.4-2.6 3.6 0 5.7 3.7 4.2 7.2C19.5 16.4 12 21 12 21z"/>
+                </svg>
+            </button>
+        </li>
+    `;
+
+}
+
+
+function bindCharityIdeaHearts(root) {
+
+    root
+        .querySelectorAll(".cp-heart")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => toggleCharityIdeaVote(
+                    Number(button.closest("[data-idea]").dataset.idea),
+                    button
+                )
+            );
+
+        });
+
+}
+
+
+function renderCharityIdeas() {
+
+    const box =
+        document.getElementById("cpIdeas");
+
+
+    if (!box) {
+        return;
+    }
+
+
+    const top =
+        charityIdeas.slice(0, 4);
+
+
+    box.innerHTML = `
+        <div class="cp-ideas-wrap">
+
+            ${top.length
+                ? `<ol class="cp-ideas">${top.map(renderCharityIdeaItem).join("")}</ol>`
+                : `<p class="cp-empty">No ideas yet. Be the first to propose one.</p>`}
+
+            <p class="cp-idea-error" role="status" aria-live="polite"></p>
+
+            <button type="button" class="cp-btn cp-btn--navy cp-propose" data-propose>
+                + Propose an idea · $1
+            </button>
+
+            ${charityIdeas.length > top.length ? `
+                <button type="button" class="cp-link" data-ideas-all>
+                    See all proposals (${charityIdeas.length}) →
+                </button>
+            ` : ""}
+
+        </div>
+    `;
+
+
+    bindCharityIdeaHearts(box);
+
+    box.querySelector("[data-propose]").addEventListener("click", openCharityProposalForm);
+
+    box.querySelector("[data-ideas-all]")?.addEventListener("click", openCharityIdeasModal);
+
+}
+
+
+/* ---------- Simple modal built on the donation modal styles ---------- */
+
+function openCharityModal(content, onClose) {
+
+    const modal =
+        document.createElement("div");
+
+    modal.className =
+        "donation-modal cp-modal active";
+
+    modal.setAttribute("role", "dialog");
+
+    modal.setAttribute("aria-modal", "true");
+
+
+    modal.innerHTML = `
+        <div class="donation-modal-content">
+            <button type="button" class="donation-close" aria-label="Close">×</button>
+            ${content}
+        </div>
+    `;
+
+
+    const opener =
+        document.activeElement;
+
+
+    const close = () => {
+
+        document.removeEventListener("keydown", onKey);
+
+        modal.remove();
+
+        document.body.style.overflow = "";
+
+        if (onClose) onClose();
+
+        opener?.focus?.();
+
+    };
+
+
+    const onKey = event => {
+        if (event.key === "Escape") close();
+    };
+
+
+    modal.querySelector(".donation-close").addEventListener("click", close);
+
+    modal.addEventListener("click", event => {
+        if (event.target === modal) close();
+    });
+
+    document.addEventListener("keydown", onKey);
+
+
+    document.body.appendChild(modal);
+
+    document.body.style.overflow = "hidden";
+
+    modal.querySelector(".donation-close").focus();
+
+
+    return { modal, close };
+
+}
+
+
+/* ---------- All proposals ---------- */
+
+function openCharityIdeasModal() {
+
+    let category = "All";
+
+
+    const categories =
+        ["All", ...new Set(charityIdeas.map(idea => idea.category).filter(Boolean))];
+
+
+    const { modal, close } =
+        openCharityModal(
+            `
+                <div class="donation-header">
+                    <span class="donation-label">Readers' letters</span>
+                    <h2>All proposals</h2>
+                    <p>Vote ❤ for free. At 5,000 votes, an idea becomes a campaign.</p>
+                </div>
+
+                <button type="button" class="cp-btn cp-btn--navy cp-propose" data-propose>
+                    + Propose an idea · $1
+                </button>
+
+                <div class="cp-filters cp-modal-filters" role="group" aria-label="Filter by category">
+                    ${categories.map(name => `
+                        <button type="button" class="cp-pill${name === "All" ? " is-active" : ""}" data-category="${escapeCharityHtml(name)}"
+                                aria-pressed="${name === "All"}">${escapeCharityHtml(name)}</button>
+                    `).join("")}
+                </div>
+
+                <div class="cp-ideas-wrap">
+                    <ol class="cp-ideas" data-all-ideas></ol>
+                    <p class="cp-idea-error" role="status" aria-live="polite"></p>
+                </div>
+            `,
+            renderCharityIdeas
+        );
+
+
+    modal.classList.add("cp-modal--ideas");
+
+
+    const list =
+        modal.querySelector("[data-all-ideas]");
+
+
+    const draw = () => {
+
+        const shown =
+            category === "All"
+                ? charityIdeas
+                : charityIdeas.filter(idea => idea.category === category);
+
+
+        list.innerHTML =
+            shown.map(idea => renderCharityIdeaItem(idea, charityIdeas.indexOf(idea))).join("");
+
+
+        bindCharityIdeaHearts(list);
+
+    };
+
+
+    modal
+        .querySelectorAll("[data-category]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    category = button.dataset.category;
+
+
+                    modal.querySelectorAll("[data-category]").forEach(pill => {
+                        const active = pill === button;
+                        pill.classList.toggle("is-active", active);
+                        pill.setAttribute("aria-pressed", String(active));
+                    });
+
+
+                    draw();
+
+                }
+            );
+
+        });
+
+
+    modal.querySelector("[data-propose]").addEventListener(
+        "click",
+        () => {
+
+            close();
+
+            openCharityProposalForm();
+
+        }
+    );
+
+
+    draw();
+
+}
+
+
+/* ---------- Propose an idea ($1) ---------- */
+
+const CHARITY_IDEA_CATEGORIES = [
+    "Education", "Water", "Health", "Food",
+    "Christmas", "Environment", "Skills", "Other"
+];
+
+
+function openCharityProposalForm() {
+
+    const { modal } =
+        openCharityModal(`
+            <div class="donation-header">
+                <span class="donation-label">Readers' letters</span>
+                <h2>Propose an idea</h2>
+                <p>
+                    Tell us what Today Cares should do next. Your idea is published after
+                    review by our newsroom; at 5,000 votes it becomes a campaign.
+                </p>
+            </div>
+
+            <form class="cp-proposal-form" novalidate>
+
+                <div class="donation-field">
+                    <label for="ideaTitle">Your idea</label>
+                    <input id="ideaTitle" name="title" maxlength="90" required
+                           placeholder="e.g. School shoes for 200 pupils in Kano">
+                </div>
+
+                <div class="donation-field">
+                    <label for="ideaLocation">Where?</label>
+                    <input id="ideaLocation" name="location" maxlength="80" required
+                           placeholder="Town, State">
+                </div>
+
+                <div class="donation-field">
+                    <label for="ideaCategory">Category</label>
+                    <select id="ideaCategory" name="category" required>
+                        <option value="">Choose a category</option>
+                        ${CHARITY_IDEA_CATEGORIES.map(name => `<option>${name}</option>`).join("")}
+                    </select>
+                </div>
+
+                <div class="donation-field">
+                    <label for="ideaWhy">Why does it matter?</label>
+                    <textarea id="ideaWhy" name="why" rows="4" maxlength="400" required
+                              placeholder="Who will it help, and how?"></textarea>
+                </div>
+
+                <div class="donation-field">
+                    <label for="ideaName">Your name</label>
+                    <input id="ideaName" name="name" maxlength="60" placeholder="Shown with your idea">
+                </div>
+
+                <div class="donation-field donation-consent">
+                    <label class="donation-checkbox">
+                        <input type="checkbox" name="anonymous">
+                        Stay anonymous
+                    </label>
+                </div>
+
+                <div class="donation-field">
+                    <label for="ideaEmail">Email <span>(for your payment receipt, never shown)</span></label>
+                    <input id="ideaEmail" name="email" type="email" maxlength="120" required
+                           placeholder="you@example.com">
+                </div>
+
+                <div class="donation-field donation-consent">
+                    <label class="donation-checkbox">
+                        <input type="checkbox" name="acceptNonRefundable" required>
+                        I understand this donation is non-refundable, even if my idea is not selected.
+                    </label>
+                </div>
+
+                <p class="cp-idea-error cp-form-error" role="alert"></p>
+
+                <button type="submit" class="donation-submit">Pay $1 and send my idea</button>
+
+                <p class="cp-secure">🔒 Secure payment via Flutterwave</p>
+
+            </form>
+        `);
+
+
+    const form =
+        modal.querySelector("form");
+
+    const error =
+        form.querySelector(".cp-form-error");
+
+    const nameInput =
+        form.querySelector("[name=name]");
+
+    const anonymous =
+        form.querySelector("[name=anonymous]");
+
+
+    anonymous.addEventListener(
+        "change",
+        () => {
+            nameInput.disabled = anonymous.checked;
+            if (anonymous.checked) nameInput.value = "";
+        }
+    );
+
+
+    form.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            error.textContent = "";
+
+
+            const data =
+                Object.fromEntries(new FormData(form));
+
+
+            const payload = {
+                title: String(data.title || "").trim(),
+                location: String(data.location || "").trim(),
+                category: data.category || "",
+                why: String(data.why || "").trim(),
+                name: String(data.name || "").trim(),
+                anonymous: anonymous.checked,
+                email: String(data.email || "").trim(),
+                acceptNonRefundable: form.querySelector("[name=acceptNonRefundable]").checked
+            };
+
+
+            if (!payload.title || !payload.location || !payload.category || !payload.why) {
+                error.textContent = "Please fill in your idea, the place, the category and why it matters.";
+                return;
+            }
+
+            if (!payload.anonymous && !payload.name) {
+                error.textContent = "Please enter your name or choose to stay anonymous.";
+                return;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+                error.textContent = "Please enter a valid email.";
+                return;
+            }
+
+            if (!payload.acceptNonRefundable) {
+                error.textContent = "Please confirm that this donation is non-refundable.";
+                return;
+            }
+
+
+            const submit =
+                form.querySelector("[type=submit]");
+
+            submit.disabled = true;
+
+            submit.textContent = "Opening secure payment…";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_BASE_URL}/api/ideas/proposals`,
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(payload)
+                        }
+                    );
+
+
+                const result =
+                    await response.json().catch(() => ({}));
+
+
+                if (!response.ok || !result.checkoutUrl) {
+                    throw new Error(result.error || "Unable to start the payment.");
+                }
+
+
+                window.location.href =
+                    result.checkoutUrl;
+
+            } catch (requestError) {
+
+                error.textContent = requestError.message;
+
+                submit.disabled = false;
+
+                submit.textContent = "Pay $1 and send my idea";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* Back from Flutterwave after paying for an idea */
+
+async function showIdeaProposalVerification(reference, transactionId) {
+
+    const { modal } =
+        openCharityModal(`
+            <div class="donation-header">
+                <span class="donation-label">Readers' letters</span>
+                <h2>Checking your payment…</h2>
+                <p data-idea-status>Please wait a moment.</p>
+            </div>
+        `);
+
+
+    const title =
+        modal.querySelector("h2");
+
+    const text =
+        modal.querySelector("[data-idea-status]");
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/ideas/proposals/${encodeURIComponent(reference)}/verify`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ transactionId })
+                }
+            );
+
+
+        const result =
+            await response.json().catch(() => ({}));
+
+
+        if (!response.ok) {
+            throw new Error(result.error || "We could not check the payment yet.");
+        }
+
+
+        if (result.status === "pending" || result.status === "approved") {
+
+            title.textContent = "Thank you! Your idea was received 💡";
+
+            text.textContent =
+                `“${result.title}” will be published after review by our newsroom.`;
+
+        } else if (result.status === "awaiting_payment") {
+
+            title.textContent = "Payment still processing";
+
+            text.textContent =
+                "Flutterwave has not confirmed your payment yet. We will publish your idea once it is confirmed.";
+
+        } else {
+
+            title.textContent = "Payment not completed";
+
+            text.textContent =
+                "Your idea was not sent because the payment did not go through. You can try again.";
+
+        }
+
+    } catch (requestError) {
+
+        title.textContent = "We could not check your payment";
+
+        text.textContent = requestError.message;
+
+    }
+
+}
+
+
+
+
+function renderCharityIdeaCount(idea) {
+
+    const left =
+        idea.goal - idea.votes;
+
+
+    const extra =
+        idea.chosen
+            ? `<span class="cp-idea-chosen">⭐ Chosen by the community</span>`
+            : idea.votes >= 4000
+                ? `<span class="cp-idea-hot">🔥 only ${left.toLocaleString("en-NG")} to go</span>`
+                : "";
+
+
+    return `
+        <strong>${idea.votes.toLocaleString("en-NG")}</strong>
+        / ${idea.goal.toLocaleString("en-NG")} ❤
+        ${extra}
+    `;
+
+}
+
+
+async function toggleCharityIdeaVote(ideaId, button) {
+
+    const idea =
+        charityIdeas.find(item => item.id === ideaId);
+
+
+    if (!idea || button.disabled) {
+        return;
+    }
+
+
+    const voting =
+        !idea.votedByMe;
+
+    const row =
+        button.closest(".cp-idea");
+
+    const error =
+        button.closest(".cp-ideas-wrap")?.querySelector(".cp-idea-error");
+
+
+    /* Optimistic update */
+
+    const applyLocal = (voted, votes) => {
+
+        idea.votedByMe = voted;
+
+        idea.votes = votes;
+
+        idea.chosen = votes >= idea.goal;
+
+        button.classList.toggle("is-voted", voted);
+
+        button.setAttribute("aria-pressed", String(voted));
+
+        row.querySelector(".cp-idea-count").innerHTML =
+            renderCharityIdeaCount(idea);
+
+        row.querySelector(".cp-idea-bar span").style.width =
+            `${Math.min(100, votes / idea.goal * 100)}%`;
+
+    };
+
+
+    const before =
+        { voted: idea.votedByMe, votes: idea.votes };
+
+
+    applyLocal(voting, idea.votes + (voting ? 1 : -1));
+
+    if (error) error.textContent = "";
+
+
+    if (voting) {
+        playCharityHeart(button);
+    }
+
+
+    button.disabled = true;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/ideas/${ideaId}/vote`,
+                {
+                    method: voting ? "POST" : "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ deviceId: getCharityDeviceId() })
+                }
+            );
+
+
+        const data =
+            await response.json().catch(() => ({}));
+
+
+        if (!response.ok) {
+            throw new Error(data.error || "Your vote could not be saved.");
+        }
+
+
+        applyLocal(data.idea.votedByMe, data.idea.votes);
+
+
+        if (before.votes < idea.goal && idea.votes >= idea.goal) {
+            renderUpcomingCharity();
+        }
+
+    } catch (requestError) {
+
+        applyLocal(before.voted, before.votes);
+
+        if (error) error.textContent = requestError.message;
+
+    } finally {
+
+        button.disabled = false;
+
+    }
+
+}
+
+
+function playCharityHeart(button) {
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+    }
+
+
+    button.classList.remove("is-beating");
+
+    void button.offsetWidth;
+
+    button.classList.add("is-beating");
+
+
+    [-14, -4, 6, 16].forEach((x, i) => {
+
+        const heart =
+            document.createElement("span");
+
+        heart.className = "cp-heart-fly";
+
+        heart.textContent = "❤";
+
+        heart.style.setProperty("--x", `${x}px`);
+
+        heart.style.animationDelay = `${i * 70}ms`;
+
+        button.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 1300);
+
+    });
+
+}
+
+
+/* ---------- Thank-you band ---------- */
+
+function charityShortName(name) {
+
+    const parts =
+        String(name || "").trim().split(/\s+/);
+
+
+    return parts.length > 1
+        ? `${parts[0]} ${parts[parts.length - 1].charAt(0)}.`
+        : parts[0] || "";
+
+}
+
+
+async function renderCharityThanksBand() {
+
+    const band =
+        document.getElementById("cpThanks");
+
+
+    if (!band) {
+        return;
+    }
+
+
+    const recent =
+        latestCharityData.slice(0, 6);
+
+
+    const donorLists =
+        await Promise.all(
+            recent.map(charity =>
+                fetch(`${API_BASE_URL}/api/charities/${encodeURIComponent(charity.id)}/donors`)
+                    .then(response => response.ok ? response.json() : { donors: [] })
+                    .then(data =>
+                        Array.isArray(data.donors) && data.donors.length
+                            ? data.donors
+                            : asCharityArray(charity.donors)
+                    )
+                    .catch(() => asCharityArray(charity.donors))
+            )
+        );
+
+
+    const items = [];
+
+
+    recent.forEach((charity, index) => {
+
+        donorLists[index].forEach(donor => {
+            items.push(
+                `<li>❤ <strong>${escapeCharityHtml(donor.anonymous || !donor.name ? "Anonymous" : charityShortName(donor.name))}</strong> donor</li>`
+            );
+        });
+
+
+        asCharityArray(charity.volunteers).forEach(volunteer => {
+            items.push(
+                `<li>🙋 <strong>${escapeCharityHtml(charityShortName(volunteer.name))}</strong> volunteer</li>`
+            );
+        });
+
+    });
+
+
+    if (!items.length) {
+        return;
+    }
+
+
+    band.innerHTML = `
+        <span class="cp-thanks-label">❤ Thank you</span>
+        <div class="cp-thanks-window">
+            <ul class="cp-thanks-track" style="--cp-thanks-time: ${Math.max(40, items.length * 3)}s">${items.join("")}</ul>
+            <ul class="cp-thanks-track" aria-hidden="true" style="--cp-thanks-time: ${Math.max(40, items.length * 3)}s">${items.join("")}</ul>
+        </div>
+    `;
+
+    band.hidden = false;
+
+}
+
+
+/* ---------- Partners ---------- */
+
+function renderCharityPartnersRow(charities) {
+
+    const row =
+        document.getElementById("cpPartners");
+
+
+    if (!row) {
+        return;
+    }
+
+
+    const seen =
+        new Map();
+
+
+    charities.forEach(charity => {
+
+        asCharityArray(charity.partners).forEach(partner => {
+
+            const key =
+                String(partner.name || "").trim().toLowerCase();
+
+
+            if (key && key !== "partner name" && !seen.has(key)) {
+                seen.set(key, partner);
+            }
+
+        });
+
+    });
+
+
+    if (!seen.size) {
+        return;
+    }
+
+
+    const e =
+        escapeCharityHtml;
+
+
+    row.innerHTML = `
+        <p class="cp-partners-title">In partnership with</p>
+        <ul>
+            ${[...seen.values()].map(partner => {
+
+                const inner =
+                    partner.logo
+                        ? `<img src="${e(getImagePath(partner.logo))}" alt="${e(partner.name)}" loading="lazy">`
+                        : `<span>${e(partner.name)}</span>`;
+
+                return `<li>${partner.url
+                    ? `<a href="${e(partner.url)}" target="_blank" rel="noopener noreferrer">${inner}</a>`
+                    : inner}</li>`;
+
+            }).join("")}
+        </ul>
+    `;
+
+    row.hidden = false;
+
+}
+
+
+function renderCharityHome(charities) {
+
+    if (!document.getElementById("cpImpact")) {
+        return;
+    }
+
+
+    renderCharityImpact();
+
+    renderCharityThanksBand();
+
+    renderCharityPartnersRow(charities);
+
+    loadCharityIdeas();
 
 }
 

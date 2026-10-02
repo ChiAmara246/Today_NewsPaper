@@ -9094,3 +9094,2993 @@ nav.cw-nav-collapsed > * {
     }
 
 }
+
+
+/* =========================================================
+   CHARITY HOME — "THE FRONT PAGE OF A NEWSPAPER"
+   Hairline rules, no shadows, serif headlines, one accent: gold.
+========================================================= */
+
+.cp-page {
+
+    --cp-gold: #b08a4a;
+    --cp-navy: #032456;
+    --cp-rule: var(--border);
+
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    padding: 30px 28px 56px;
+
+    box-sizing: border-box;
+
+    color: var(--text);
+
+}
+
+
+html.dark-mode .cp-page {
+
+    --cp-gold: #d8b56a;
+
+}
+
+
+.cp-page h2,
+.cp-page h3 {
+
+    margin: 0;
+
+}
+
+
+/* ---------- Section names ---------- */
+
+.cp-rubric {
+
+    display: flex;
+
+    align-items: baseline;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+
+    padding-bottom: 8px;
+
+    border-bottom: 2px solid var(--text);
+
+}
+
+
+.cp-rubric h2 {
+
+    font-family: "Inter", "Segoe UI", sans-serif;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+
+    color: var(--text);
+
+}
+
+
+.cp-rubric span {
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+
+}
+
+
+.cp-smallcaps {
+
+    display: block;
+
+    margin: 0;
+
+    color: var(--text-muted);
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+.cp-empty {
+
+    margin: 0;
+
+    padding: 18px 0;
+
+    color: var(--text-muted);
+
+    line-height: 1.6;
+
+}
+
+
+.cp-empty a {
+
+    color: var(--cp-gold);
+
+    font-weight: 700;
+
+}
+
+
+/* ---------- Buttons ---------- */
+
+.cp-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    min-height: 42px;
+
+    padding: 0 18px;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--text);
+
+    border-radius: 2px;
+
+    background: transparent;
+
+    color: var(--text);
+
+    font: inherit;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease;
+
+}
+
+
+.cp-btn:hover {
+
+    border-color: var(--cp-gold);
+
+    color: var(--cp-gold);
+
+}
+
+
+.cp-btn--navy {
+
+    width: 100%;
+
+    border-color: var(--cp-navy);
+
+    background: var(--cp-navy);
+
+    color: #ffffff;
+
+}
+
+
+.cp-btn--navy:hover {
+
+    border-color: var(--cp-gold);
+
+    background: var(--cp-gold);
+
+    color: #021a3f;
+
+}
+
+
+html.dark-mode .cp-btn--navy {
+
+    border-color: var(--cp-gold);
+
+    background: var(--cp-gold);
+
+    color: #021a3f;
+
+}
+
+
+.cp-btn:focus-visible,
+.cp-pill:focus-visible,
+.cp-heart:focus-visible,
+.cp-variant:focus-visible {
+
+    outline: 2px solid var(--cp-gold);
+
+    outline-offset: 2px;
+
+}
+
+
+/* ---------- 1. Impact figures ---------- */
+
+.cp-impact {
+
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    border-top: 1px solid var(--cp-rule);
+
+    border-bottom: 1px solid var(--cp-rule);
+
+}
+
+
+.cp-figure {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 22px 10px;
+
+    text-align: center;
+
+}
+
+
+.cp-figure + .cp-figure {
+
+    border-left: 1px solid var(--cp-rule);
+
+}
+
+
+.cp-figure strong {
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: clamp(2rem, 3.4vw, 3rem);
+
+    font-weight: 700;
+
+    line-height: 1;
+
+    font-variant-numeric: tabular-nums;
+
+}
+
+
+.cp-figure span {
+
+    color: var(--text-muted);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+
+/* ---------- Rows and columns ---------- */
+
+.cp-row {
+
+    display: grid;
+
+    margin-top: 44px;
+
+}
+
+
+.cp-row--top {
+
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+
+}
+
+
+.cp-row--bottom {
+
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+
+}
+
+
+.cp-col {
+
+    min-width: 0;
+
+    padding: 0 32px;
+
+}
+
+
+.cp-col:first-child {
+
+    padding-left: 0;
+
+}
+
+
+.cp-col:last-child {
+
+    padding-right: 0;
+
+}
+
+
+.cp-col + .cp-col {
+
+    border-left: 1px solid var(--cp-rule);
+
+}
+
+
+/* ---------- 2a. Campaign poster ---------- */
+
+.cp-poster {
+
+    --u: 1cqw;
+
+    position: relative;
+
+    container-type: inline-size;
+
+    display: grid;
+
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+
+    grid-template-areas:
+        "top top"
+        "text art"
+        "bottom bottom"
+        "partners partners";
+
+    grid-template-rows: auto 1fr auto auto;
+
+    aspect-ratio: 16 / 9;
+
+    padding: calc(var(--u) * 4.4) calc(var(--u) * 5) calc(var(--u) * 3);
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(circle at 78% 40%, rgba(201, 164, 92, 0.30), transparent 55%),
+        linear-gradient(135deg, #05306b 0%, #021a3f 70%);
+
+    color: #ffffff;
+
+    font-family: "Inter", "Segoe UI", sans-serif;
+
+}
+
+
+.cp-poster::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: clamp(3px, calc(var(--u) * 1.1), 10px);
+
+    border: 1px solid rgba(201, 164, 92, 0.75);
+
+    pointer-events: none;
+
+}
+
+
+.cp-poster-top {
+
+    grid-area: top;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: baseline;
+
+    color: #c9a45c;
+
+    font-size: calc(var(--u) * 1.3);
+
+    font-weight: 700;
+
+    letter-spacing: 0.3em;
+
+    text-transform: uppercase;
+
+}
+
+
+.cp-poster-brand {
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: calc(var(--u) * 1.9);
+
+    letter-spacing: 0.22em;
+
+}
+
+
+.cp-poster-text {
+
+    grid-area: text;
+
+    align-self: center;
+
+    min-width: 0;
+
+}
+
+
+.cp-poster-kicker {
+
+    display: block;
+
+    margin-bottom: calc(var(--u) * 1.2);
+
+    color: #c9a45c;
+
+    font-size: calc(var(--u) * 1.3);
+
+    font-weight: 700;
+
+    letter-spacing: 0.26em;
+
+    text-transform: uppercase;
+
+}
+
+
+.cp-poster-title {
+
+    color: #ffffff;
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: calc(var(--u) * 5.2);
+
+    font-weight: 700;
+
+    line-height: 1.03;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+.cp-poster-rule {
+
+    display: block;
+
+    width: calc(var(--u) * 5);
+
+    height: max(2px, calc(var(--u) * 0.32));
+
+    margin: calc(var(--u) * 2) 0;
+
+    background: #c9a45c;
+
+}
+
+
+.cp-poster-lead {
+
+    max-width: 92%;
+
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.82);
+
+    font-size: calc(var(--u) * 1.6);
+
+    line-height: 1.5;
+
+}
+
+
+.cp-poster-art {
+
+    grid-area: art;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #c9a45c;
+
+}
+
+
+.cp-art {
+
+    width: 72%;
+
+    max-height: 100%;
+
+}
+
+
+.cp-stamp {
+
+    position: absolute;
+
+    top: 10%;
+
+    right: 4%;
+
+    padding: calc(var(--u) * 0.6) calc(var(--u) * 1.4);
+
+    border: max(2px, calc(var(--u) * 0.3)) solid #c1121f;
+
+    background: #ffffff;
+
+    color: #c1121f;
+
+    font-size: calc(var(--u) * 1.6);
+
+    font-weight: 800;
+
+    letter-spacing: 0.16em;
+
+    text-transform: uppercase;
+
+    transform: rotate(-8deg);
+
+    white-space: nowrap;
+
+}
+
+
+.cp-poster-bottom {
+
+    grid-area: bottom;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: calc(var(--u) * 3);
+
+    margin-top: calc(var(--u) * 2);
+
+    padding-top: calc(var(--u) * 2);
+
+    border-top: 1px solid rgba(201, 164, 92, 0.6);
+
+}
+
+
+.cp-poster-when strong {
+
+    display: block;
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: calc(var(--u) * 3.3);
+
+    line-height: 1;
+
+}
+
+
+.cp-poster-when span {
+
+    display: block;
+
+    margin-top: calc(var(--u) * 0.9);
+
+    color: #c9a45c;
+
+    font-size: calc(var(--u) * 1.25);
+
+    font-weight: 700;
+
+    letter-spacing: 0.24em;
+
+    text-transform: uppercase;
+
+}
+
+
+.cp-poster-cta {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: calc(var(--u) * 1.6);
+
+    text-align: right;
+
+}
+
+
+.cp-poster-cta strong {
+
+    display: block;
+
+    color: #c9a45c;
+
+    font-size: calc(var(--u) * 2);
+
+    letter-spacing: 0.3em;
+
+    text-transform: uppercase;
+
+}
+
+
+.cp-poster-cta span {
+
+    display: block;
+
+    margin-top: calc(var(--u) * 0.4);
+
+    color: rgba(255, 255, 255, 0.72);
+
+    font-size: calc(var(--u) * 1.2);
+
+}
+
+
+.cp-poster-qr {
+
+    width: calc(var(--u) * 8);
+
+    padding: calc(var(--u) * 0.6);
+
+    background: #ffffff;
+
+    line-height: 0;
+
+}
+
+
+.cp-poster-qr svg {
+
+    width: 100%;
+
+    height: auto;
+
+}
+
+
+.cp-poster-partners {
+
+    grid-area: partners;
+
+    margin: calc(var(--u) * 1.2) 0 0;
+
+    color: rgba(255, 255, 255, 0.55);
+
+    font-size: calc(var(--u) * 1.05);
+
+    letter-spacing: 0.14em;
+
+    text-transform: uppercase;
+
+}
+
+
+/* Vertical posters: illustration first, then title, then date + QR */
+
+.cp-poster--portrait,
+.cp-poster--square,
+.cp-poster--story {
+
+    grid-template-columns: minmax(0, 1fr);
+
+    grid-template-areas:
+        "top"
+        "art"
+        "text"
+        "bottom"
+        "partners";
+
+    grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+
+}
+
+
+.cp-poster--portrait { --u: 1.75cqw; aspect-ratio: 4 / 5; }
+
+.cp-poster--square { --u: 1.5cqw; aspect-ratio: 1 / 1; }
+
+.cp-poster--story { --u: 1.95cqw; aspect-ratio: 9 / 16; }
+
+
+.cp-poster--portrait .cp-art,
+.cp-poster--square .cp-art,
+.cp-poster--story .cp-art {
+
+    width: auto;
+
+    height: 82%;
+
+}
+
+
+.cp-poster--portrait .cp-poster-title,
+.cp-poster--square .cp-poster-title,
+.cp-poster--story .cp-poster-title {
+
+    font-size: calc(var(--u) * 4.6);
+
+}
+
+
+.cp-poster--image {
+
+    display: block;
+
+    padding: 0;
+
+    aspect-ratio: auto;
+
+    background: none;
+
+}
+
+
+.cp-poster--image::before {
+
+    display: none;
+
+}
+
+
+.cp-poster--image img {
+
+    display: block;
+
+    width: 100%;
+
+    height: auto;
+
+}
+
+
+.cp-export-stage {
+
+    position: fixed;
+
+    top: 0;
+
+    left: -20000px;
+
+}
+
+
+.cp-poster-figure {
+
+    margin: 0;
+
+}
+
+
+.cp-caption {
+
+    margin-top: 10px;
+
+    color: var(--text-muted);
+
+    font-size: 0.85rem;
+
+    font-style: italic;
+
+}
+
+
+/* Also available: 1:1 and 9:16 */
+
+.cp-variants {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+
+    gap: 12px 16px;
+
+    margin-top: 14px;
+
+}
+
+
+.cp-variants-label {
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+
+}
+
+
+.cp-variant {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 0;
+
+    border: 0;
+
+    background: none;
+
+    color: var(--text-secondary);
+
+    font: inherit;
+
+    font-size: 12px;
+
+    cursor: pointer;
+
+}
+
+
+.cp-variant:hover {
+
+    color: var(--cp-gold);
+
+}
+
+
+.cp-variant-thumb {
+
+    display: block;
+
+    outline: 1px solid var(--cp-rule);
+
+}
+
+
+.cp-variant-thumb--square { width: 52px; }
+
+.cp-variant-thumb--story { width: 34px; }
+
+
+.cp-variant-actions {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-left: auto;
+
+}
+
+
+/* ---------- Under the poster ---------- */
+
+.cp-front-details {
+
+    display: grid;
+
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+
+    margin-top: 26px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid var(--cp-rule);
+
+}
+
+
+.cp-front-story {
+
+    padding-right: 26px;
+
+}
+
+
+.cp-front-action {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    padding-left: 26px;
+
+    border-left: 1px solid var(--cp-rule);
+
+}
+
+
+.cp-label {
+
+    color: var(--cp-gold);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+.cp-front-title {
+
+    margin: 8px 0 10px !important;
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+
+    line-height: 1.15;
+
+}
+
+
+.cp-front-title a {
+
+    color: inherit;
+
+    text-decoration: none;
+
+}
+
+
+.cp-front-title a:hover {
+
+    color: var(--cp-gold);
+
+}
+
+
+.cp-dropcap {
+
+    margin: 14px 0 0;
+
+    color: var(--text-secondary);
+
+    line-height: 1.7;
+
+}
+
+
+.cp-dropcap::first-letter {
+
+    float: left;
+
+    padding: 6px 8px 0 0;
+
+    color: var(--cp-gold);
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 3.4em;
+
+    font-weight: 700;
+
+    line-height: 0.8;
+
+}
+
+
+.cp-countdown {
+
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 10px;
+
+    padding: 12px 0;
+
+    border-top: 1px solid var(--cp-rule);
+
+    border-bottom: 1px solid var(--cp-rule);
+
+}
+
+
+.cp-countdown strong {
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 2.4rem;
+
+    line-height: 1;
+
+}
+
+
+.cp-countdown span {
+
+    color: var(--text-muted);
+
+}
+
+
+.cp-progress {
+
+    height: 4px;
+
+    overflow: hidden;
+
+    background: var(--surface-soft);
+
+}
+
+
+.cp-progress span {
+
+    display: block;
+
+    height: 100%;
+
+    background: var(--cp-gold);
+
+}
+
+
+.cp-progress-text {
+
+    margin: 0;
+
+    color: var(--text-muted);
+
+    font-size: 0.85rem;
+
+}
+
+
+.cp-progress-text strong {
+
+    color: var(--text);
+
+}
+
+
+.cp-front-row {
+
+    display: flex;
+
+    gap: 10px;
+
+}
+
+
+.cp-front-row .cp-btn {
+
+    flex: 1;
+
+}
+
+
+.cp-reminder.charity-reminder {
+
+    position: static;
+
+    flex: 0 0 auto;
+
+    width: 42px;
+
+    height: 42px;
+
+    min-width: 42px;
+
+    border: 1px solid var(--text);
+
+    border-radius: 2px;
+
+    background: transparent;
+
+    color: var(--text);
+
+    box-shadow: none;
+
+}
+
+
+.cp-reminder.charity-reminder:hover,
+.cp-reminder.charity-reminder.active {
+
+    border-color: var(--cp-gold);
+
+    background: transparent;
+
+    color: var(--cp-gold);
+
+}
+
+
+.cp-secure {
+
+    margin: 0;
+
+    color: var(--text-muted);
+
+    font-size: 0.8rem;
+
+}
+
+
+/* ---------- 2b. Readers' letters ---------- */
+
+.cp-letters-intro {
+
+    margin: -8px 0 6px;
+
+    color: var(--text-muted);
+
+    font-size: 0.85rem;
+
+}
+
+
+.cp-ideas {
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+
+}
+
+
+.cp-idea {
+
+    display: grid;
+
+    grid-template-columns: 30px minmax(0, 1fr) 42px;
+
+    align-items: start;
+
+    gap: 12px;
+
+    padding: 16px 0;
+
+    border-bottom: 1px solid var(--cp-rule);
+
+}
+
+
+.cp-idea-rank {
+
+    color: var(--cp-gold);
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 1.7rem;
+
+    font-weight: 700;
+
+    line-height: 1;
+
+}
+
+
+.cp-idea-title {
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 1.05rem;
+
+    font-weight: 600;
+
+    line-height: 1.3;
+
+}
+
+
+.cp-idea-meta {
+
+    margin: 4px 0 8px;
+
+    color: var(--text-muted);
+
+    font-size: 0.8rem;
+
+}
+
+
+.cp-idea-bar {
+
+    height: 3px;
+
+    overflow: hidden;
+
+    background: var(--surface-soft);
+
+}
+
+
+.cp-idea-bar span {
+
+    display: block;
+
+    height: 100%;
+
+    background: var(--cp-gold);
+
+    transition: width 0.6s ease;
+
+}
+
+
+.cp-idea-count {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: baseline;
+
+    gap: 4px 6px;
+
+    margin: 6px 0 0;
+
+    color: var(--text-muted);
+
+    font-size: 0.8rem;
+
+}
+
+
+.cp-idea-count strong {
+
+    color: var(--text);
+
+}
+
+
+.cp-idea-hot {
+
+    color: #c1121f;
+
+    font-weight: 700;
+
+}
+
+
+.cp-idea-chosen {
+
+    color: var(--cp-gold);
+
+    font-weight: 700;
+
+}
+
+
+.cp-heart {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 42px;
+
+    height: 42px;
+
+    padding: 0;
+
+    border: 1px solid var(--border-dark);
+
+    border-radius: 50%;
+
+    background: var(--surface);
+
+    cursor: pointer;
+
+    transition: border-color 0.3s ease;
+
+}
+
+
+.cp-heart svg {
+
+    width: 20px;
+
+    height: 20px;
+
+    fill: none;
+
+    stroke: var(--text);
+
+    stroke-width: 1.8;
+
+    transition: fill 0.3s ease, stroke 0.3s ease;
+
+}
+
+
+.cp-heart:hover {
+
+    border-color: #e0245e;
+
+}
+
+
+.cp-heart.is-voted {
+
+    border-color: #e0245e;
+
+}
+
+
+.cp-heart.is-voted svg {
+
+    fill: #e0245e;
+
+    stroke: #e0245e;
+
+}
+
+
+.cp-heart.is-beating svg {
+
+    animation: cp-beat 0.6s ease;
+
+}
+
+
+@keyframes cp-beat {
+
+    30% { transform: scale(1.35); }
+
+    60% { transform: scale(0.9); }
+
+}
+
+
+.cp-heart-fly {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 4px;
+
+    color: #e0245e;
+
+    font-size: 11px;
+
+    pointer-events: none;
+
+    animation: cp-fly 1.1s ease-out forwards;
+
+}
+
+
+@keyframes cp-fly {
+
+    from {
+
+        opacity: 1;
+
+        transform: translate(-50%, 0) scale(0.8);
+
+    }
+
+    to {
+
+        opacity: 0;
+
+        transform: translate(calc(-50% + var(--x)), -46px) scale(1.2);
+
+    }
+
+}
+
+
+.cp-link {
+
+    margin-top: 14px;
+
+    padding: 0;
+
+    border: 0;
+
+    background: none;
+
+    color: var(--cp-gold);
+
+    font: inherit;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.1em;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+}
+
+
+.cp-idea-error {
+
+    min-height: 1em;
+
+    margin: 8px 0 0;
+
+    color: #c1121f;
+
+    font-size: 0.8rem;
+
+}
+
+
+/* ---------- 3a. Agenda ---------- */
+
+.cp-agenda {
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+
+}
+
+
+.cp-agenda-item {
+
+    display: grid;
+
+    grid-template-columns: 64px minmax(0, 1fr);
+
+    gap: 16px;
+
+    padding: 16px 0;
+
+    border-bottom: 1px solid var(--cp-rule);
+
+    color: inherit;
+
+    text-decoration: none;
+
+}
+
+
+.cp-agenda-date {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-right: 1px solid var(--cp-rule);
+
+}
+
+
+.cp-agenda-date strong {
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 2rem;
+
+    line-height: 1;
+
+}
+
+
+.cp-agenda-date span {
+
+    margin-top: 4px;
+
+    color: var(--cp-gold);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+
+.cp-agenda-body {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    min-width: 0;
+
+}
+
+
+.cp-agenda-title {
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 1.05rem;
+
+    font-weight: 600;
+
+    line-height: 1.3;
+
+    transition: color 0.3s ease;
+
+}
+
+
+a.cp-agenda-item:hover .cp-agenda-title {
+
+    color: var(--cp-gold);
+
+}
+
+
+.cp-agenda-meta {
+
+    color: var(--text-muted);
+
+    font-size: 0.8rem;
+
+}
+
+
+.cp-mini-bar {
+
+    display: block;
+
+    height: 3px;
+
+    margin-top: 6px;
+
+    overflow: hidden;
+
+    background: var(--surface-soft);
+
+}
+
+
+.cp-mini-bar span {
+
+    display: block;
+
+    height: 100%;
+
+    background: var(--cp-gold);
+
+}
+
+
+.cp-agenda-item--chosen {
+
+    margin-top: 12px;
+
+    padding: 14px;
+
+    border: 1px solid var(--cp-gold);
+
+    background: var(--gold-soft, rgba(176, 138, 74, 0.12));
+
+}
+
+
+.cp-chosen-badge {
+
+    color: var(--cp-gold);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.8px;
+
+    text-transform: uppercase;
+
+}
+
+
+/* ---------- 3b. Archives ---------- */
+
+.cp-filters {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 22px;
+
+}
+
+
+.cp-pill {
+
+    padding: 6px 14px;
+
+    border: 1px solid var(--border-dark);
+
+    border-radius: 999px;
+
+    background: transparent;
+
+    color: var(--text);
+
+    font: inherit;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background 0.3s ease, color 0.3s ease;
+
+}
+
+
+.cp-pill.is-active {
+
+    border-color: #111111;
+
+    background: #111111;
+
+    color: #ffffff;
+
+}
+
+
+html.dark-mode .cp-pill.is-active {
+
+    border-color: #f1f0ec;
+
+    background: #f1f0ec;
+
+    color: #111111;
+
+}
+
+
+.cp-year + .cp-year {
+
+    margin-top: 36px;
+
+}
+
+
+.cp-year-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    margin-bottom: 20px !important;
+
+}
+
+
+.cp-year-title span {
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 2rem;
+
+    font-weight: 700;
+
+}
+
+
+.cp-year-title::after {
+
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background: var(--cp-rule);
+
+}
+
+
+.cp-archive-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 34px 26px;
+
+}
+
+
+.cp-archive-card a {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    color: inherit;
+
+    text-decoration: none;
+
+}
+
+
+.cp-archive-photo {
+
+    position: relative;
+
+    display: block;
+
+    aspect-ratio: 16 / 10;
+
+    margin-bottom: 6px;
+
+}
+
+
+.cp-archive-image {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: block;
+
+    height: 100%;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(circle at 75% 30%, rgba(201, 164, 92, 0.3), transparent 60%),
+        #032456;
+
+    transition: transform 0.6s ease;
+
+}
+
+
+.cp-archive-image img {
+
+    display: block;
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+
+.cp-archive-image.is-missing img {
+
+    display: none;
+
+}
+
+
+.cp-print {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    border: 6px solid #ffffff;
+
+    background: var(--surface-soft);
+
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+
+    opacity: 0;
+
+    transition: opacity 0.6s ease, transform 0.6s ease;
+
+}
+
+
+.cp-print--back { transform: rotate(-2deg); }
+
+.cp-print--front { transform: rotate(2deg); }
+
+
+.cp-badge,
+.cp-photos {
+
+    position: absolute;
+
+    z-index: 3;
+
+    padding: 4px 9px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.06em;
+
+}
+
+
+.cp-badge {
+
+    top: 10px;
+
+    left: 10px;
+
+    background: #ffffff;
+
+    color: #032456;
+
+}
+
+
+.cp-photos {
+
+    bottom: 10px;
+
+    left: 10px;
+
+    background: rgba(2, 26, 63, 0.85);
+
+    color: #ffffff;
+
+    opacity: 0;
+
+    transition: opacity 0.6s ease;
+
+}
+
+
+.cp-archive-card a:hover .cp-archive-image,
+.cp-archive-card a:focus-visible .cp-archive-image {
+
+    transform: translateY(-6px);
+
+}
+
+
+.cp-archive-card a:hover .cp-print,
+.cp-archive-card a:focus-visible .cp-print {
+
+    opacity: 1;
+
+}
+
+
+.cp-archive-card a:hover .cp-print--back,
+.cp-archive-card a:focus-visible .cp-print--back {
+
+    transform: rotate(-5deg);
+
+}
+
+
+.cp-archive-card a:hover .cp-print--front,
+.cp-archive-card a:focus-visible .cp-print--front {
+
+    transform: rotate(4deg);
+
+}
+
+
+.cp-archive-card a:hover .cp-photos,
+.cp-archive-card a:focus-visible .cp-photos {
+
+    opacity: 1;
+
+}
+
+
+/* Touch screens: no hover, so show the prints and photo count */
+
+@media (hover: none) {
+
+    .cp-print { opacity: 1; }
+
+    .cp-print--back { transform: rotate(-5deg); }
+
+    .cp-print--front { transform: rotate(4deg); }
+
+    .cp-photos { opacity: 1; }
+
+}
+
+
+.cp-archive-title {
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 1.15rem;
+
+    font-weight: 600;
+
+    line-height: 1.3;
+
+    transition: color 0.3s ease;
+
+}
+
+
+.cp-archive-card a:hover .cp-archive-title {
+
+    color: var(--cp-gold);
+
+}
+
+
+.cp-archive-lead {
+
+    color: var(--text-muted);
+
+    font-size: 0.9rem;
+
+    line-height: 1.5;
+
+}
+
+
+.cp-archive-result {
+
+    color: var(--cp-gold);
+
+    font-size: 0.85rem;
+
+    font-weight: 700;
+
+}
+
+
+/* Sober pagination */
+
+.cp-archive-list .charity-pagination {
+
+    margin-top: 34px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid var(--cp-rule);
+
+}
+
+
+.cp-archive-list .charity-page-button {
+
+    min-width: 36px;
+
+    height: 36px;
+
+    border: 1px solid var(--cp-rule);
+
+    border-radius: 2px;
+
+    background: transparent;
+
+    color: var(--text);
+
+    box-shadow: none;
+
+}
+
+
+.cp-archive-list .charity-page-button.active {
+
+    border-color: #111111;
+
+    background: #111111;
+
+    color: #ffffff;
+
+}
+
+
+html.dark-mode .cp-archive-list .charity-page-button.active {
+
+    border-color: #f1f0ec;
+
+    background: #f1f0ec;
+
+    color: #111111;
+
+}
+
+
+/* ---------- 4. Thank-you band ---------- */
+
+.cp-thanks {
+
+    display: flex;
+
+    align-items: stretch;
+
+    margin-top: 50px;
+
+    border-top: 1px solid var(--cp-rule);
+
+    border-bottom: 1px solid var(--cp-rule);
+
+    overflow: hidden;
+
+}
+
+
+.cp-thanks[hidden],
+.cp-partners[hidden] {
+
+    display: none;
+
+}
+
+
+.cp-thanks-label {
+
+    display: flex;
+
+    flex: 0 0 auto;
+
+    align-items: center;
+
+    padding: 0 16px;
+
+    background: var(--cp-navy);
+
+    color: #ffffff;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+html.dark-mode .cp-thanks-label {
+
+    background: #0c2955;
+
+}
+
+
+.cp-thanks-window {
+
+    display: flex;
+
+    flex: 1;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+}
+
+
+.cp-thanks-track {
+
+    display: flex;
+
+    flex: 0 0 auto;
+
+    gap: 30px;
+
+    margin: 0;
+
+    padding: 13px 15px;
+
+    list-style: none;
+
+    white-space: nowrap;
+
+    color: var(--text-muted);
+
+    font-size: 0.9rem;
+
+    animation: cp-marquee var(--cp-thanks-time, 60s) linear infinite;
+
+}
+
+
+.cp-thanks-track strong {
+
+    color: var(--text);
+
+    font-family: "Playfair Display", Georgia, serif;
+
+}
+
+
+.cp-thanks:hover .cp-thanks-track {
+
+    animation-play-state: paused;
+
+}
+
+
+@keyframes cp-marquee {
+
+    to { transform: translateX(-100%); }
+
+}
+
+
+/* ---------- 5. Partners ---------- */
+
+.cp-partners {
+
+    margin-top: 40px;
+
+    text-align: center;
+
+}
+
+
+.cp-partners-title {
+
+    margin: 0 0 18px;
+
+    color: var(--text-muted);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+.cp-partners ul {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 18px 36px;
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+
+}
+
+
+.cp-partners li {
+
+    opacity: 0.55;
+
+    filter: grayscale(1);
+
+    transition: opacity 0.4s ease, filter 0.4s ease;
+
+}
+
+
+.cp-partners li:hover {
+
+    opacity: 1;
+
+    filter: none;
+
+}
+
+
+.cp-partners a {
+
+    color: inherit;
+
+    text-decoration: none;
+
+}
+
+
+.cp-partners img {
+
+    display: block;
+
+    max-height: 44px;
+
+    max-width: 140px;
+
+}
+
+
+.cp-partners span {
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 1.1rem;
+
+    font-weight: 600;
+
+}
+
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .cp-thanks-track {
+
+        animation: none;
+
+    }
+
+
+    .cp-thanks-track[aria-hidden="true"] {
+
+        display: none;
+
+    }
+
+
+    .cp-thanks-window {
+
+        overflow-x: auto;
+
+    }
+
+
+    .cp-archive-image,
+    .cp-print,
+    .cp-photos,
+    .cp-idea-bar span {
+
+        transition: none;
+
+    }
+
+}
+
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 1200px) {
+
+    .cp-archive-grid {
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+/* ---------- Mobile: one column, 16px margins ---------- */
+
+@media (max-width: 900px) {
+
+    .cp-page {
+
+        padding: 22px 16px 40px;
+
+    }
+
+
+    .cp-impact {
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    }
+
+
+    .cp-figure:nth-child(3) {
+
+        border-left: 0;
+
+    }
+
+
+    .cp-figure:nth-child(n + 3) {
+
+        border-top: 1px solid var(--cp-rule);
+
+    }
+
+
+    .cp-row,
+    .cp-row--top,
+    .cp-row--bottom {
+
+        grid-template-columns: minmax(0, 1fr);
+
+        margin-top: 34px;
+
+    }
+
+
+    .cp-col,
+    .cp-col:first-child,
+    .cp-col:last-child {
+
+        padding: 0;
+
+    }
+
+
+    .cp-col + .cp-col {
+
+        margin-top: 40px;
+
+        border-left: 0;
+
+    }
+
+
+    /* Poster turns vertical (4:5) */
+
+    .cp-poster--responsive {
+
+        --u: 1.75cqw;
+
+        grid-template-columns: minmax(0, 1fr);
+
+        grid-template-areas:
+            "top"
+            "art"
+            "text"
+            "bottom"
+            "partners";
+
+        grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+
+        aspect-ratio: 4 / 5;
+
+    }
+
+
+    .cp-poster--responsive .cp-art {
+
+        width: auto;
+
+        height: 82%;
+
+    }
+
+
+    .cp-poster--responsive .cp-poster-title {
+
+        font-size: calc(var(--u) * 4.6);
+
+    }
+
+
+    .cp-variant-actions {
+
+        width: 100%;
+
+        margin-left: 0;
+
+    }
+
+
+    .cp-variant-actions .cp-btn {
+
+        flex: 1;
+
+    }
+
+
+    .cp-front-details {
+
+        grid-template-columns: minmax(0, 1fr);
+
+    }
+
+
+    .cp-front-story {
+
+        padding-right: 0;
+
+    }
+
+
+    .cp-front-action {
+
+        margin-top: 20px;
+
+        padding: 20px 0 0;
+
+        border-left: 0;
+
+        border-top: 1px solid var(--cp-rule);
+
+    }
+
+
+    .cp-archive-grid {
+
+        grid-template-columns: minmax(0, 1fr);
+
+    }
+
+
+    .cp-thanks-label {
+
+        padding: 0 10px;
+
+        font-size: 10px;
+
+        letter-spacing: 1.5px;
+
+    }
+
+}
+
+
+@media (min-width: 600px) and (max-width: 900px) {
+
+    .cp-archive-grid {
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+/* Poster: the outer box is the size container, the inner box holds the
+   layout, so every cqw unit is measured on the poster itself. */
+
+.cp-poster {
+
+    display: block;
+
+    padding: 0;
+
+}
+
+
+.cp-poster::before {
+
+    display: none;
+
+}
+
+
+.cp-poster-inner {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: grid;
+
+    grid-template-columns: inherit;
+
+    grid-template-areas: inherit;
+
+    grid-template-rows: inherit;
+
+    padding: calc(var(--u) * 4.4) calc(var(--u) * 5) calc(var(--u) * 3);
+
+    box-sizing: border-box;
+
+}
+
+
+.cp-poster-inner::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: clamp(3px, calc(var(--u) * 1.1), 10px);
+
+    border: 1px solid rgba(201, 164, 92, 0.75);
+
+    pointer-events: none;
+
+}
+
+
+.cp-variant-thumb {
+
+    flex: 0 0 auto;
+
+    overflow: hidden;
+
+}
+
+
+/* The site's .container is a flex column: without an explicit width the
+   page would grow to fit the long thank-you line. */
+
+.cp-page {
+
+    width: 100%;
+
+    min-width: 0;
+
+}
+
+
+.cp-thanks {
+
+    min-width: 0;
+
+    max-width: 100%;
+
+}
+
+
+/* Charity home: impact figures and search on one line, same height */
+
+.cw-navbar--empty {
+
+    display: none;
+
+}
+
+
+.cp-topline {
+
+    display: flex;
+
+    align-items: stretch;
+
+}
+
+
+.cp-topline .cp-impact {
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+
+.cp-search-slot {
+
+    display: flex;
+
+    flex: 0 0 260px;
+
+    align-items: center;
+
+    padding-left: 20px;
+
+    border-top: 1px solid var(--border);
+
+    border-bottom: 1px solid var(--border);
+
+    border-left: 1px solid var(--border);
+
+}
+
+
+.cp-search-slot .cw-search {
+
+    width: 100%;
+
+    margin: 0;
+
+}
+
+
+/* Hidden (space kept) while the site menu is open */
+
+html.cw-nav-open .cp-search-slot .cw-search {
+
+    visibility: hidden;
+
+}
+
+
+@media (max-width: 900px) {
+
+    .cp-topline {
+
+        flex-direction: column-reverse;
+
+    }
+
+
+    .cp-search-slot {
+
+        flex: none;
+
+        padding: 0 0 16px;
+
+        border: 0;
+
+    }
+
+}
+
+
+/* Impact figures reduced to the height of the search bar,
+   two separate elements side by side. */
+
+.cp-topline {
+
+    align-items: center;
+
+    gap: 20px;
+
+}
+
+
+.cp-topline .cp-impact {
+
+    height: 40px;
+
+    border: 1px solid var(--border-dark);
+
+    border-radius: 999px;
+
+    overflow: hidden;
+
+}
+
+
+.cp-topline .cp-figure {
+
+    flex-direction: row;
+
+    align-items: baseline;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 0 12px;
+
+    align-self: center;
+
+}
+
+
+.cp-topline .cp-figure strong {
+
+    font-size: 1.15rem;
+
+}
+
+
+.cp-topline .cp-figure span {
+
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+
+    white-space: nowrap;
+
+}
+
+
+.cp-topline .cp-figure + .cp-figure {
+
+    height: 100%;
+
+    align-items: center;
+
+}
+
+
+.cp-topline .cp-figure:first-child {
+
+    height: 100%;
+
+    align-items: center;
+
+}
+
+
+.cp-search-slot {
+
+    flex: 0 0 260px;
+
+    padding: 0;
+
+    border: 0;
+
+}
+
+
+@media (max-width: 900px) {
+
+    .cp-topline {
+
+        align-items: stretch;
+
+        gap: 12px;
+
+    }
+
+
+    .cp-topline .cp-impact {
+
+        height: auto;
+
+        border-radius: 12px;
+
+    }
+
+
+    .cp-topline .cp-figure,
+    .cp-topline .cp-figure:first-child,
+    .cp-topline .cp-figure + .cp-figure {
+
+        height: 40px;
+
+        padding: 0 8px;
+
+    }
+
+
+    .cp-search-slot {
+
+        padding: 0;
+
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .cp-search-slot {
+
+        flex: none;
+
+    }
+
+}
+
+
+
+/* New order, each block keeps its own width:
+   Agenda (1/3) + Front page (2/3) on top,
+   Archives (2/3) + Readers' letters (1/3) below. */
+
+.cp-row--top {
+
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+
+}
+
+
+.cp-row--bottom {
+
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+
+}
+
+
+@media (max-width: 900px) {
+
+    .cp-row--top,
+    .cp-row--bottom {
+
+        grid-template-columns: minmax(0, 1fr);
+
+    }
+
+}
+
+
+/* Agenda rows: Donate + reminder are back */
+
+.cp-agenda-date,
+.cp-agenda-title {
+
+    color: inherit;
+
+    text-decoration: none;
+
+}
+
+
+.cp-agenda-title:hover,
+.cp-agenda-title:focus-visible {
+
+    color: var(--cp-gold);
+
+}
+
+
+.cp-agenda-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 10px;
+
+}
+
+
+.cp-btn--sm {
+
+    width: auto;
+
+    min-height: 32px;
+
+    padding: 0 14px;
+
+    font-size: 11px;
+
+}
+
+
+.cp-reminder--sm.charity-reminder {
+
+    width: 32px;
+
+    height: 32px;
+
+    min-width: 32px;
+
+    font-size: 13px;
+
+}
+
+
+/* Readers' letters: propose button + "All proposals" window */
+
+.cp-propose {
+
+    margin-top: 18px;
+
+}
+
+
+.cp-modal {
+
+    --cp-gold: #b08a4a;
+    --cp-navy: #032456;
+    --cp-rule: var(--border);
+
+}
+
+
+html.dark-mode .cp-modal {
+
+    --cp-gold: #d8b56a;
+
+}
+
+
+.cp-modal--ideas .donation-modal-content {
+
+    width: min(720px, 92vw);
+
+    max-width: 720px;
+
+}
+
+
+.cp-modal-filters {
+
+    margin: 20px 0 4px;
+
+}
+
+
+.cp-modal .cp-ideas {
+
+    margin-top: 4px;
+
+}
+
+
+.cp-proposal-form .donation-field select,
+.cp-proposal-form .donation-field input:not([type="checkbox"]),
+.cp-proposal-form .donation-field textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+}
+
+
+.cp-proposal-form .donation-field input:disabled {
+
+    opacity: 0.5;
+
+}
+
+
+.cp-proposal-form .cp-secure {
+
+    margin-top: 10px;
+
+    text-align: center;
+
+}
+
+
+.cp-proposal-form .donation-checkbox {
+
+    justify-content: flex-start;
+
+    line-height: 1.4;
+
+}
+
+
+.cp-proposal-form .donation-checkbox input {
+
+    flex: 0 0 18px;
+
+}
