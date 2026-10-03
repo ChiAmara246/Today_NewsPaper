@@ -361,11 +361,30 @@ if (
 
 }
 
-articleImg.src =
+/* Article page: no photo means no image at all
+   (the branded placeholder is only for cards) */
+
+const articleImagePath =
     getImagePath(article.img);
 
-    articleImg.src =
-        getImagePath(article.img);
+if (articleImagePath.endsWith(IMAGE_PLACEHOLDER)) {
+
+    articleImg.hidden = true;
+
+    articleImg.removeAttribute("src");
+
+} else {
+
+    articleImg.hidden = false;
+
+    articleImg.onerror = () => {
+        articleImg.hidden = true;
+        articleImg.removeAttribute("src");
+    };
+
+    articleImg.src = articleImagePath;
+
+}
 
 
     positionRelatedStories();

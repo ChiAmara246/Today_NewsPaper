@@ -27,8 +27,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -100,8 +100,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -172,8 +172,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -244,8 +244,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -315,8 +315,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -387,8 +387,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -458,9 +458,9 @@
       }
     ],
     "fundraising": {
-      "raised": 1104500,
-      "goal": 1000000,
-      "currency": "NGN",
+      "raised": 740,
+      "goal": 670,
+      "currency": "USD",
       "updatedAt": "2026-09-26T10:00:00+01:00"
     },
     "cta": {
@@ -707,7 +707,7 @@
     "donors": [
       {
         "name": "Dangote Foundation",
-        "amount": 500000,
+        "amount": 330,
         "thanks": {
           "text": "Thank you Dangote Foundation for the 10 sewing machines. I now sew school uniforms for my whole street.",
           "from": "Mama Bisi Adewale",
@@ -716,7 +716,7 @@
       },
       {
         "name": "Chioma Okeke",
-        "amount": 25000,
+        "amount": 17,
         "thanks": {
           "text": "Thank you Chioma for paying my hairdressing kit. I did my first paid braids yesterday!",
           "from": "Esther Nwachukwu",
@@ -725,7 +725,7 @@
       },
       {
         "anonymous": true,
-        "amount": 150000,
+        "amount": 100,
         "thanks": {
           "text": "To the kind donor: thank you for my training fees. I could never have paid them alone.",
           "from": "Hauwa Abdullahi",
@@ -734,7 +734,7 @@
       },
       {
         "name": "Femi Adebayo",
-        "amount": 50000,
+        "amount": 33,
         "thanks": {
           "text": "Thank you Femi for the baking oven. I sell bread every morning before church.",
           "from": "Folake Adeyinka",
@@ -743,7 +743,7 @@
       },
       {
         "name": "Aisha Musa",
-        "amount": 30000,
+        "amount": 20,
         "thanks": {
           "text": "Thank you Aisha for the bead-making starter kit. My first necklace sold in one day!",
           "from": "Ruth Akpan",
@@ -752,7 +752,7 @@
       },
       {
         "name": "Bisi Ogunleye",
-        "amount": 10000,
+        "amount": 7,
         "thanks": {
           "text": "Thank you Bisi for my transport money. I came every day without missing a class.",
           "from": "Grace Effiong",
@@ -761,7 +761,7 @@
       },
       {
         "name": "John Danjuma",
-        "amount": 5000,
+        "amount": 3,
         "thanks": {
           "text": "Thank you John for the notebook and pens. I wrote down every recipe.",
           "from": "Mama Ngozi Eze",
@@ -770,7 +770,7 @@
       },
       {
         "name": "Ngozi Eze",
-        "amount": 20000,
+        "amount": 13,
         "thanks": {
           "text": "Thank you Ngozi for the childcare corner. My baby was safe while I learnt.",
           "from": "Blessing Okafor",
@@ -779,7 +779,7 @@
       },
       {
         "name": "Emeka Nwosu",
-        "amount": 15000,
+        "amount": 10,
         "thanks": {
           "text": "Thank you Emeka for the fabric. I made my first dress for my daughter.",
           "from": "Joy Uzor",
@@ -788,7 +788,7 @@
       },
       {
         "anonymous": true,
-        "amount": 7500,
+        "amount": 5,
         "thanks": {
           "text": "To whoever paid for lunch: thank you, we learnt better with full stomachs.",
           "from": "Halima Garba",
@@ -797,7 +797,7 @@
       },
       {
         "name": "Halima Bello",
-        "amount": 40000,
+        "amount": 27,
         "thanks": {
           "text": "Thank you Halima for the soap-making materials. My shop shelf is full now.",
           "from": "Rukayat Bello",
@@ -806,7 +806,7 @@
       },
       {
         "name": "Kunle Afolabi",
-        "amount": 12000,
+        "amount": 8,
         "thanks": {
           "text": "Thank you Kunle for my certificate. I framed it in my shop.",
           "from": "Comfort Etuk",
@@ -815,7 +815,7 @@
       },
       {
         "name": "Grace Etim",
-        "amount": 8000,
+        "amount": 5,
         "thanks": {
           "text": "Thank you Grace for the scissors and measuring tape. They are my treasures.",
           "from": "Adaeze Obi",
@@ -824,7 +824,7 @@
       },
       {
         "name": "Ibrahim Sani",
-        "amount": 100000,
+        "amount": 67,
         "thanks": {
           "text": "Thank you Ibrahim for the small business grant. I bought my first stock of fabric.",
           "from": "Zainab Ahmed",
@@ -833,7 +833,7 @@
       },
       {
         "name": "Funke Akindele",
-        "amount": 35000,
+        "amount": 23,
         "thanks": {
           "text": "Thank you Funke for the phone training. I now take orders on WhatsApp.",
           "from": "Mama Tolu Ajayi",
@@ -842,7 +842,7 @@
       },
       {
         "name": "Uche Obi",
-        "amount": 6000,
+        "amount": 4,
         "thanks": {
           "text": "Thank you Uche for the snacks for our children. They played while we worked.",
           "from": "Kaderi Yolande",
@@ -851,7 +851,7 @@
       },
       {
         "name": "Zainab Lawal",
-        "amount": 18000,
+        "amount": 12,
         "thanks": {
           "text": "Thank you Zainab for the hair dryer. My clients don't wait anymore.",
           "from": "Amina Yusuf",
@@ -860,7 +860,7 @@
       },
       {
         "anonymous": true,
-        "amount": 60000,
+        "amount": 40,
         "thanks": {
           "text": "To the kind donor: thank you for the generator fuel. We sewed even when NEPA took light.",
           "from": "Patience Udoh",
@@ -869,7 +869,7 @@
       },
       {
         "name": "Tolu Bankole",
-        "amount": 9000,
+        "amount": 6,
         "thanks": {
           "text": "Thank you Tolu for the apron and gloves. I feel like a real baker.",
           "from": "Ifeoma Nnaji",
@@ -878,7 +878,7 @@
       },
       {
         "name": "Patience Okon",
-        "amount": 4000,
+        "amount": 3,
         "thanks": {
           "text": "Thank you Patience. You were trained here last year and now you helped me. I will do the same.",
           "from": "Mary Ekanem",
@@ -916,8 +916,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -987,8 +987,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1058,8 +1058,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1129,8 +1129,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1200,8 +1200,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1271,8 +1271,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1342,8 +1342,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1413,8 +1413,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1484,8 +1484,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1555,8 +1555,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1626,8 +1626,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1697,8 +1697,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1768,8 +1768,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1839,8 +1839,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1910,8 +1910,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -1981,8 +1981,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2052,8 +2052,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2123,8 +2123,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2194,8 +2194,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2265,8 +2265,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2336,8 +2336,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2407,8 +2407,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2478,8 +2478,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2549,8 +2549,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2620,8 +2620,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2691,8 +2691,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2762,8 +2762,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2833,8 +2833,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2904,8 +2904,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -2975,8 +2975,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -3046,8 +3046,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -3117,8 +3117,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -3188,8 +3188,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -3259,8 +3259,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -3330,8 +3330,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -3401,8 +3401,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -3472,8 +3472,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -3543,8 +3543,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -3614,8 +3614,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -3685,8 +3685,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -3756,8 +3756,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -3827,8 +3827,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {
@@ -3898,8 +3898,8 @@
     ],
     "fundraising": {
       "raised": 0,
-      "goal": 500000,
-      "currency": "NGN",
+      "goal": 330,
+      "currency": "USD",
       "updatedAt": "2026-10-02T09:00:00+01:00"
     },
     "cta": {

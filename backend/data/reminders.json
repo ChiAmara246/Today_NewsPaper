@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "charityId": 6,
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/evis83vNq4s:APA91bHuH_OEFzCSCJKYZ95R3MTMWj0HgUZJ_ooF4X9-JJ_Y9U8Z76HkiqGSyRxcFCMQOw1W0HD9LSJuAgD599RAUAg1A4kEqBy47hvsvOcnwjRyzdGppxlQhDVrnEwakh2oM1HkqO_s",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BKdfS2c5m3SnfVyp6mcg9UI5oBaMBqkjyFSzxtdhsGNDpfNM45ndufEUWHOBBA2FHypVOBRM-Pz4ljLwHu7i4Pg",
+        "auth": "L-VTGerO22IyQZD9bC8sog"
+      }
+    },
+    "createdAt": "2026-10-03T13:04:30.022Z",
+    "frequency": "12h",
+    "nextAt": "2026-10-04T01:04:30.022Z"
+  }
+]

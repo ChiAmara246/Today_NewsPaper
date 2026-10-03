@@ -5807,3 +5807,408 @@ html.dark-mode footer {
   border-color: rgba(201, 164, 92, 0.5);
 
 }
+
+
+/* =========================================================
+   SECTION PAGES — FIXES
+   ========================================================= */
+
+/* Missing photo: the branded placeholder is shown instead
+   of the old "!" / "something went wrong" message */
+
+.card.image-error > img {
+
+  visibility: visible;
+
+}
+
+
+.card.image-error::before,
+.card.image-error::after {
+
+  content: none;
+
+}
+
+
+/* ePaper: same width and title as the other sidebar boxes */
+
+#ePaper {
+
+  max-width: none;
+
+  box-shadow: none;
+
+}
+
+
+#ePaper h6 {
+
+  padding: 14px 12px;
+
+  border-bottom: 1px solid var(--border);
+
+  color: var(--text);
+
+  font-family: var(--serif);
+
+  font-size: 17px;
+
+  font-weight: 600;
+
+}
+
+
+#ePaper .epaper-carousel {
+
+  width: min(220px, 80%);
+
+  margin: 16px auto;
+
+  box-shadow: 0 6px 18px rgba(2, 26, 63, 0.15);
+
+}
+
+
+#ePaper.epaper-missing .epaper-carousel {
+
+  background: url("images/placeholder.svg") center / cover;
+
+}
+
+
+/* Sidebar "Open Hearts" box */
+
+#charityEvent:empty {
+
+  display: none;
+
+}
+
+
+#charityEvent {
+
+  min-height: 0;
+
+}
+
+
+.side-cares {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  padding: 24px 20px;
+
+  background:
+    radial-gradient(circle at 85% 20%, rgba(201, 164, 92, 0.3), transparent 60%),
+    linear-gradient(135deg, #05306b, #021a3f);
+
+  color: #ffffff;
+
+  text-decoration: none;
+
+}
+
+
+.side-cares-kicker {
+
+  color: #c9a45c;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 2.5px;
+
+  text-transform: uppercase;
+
+}
+
+
+.side-cares strong {
+
+  font-family: var(--serif);
+
+  font-size: 1.25rem;
+
+  line-height: 1.3;
+
+}
+
+
+.side-cares-link {
+
+  color: #c9a45c;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+
+}
+
+
+.side-cares:hover .side-cares-link {
+
+  text-decoration: underline;
+
+}
+
+
+/* Empty section (no articles yet) */
+
+.grid:has(> .section-empty) {
+
+  display: block;
+
+}
+
+
+.section-empty {
+
+  padding: 60px 24px;
+
+  border-top: 1px solid var(--border);
+
+  border-bottom: 1px solid var(--border);
+
+  text-align: center;
+
+}
+
+
+.section-empty-mark {
+
+  color: var(--gold);
+
+  font-size: 1.6rem;
+
+}
+
+
+.section-empty h3 {
+
+  margin: 10px 0 8px;
+
+  color: var(--text);
+
+  font-family: var(--serif);
+
+  font-size: 1.6rem;
+
+}
+
+
+.section-empty p {
+
+  margin: 0 0 18px;
+
+  color: var(--text-muted);
+
+}
+
+
+.section-empty a {
+
+  color: var(--gold);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+
+  text-decoration: none;
+
+}
+
+
+/* =========================================================
+   SUB NAV — same look as the nav, same 20px height, sticky
+   ========================================================= */
+
+.subnav {
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 1002;
+
+  height: 20px;
+
+  min-height: 20px;
+
+  padding: 0 24px;
+
+  background: linear-gradient(180deg, #05306b 0%, var(--primary) 100%);
+
+  border-bottom: 1px solid rgba(201, 164, 92, 0.35);
+
+}
+
+
+html.dark-mode .subnav {
+
+  background: linear-gradient(180deg, #10305f 0%, #0c2955 100%);
+
+}
+
+
+#dateheure,
+.subnav a {
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-size: 9.5px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.09em;
+
+  text-transform: uppercase;
+
+}
+
+
+.subnav a:hover,
+.subnav a.active {
+
+  color: #ffffff;
+
+}
+
+
+.subnavRight a {
+
+  position: relative;
+
+}
+
+
+.subnavRight a::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 8px;
+
+  right: 8px;
+
+  bottom: 2px;
+
+  height: 1px;
+
+  background: #c9a45c;
+
+  transform: scaleX(0);
+
+  transition: transform 0.3s ease;
+
+}
+
+
+.subnavRight a:hover::after,
+.subnavRight a.active::after {
+
+  transform: scaleX(1);
+
+}
+
+
+/* The nav now sticks just under the sub nav */
+
+nav {
+
+  top: 20px;
+
+}
+
+
+@media (max-width: 746px) {
+
+  header {
+
+    top: 20px;
+
+  }
+
+
+  nav {
+
+    top: calc(20px + var(--tnp-header-h, 0px));
+
+  }
+
+}
+
+
+#articleImg[hidden] {
+
+  display: none !important;
+
+}
+
+
+/* Open Hearts emblem in the nav (next to Press & Events).
+   The nav is navy in both themes, so the light-letter version is used. */
+
+nav .nav-emblem a {
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 6px 8px;
+
+}
+
+
+nav .nav-emblem img {
+
+  height: 32px;
+
+  width: auto;
+
+  border-radius: 0;
+
+}
+
+
+nav .nav-emblem .emblem-light {
+
+  display: none;
+
+}
+
+
+nav .nav-emblem .emblem-dark {
+
+  display: block;
+
+}
+
+
+.side-cares-logo {
+
+  display: block;
+
+  width: 170px;
+
+  max-width: 100%;
+
+  height: auto;
+
+  margin-bottom: 4px;
+
+}

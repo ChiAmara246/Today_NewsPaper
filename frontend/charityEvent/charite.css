@@ -12084,3 +12084,878 @@ html.dark-mode .cp-modal {
     flex: 0 0 18px;
 
 }
+
+
+/* Open Hearts logo in the header (charity pages) */
+
+header img.logo-open-hearts {
+
+  width: min(300px, 80%);
+
+  height: auto;
+
+  aspect-ratio: 1168 / 411;
+
+}
+
+
+
+
+
+/* Text logo on the poster and in the sidebar box */
+
+img.cp-poster-brand {
+
+  display: block;
+
+  width: calc(var(--u) * 16);
+
+  height: auto;
+
+}
+
+
+
+/* Sub nav folds away together with the nav */
+
+.subnav.cw-subnav {
+
+    max-height: 20px;
+
+    overflow: hidden;
+
+    transition:
+        max-height 0.6s cubic-bezier(0.65, 0, 0.35, 1),
+        min-height 0.6s cubic-bezier(0.65, 0, 0.35, 1),
+        border-color 0.3s ease;
+
+}
+
+
+.subnav.cw-subnav-collapsed {
+
+    max-height: 0;
+
+    min-height: 0;
+
+    border-bottom-color: transparent;
+
+}
+
+
+.subnav.cw-subnav-collapsed > * {
+
+    visibility: hidden;
+
+}
+
+
+/* With the sub nav folded, the thin nav line sticks to the very top */
+
+html:not(.cw-nav-open) nav.cw-nav {
+
+    top: 0;
+
+}
+
+
+@media (max-width: 746px) {
+
+    html:not(.cw-nav-open) header {
+
+        top: 0;
+
+    }
+
+
+    html:not(.cw-nav-open) nav.cw-nav {
+
+        top: var(--tnp-header-h, 0px);
+
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .subnav.cw-subnav {
+
+        transition: none;
+
+    }
+
+}
+
+
+/* =========================================================
+   CHARITY FOOTER — thank-you band + partners
+========================================================= */
+
+footer.cp-footer {
+
+    --cp-gold: #b08a4a;
+    --cp-navy: #032456;
+    --cp-rule: var(--border);
+
+    display: block;
+
+    margin-top: 40px;
+
+    padding: 0 0 26px;
+
+    background: var(--surface);
+
+    border-top: 2px solid var(--text);
+
+    color: var(--text);
+
+}
+
+
+html.dark-mode footer.cp-footer {
+
+    --cp-gold: #d8b56a;
+
+    background: var(--surface);
+
+}
+
+
+.cp-footer-inner {
+
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    padding: 0 28px;
+
+    box-sizing: border-box;
+
+}
+
+
+.cp-footer .cp-thanks {
+
+    margin-top: 0;
+
+    border-top: 0;
+
+}
+
+
+.cp-footer .cp-partners {
+
+    margin-top: 32px;
+
+}
+
+
+.cp-partners .cp-partner-own {
+
+    opacity: 1;
+
+    filter: none;
+
+}
+
+
+.cp-partners .cp-partner-own img {
+
+    max-height: 52px;
+
+    max-width: 160px;
+
+}
+
+
+.cp-footer-copy {
+
+    margin: 30px 0 0;
+
+    padding-top: 16px;
+
+    border-top: 1px solid var(--border);
+
+    color: var(--text-muted);
+
+    font-size: 0.8rem;
+
+    text-align: center;
+
+}
+
+
+@media (max-width: 900px) {
+
+    .cp-footer-inner {
+
+        padding: 0 16px;
+
+    }
+
+}
+
+
+/* =========================================================
+   LATEST WORK — sidebar turned into the footer
+========================================================= */
+
+.cw-layout--full {
+
+    grid-template-columns: minmax(0, 1fr);
+
+    max-width: 1100px;
+
+}
+
+
+.lw-footer-thanks {
+
+    --lw-bubble: var(--surface-soft);
+    --lw-bubble-gold: rgba(201, 164, 92, 0.14);
+
+    padding: 30px 0 6px;
+
+    background: none !important;
+
+    border: 0 !important;
+
+    box-shadow: none !important;
+
+}
+
+
+.lw-footer-head {
+
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 14px;
+
+    margin-bottom: 18px;
+
+    padding-bottom: 8px;
+
+    border-bottom: 2px solid var(--text);
+
+}
+
+
+.lw-footer-head h2 {
+
+    margin: 0;
+
+    font-family: "Inter", "Segoe UI", sans-serif;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+
+    color: var(--text);
+
+}
+
+
+.lw-footer-head span {
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+
+}
+
+
+.lw-footer-thanks .lw-side-body {
+
+    padding: 0;
+
+}
+
+
+.lw-footer-thanks .lw-ticker {
+
+    position: static !important;
+
+    display: block !important;
+
+    height: auto !important;
+
+    background: none !important;
+
+    border: 0 !important;
+
+    box-shadow: none !important;
+
+}
+
+
+.lw-footer-thanks .lw-ticker-label--strip {
+
+    display: none !important;
+
+}
+
+
+.lw-footer-thanks .lw-ticker-window {
+
+    display: flex !important;
+
+    height: auto !important;
+
+    padding: 4px 0 10px !important;
+
+    overflow-x: auto !important;
+
+    overflow-y: hidden !important;
+
+    scrollbar-width: thin;
+
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+
+    mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+
+}
+
+
+.lw-footer-thanks .lw-ticker-track {
+
+    display: flex !important;
+
+    flex: 0 0 auto;
+
+    gap: 16px;
+
+    padding-right: 16px;
+
+    animation: none !important;
+
+}
+
+
+.lw-footer-thanks .lw-note {
+
+    display: flex !important;
+
+    flex-direction: column;
+
+    align-items: stretch !important;
+
+    width: 300px;
+
+    flex: 0 0 300px;
+
+    margin: 0 !important;
+
+    padding: 16px 18px 14px !important;
+
+    border: 1px solid var(--border) !important;
+
+    border-radius: 4px !important;
+
+    background: var(--lw-bubble) !important;
+
+    box-shadow: none !important;
+
+    white-space: normal !important;
+
+}
+
+
+.lw-footer-thanks .lw-note--gold {
+
+    background: var(--lw-bubble-gold) !important;
+
+}
+
+
+.lw-footer-thanks .lw-note-to strong {
+
+    color: var(--text) !important;
+
+}
+
+
+.lw-footer-thanks .lw-note-to strong + span {
+
+    color: var(--accent) !important;
+
+}
+
+
+.lw-footer-thanks .lw-note-text {
+
+    max-width: none !important;
+
+    margin: 10px 0 6px !important;
+
+    padding-left: 18px !important;
+
+    color: var(--text) !important;
+
+    font-size: 0.98rem !important;
+
+    white-space: normal !important;
+
+    overflow: visible !important;
+
+}
+
+
+.lw-footer-thanks .lw-note-text::before {
+
+    position: absolute !important;
+
+    font-size: 1.8rem !important;
+
+}
+
+
+.lw-footer-thanks .lw-note-from {
+
+    margin-top: auto;
+
+    color: var(--text-secondary) !important;
+
+}
+
+
+.lw-footer-thanks .lw-ticker-count {
+
+    display: block !important;
+
+    padding: 10px 0 0;
+
+    border: 0;
+
+    text-align: left;
+
+}
+
+
+.cp-footer .lw-footer-thanks + .cp-partners {
+
+    margin-top: 26px;
+
+}
+
+
+@media (max-width: 900px) {
+
+    .lw-footer-thanks .lw-note {
+
+        width: 260px;
+
+        flex-basis: 260px;
+
+    }
+
+}
+
+
+/* latestWork: "More campaigns" spans the full column */
+
+.cw-detail > .uw-more,
+.cw-detail > .lw-next {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+}
+
+
+.cw-detail .uw-more-grid .charity-card {
+
+    min-width: 0;
+
+}
+
+
+/* Card titles inside "More campaigns" keep the card style */
+
+.uw-more .charity-content h2 {
+
+    margin: 0 0 16px;
+
+    padding-left: 0;
+
+    border-left: 0;
+
+    color: var(--text-light);
+
+}
+
+
+/* =========================================================
+   CHARITY HOME — PHONE LAYOUT
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .cp-rubric {
+
+        margin-bottom: 14px;
+
+    }
+
+
+    /* ---------- Agenda: tighter rows, buttons on one line ---------- */
+
+    .cp-agenda-item {
+
+        grid-template-columns: 52px minmax(0, 1fr);
+
+        gap: 12px;
+
+        padding: 14px 0;
+
+    }
+
+
+    .cp-agenda-date strong {
+
+        font-size: 1.6rem;
+
+    }
+
+
+    .cp-agenda-title {
+
+        font-size: 1rem;
+
+    }
+
+
+    .cp-agenda-actions {
+
+        margin-top: 8px;
+
+    }
+
+
+    /* ---------- Front page: poster tools on two tidy rows ---------- */
+
+    .cp-variants {
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 10px;
+
+    }
+
+
+    .cp-variants-label {
+
+        grid-column: 1 / -1;
+
+    }
+
+
+    .cp-variant {
+
+        flex-direction: column;
+
+        align-items: center;
+
+        gap: 6px;
+
+        padding: 10px 6px;
+
+        border: 1px solid var(--border);
+
+    }
+
+
+    .cp-variant-thumb--square { width: 60px; }
+
+    .cp-variant-thumb--story { width: 38px; }
+
+
+    .cp-variant-actions {
+
+        grid-column: 1 / -1;
+
+    }
+
+
+    .cp-variant-actions .cp-btn {
+
+        min-height: 40px;
+
+        padding: 0 8px;
+
+        font-size: 11px;
+
+        white-space: nowrap;
+
+    }
+
+
+    .cp-front-title {
+
+        font-size: 1.45rem;
+
+    }
+
+
+    .cp-countdown strong {
+
+        font-size: 2rem;
+
+    }
+
+
+    /* ---------- Archives: compact list (thumbnail + text) ---------- */
+
+    .cp-year + .cp-year {
+
+        margin-top: 24px;
+
+    }
+
+
+    .cp-year-title span {
+
+        font-size: 1.5rem;
+
+    }
+
+
+    .cp-archive-grid {
+
+        grid-template-columns: minmax(0, 1fr);
+
+        gap: 0;
+
+    }
+
+
+    .cp-archive-card a {
+
+        display: grid;
+
+        grid-template-columns: 104px minmax(0, 1fr);
+
+        grid-template-rows: auto auto auto;
+
+        column-gap: 14px;
+
+        row-gap: 4px;
+
+        padding: 14px 0;
+
+        border-bottom: 1px solid var(--border);
+
+    }
+
+
+    .cp-archive-photo {
+
+        grid-row: 1 / span 3;
+
+        aspect-ratio: 1 / 1;
+
+        margin: 0;
+
+    }
+
+
+    .cp-print,
+    .cp-photos {
+
+        display: none;
+
+    }
+
+
+    .cp-badge {
+
+        top: 6px;
+
+        left: 6px;
+
+        padding: 2px 6px;
+
+        font-size: 10px;
+
+    }
+
+
+    .cp-archive-card .cp-smallcaps {
+
+        font-size: 10px;
+
+        letter-spacing: 1px;
+
+    }
+
+
+    .cp-archive-title {
+
+        font-size: 1rem;
+
+    }
+
+
+    .cp-archive-lead {
+
+        display: none;
+
+    }
+
+
+    .cp-archive-result {
+
+        font-size: 0.8rem;
+
+    }
+
+
+    .cp-archive-card a:hover .cp-archive-image {
+
+        transform: none;
+
+    }
+
+
+    .cp-archive-list .charity-pagination {
+
+        margin-top: 18px;
+
+    }
+
+
+    /* ---------- Readers' letters ---------- */
+
+    .cp-letters-intro {
+
+        font-size: 0.8rem;
+
+    }
+
+
+    .cp-idea {
+
+        grid-template-columns: 22px minmax(0, 1fr) 38px;
+
+        gap: 10px;
+
+        padding: 14px 0;
+
+    }
+
+
+    .cp-idea-rank {
+
+        font-size: 1.35rem;
+
+    }
+
+
+    .cp-idea-title {
+
+        font-size: 0.98rem;
+
+    }
+
+
+    .cp-heart {
+
+        width: 38px;
+
+        height: 38px;
+
+    }
+
+
+    .cp-propose {
+
+        margin-top: 14px;
+
+    }
+
+}
+
+
+.cp-rubric > span {
+
+    white-space: nowrap;
+
+}
+
+
+.cp-archive-list .charity-pagination {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 8px;
+
+}
+
+
+.cp-archive-list .charity-page-button {
+
+    min-width: 40px;
+
+    height: 36px;
+
+    padding: 0 12px;
+
+    font-family: "Inter", "Segoe UI", sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
+
+}
+
+
+.cp-archive-list .charity-page-button:disabled {
+
+    opacity: 0.35;
+
+}
+
+
+/* Phones: the next campaign comes before the agenda */
+
+@media (max-width: 900px) {
+
+    .cp-row--top .cp-front {
+
+        order: -1;
+
+    }
+
+
+    .cp-row--top .cp-agenda {
+
+        margin-top: 40px;
+
+        border-top: 0;
+
+    }
+
+
+    .cp-row--top .cp-front + .cp-col,
+    .cp-row--top .cp-col + .cp-front {
+
+        margin-top: 0;
+
+    }
+
+}

@@ -27,7 +27,7 @@
         const preload = document.createElement("link");
         preload.rel = "preload";
         preload.as = "image";
-        preload.href = logoPath + logoFile;
+        preload.href = "campaign images/logos/" + (isDarkMode ? "open-hearts-text-dark.png" : "open-hearts-text.png");
         preload.fetchPriority = "high";
 
         document.head.appendChild(preload);
@@ -54,11 +54,11 @@
       }
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css">
-    <link rel="stylesheet" type="text/css" href="../index.css?v=20261002r">
-    <link rel="stylesheet" type="text/css" href="charite.css?v=20261003b">
+    <link rel="stylesheet" type="text/css" href="../index.css?v=20261004a">
+    <link rel="stylesheet" type="text/css" href="charite.css?v=20261004k">
     <script src="https://unpkg.com/lucide@1.48.0/dist/umd/lucide.min.js" defer></script>
-    <script src="../index.js?v=20261002p" defer></script>
-    <script src="charity.js?v=20261003a" defer></script>
+    <script src="../index.js?v=20261004a" defer></script>
+    <script src="charity.js?v=20261004j" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   </head>
   <body>
@@ -86,25 +86,13 @@
       </div>
     </div>
     <header>
-      <img id="logo" alt="Today Newspaper" fetchpriority="high"/>
-
+      <img id="logo" class="logo-open-hearts" data-brand="open-hearts" alt="Open Hearts Foundation" width="1168" height="411" fetchpriority="high"/>
       <script>
-        (function () {
-
-          const logo = document.getElementById("logo");
-
-          if (!logo) return;
-
-          const isDarkMode =
-            document.documentElement.classList.contains("dark-mode");
-
-          logo.src = "../images/" + (
-            isDarkMode
-              ? "logoDarkMode.jpg"
-              : "logoDefaultMode.jpg"
-          );
-
-        })();
+        document.getElementById("logo").src =
+          "campaign images/logos/" +
+          (document.documentElement.classList.contains("dark-mode")
+            ? "open-hearts-text-dark.png"
+            : "open-hearts-text.png");
       </script>
     </header>
     <nav>
@@ -118,7 +106,7 @@
           <li><a href="../navpages/entertainment.html">Entertainment</a></li>
           <li><a href="../navpages/announces.html">Jobs & Opportunities</a></li>
           <li><a href="../navpages/pressEvent.html">Press & Events</a></li>
-          <li><a href="campaign images/charity_events_fluid_motion_loop.webp"><img src="campaign images/charity_events_fluid_motion_loop.webp"/></a></li>
+          <li class="nav-emblem"><a href="charityEvents.html" title="Open Hearts Foundation" aria-label="Open Hearts Foundation"><img class="emblem-light" src="campaign images/logos/open-hearts-emblem.png" alt=""><img class="emblem-dark" src="campaign images/logos/open-hearts-emblem-dark.png" alt=""></a></li>
         </ul>
         <div class="search-box">
           <input type="text" id="searchInput" placeholder="Search articles... " onkeyup="searchFunction()">
@@ -135,6 +123,7 @@
       <a href="../navpages/entertainment.html">Entertainment</a>
       <a href="../navpages/announces.html">Jobs & Opportunities</a>
       <a href="../navpages/pressEvent.html">Press & Events</a>
+      <a href="charityEvents.html">Open Hearts Foundation</a>
       <a href="../navpages/laugh.html">Laugh It Out</a>
       <a href="../navpages/about.html">About Us</a>
 
@@ -146,73 +135,12 @@
       </div>
       <section id="searchResults" class="hidden"></section>
     </main>
-    <footer>
-
-      <!-- Brand -->
-      <div class="footer-brand">
-
-        <img src="../images/tnp-icon.png" alt="Today Newspaper" class="footer-icon">
-
-        <div class="footer-brand-text">
-          <h2>Today Newspaper</h2>
-          <p>
-            Your trusted source for news and insights on Education since 2020.
-          </p>
-        </div>
-
+    <footer class="cp-footer">
+      <div class="cp-footer-inner">
+        <section class="cp-thanks" id="cpThanks" aria-label="Thank you" hidden></section>
+        <section class="cp-partners" id="cpPartners" hidden></section>
+        <p class="cp-footer-copy">&copy; 2026 Open Hearts Foundation &middot; An initiative of Today Newspaper</p>
       </div>
-
-      <!-- Navigation -->
-      <div class="footer-navigation">
-
-        <div class="footer-links">
-          <h3>◉Explore</h3>
-
-          <a href="../index.html">Home</a>
-          <a href="../navpages/education.html">Education</a>
-          <a href="../navpages/economy.html">Economy</a>
-          <a href="../navpages/today.html">Today's News</a>
-        </div>
-
-        <div class="footer-links">
-          <h3>◇About</h3>
-
-          <a href="../navpages/about.html">Our Purpose</a>
-          <a href="../navpages/about.html">Our Mission</a>
-          <a href="../navpages/about.html">Our Vision</a>
-          <a href="../navpages/about.html">Our Values</a>
-        </div>
-
-        <div class="footer-links">
-          <h3>◎Connect</h3>
-
-          <a href="#">Contact Us</a>
-          <a href="#">Advertise With Us</a>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Use</a>
-        </div>
-
-      </div>
-
-      <!-- Values -->
-      <div class="footer-values">
-
-        <span>Integrity</span>
-        <span>Accuracy</span>
-        <span>Empowerment</span>
-        <span>Excellence</span>
-
-      </div>
-
-      <!-- Copyright -->
-      <div class="footer-bottom">
-
-        <p>
-          &copy; 2026 Today Newspaper &middot; All Rights Reserved.
-        </p>
-
-      </div>
-
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
   </body>

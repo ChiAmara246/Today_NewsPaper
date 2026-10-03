@@ -18,11 +18,19 @@ document.querySelectorAll("nav a").forEach(link => {
     }
 
 });
+const IMAGE_PLACEHOLDER = "placeholder.svg";
+
+
 function getImagePath(img) {
 
     // External URL
     if (/^(https?:)?\/\//.test(img)) {
         return img;
+    }
+
+    // Empty value or a description instead of a file name
+    if (!img || !/\.(jpe?g|png|gif|webp|avif|svg)$/i.test(String(img).trim())) {
+        img = IMAGE_PLACEHOLDER;
     }
 
     // Pages inside folders that sit directly under /frontend/
@@ -269,18 +277,14 @@ date.classList.add("date");
 date.textContent = formatPublicationDate(article.date);
 cardContent.appendChild(date);
 
-image.addEventListener("error", () => {
-image.onerror = null;
+image.addEventListener("error", function onImageError() {
+image.removeEventListener("error", onImageError);
 
 card.classList.add("image-error");
 
-image.alt = "something when wrong";
+image.alt = "";
 
-image.removeAttribute("src");
-
-if (summary) {
-summary.style.display = "none";
-}
+image.src = getImagePath(IMAGE_PLACEHOLDER);
 });
 
 card.appendChild(image);
@@ -391,14 +395,19 @@ function renderTopNews(articles) {
 
     heroImage.addEventListener(
         "error",
-        () => {
+        function onHeroError() {
+
+            heroImage.removeEventListener("error", onHeroError);
 
             heroCard.classList.add(
                 "image-error"
             );
 
             heroImage.alt =
-                "something went wrong";
+                "";
+
+            heroImage.src =
+                getImagePath(IMAGE_PLACEHOLDER);
 
         }
     );
@@ -899,6 +908,18 @@ function updateLogo() {
   const logo = document.getElementById("logo");
 
   if (!logo) return;
+
+  /* Charity pages: Open Hearts logo, light or dark version */
+  if (logo.dataset.brand === "open-hearts") {
+
+    logo.src =
+      "campaign images/logos/" +
+      (root.classList.contains("dark-mode")
+        ? "open-hearts-text-dark.png"
+        : "open-hearts-text.png");
+
+    return;
+  }
 
   const isDarkMode = root.classList.contains("dark-mode");
 
@@ -1743,7 +1764,29 @@ function showFailedCards(container, count = 4) {
     container.appendChild(card);
   }
 }
+function uniqueArticles(articles) {
+
+    const seen = new Set();
+
+    return (Array.isArray(articles) ? articles : []).filter(article => {
+
+        const key =
+            String(article.headline || article.id).trim().toLowerCase();
+
+        if (seen.has(key)) return false;
+
+        seen.add(key);
+
+        return true;
+
+    });
+
+}
+
+
 function renderTopNewsCategory(articles) {
+
+    articles = uniqueArticles(articles);
 
     const grid =
         document.getElementById(
@@ -1826,7 +1869,7 @@ function renderTopNewsCategory(articles) {
         createNewsCard(
             hero,
             "featured",
-            true
+            false /* the page is already the category */
         );
 
 
@@ -1861,7 +1904,7 @@ function renderTopNewsCategory(articles) {
             createNewsCard(
                 article,
                 "side",
-                true
+                false /* the page is already the category */
             );
 
 
@@ -2133,13 +2176,10 @@ async function loadArticles(containerId, category, limit = 6, page = 1) {
                                 );
 
 
-                                image.removeAttribute(
-                                    "src"
-                                );
+                                image.alt = "";
 
-
-                                image.alt =
-                                    "Image unavailable";
+                                image.src =
+                                    getImagePath(IMAGE_PLACEHOLDER);
                             }
                         );
                     };
@@ -2499,7 +2539,7 @@ async function loadArticles(containerId, category, limit = 6, page = 1) {
     container.innerHTML = "";
 
 
-    articles.forEach(
+    uniqueArticles(articles).forEach(
         article => {
 
             const card =
@@ -2921,6 +2961,46 @@ if (pagination) {
 
     prevBtn.disabled = isFirst;
     nextBtn.disabled = isLast;
+
+    showEmptySection();
+  }
+
+
+  /* No articles yet: friendly message, no pagination */
+
+  function showEmptySection() {
+
+    const grid = document.getElementById("articlesGrid");
+
+    const top = document.getElementById("topNewsGrid");
+
+    const isEmpty =
+      grid &&
+      !grid.querySelector(".card:not(.skeleton):not(.failed-card)") &&
+      !document.querySelector("#topNewsGrids .card:not(.skeleton)");
+
+
+    pagination.classList.toggle("hidden", Boolean(isEmpty) || !totalPages || totalPages <= 1);
+
+
+    if (top) {
+      top.classList.toggle("hidden", Boolean(isEmpty));
+    }
+
+
+    if (isEmpty && grid && !grid.querySelector(".section-empty")) {
+
+      grid.innerHTML = `
+        <div class="section-empty">
+          <span class="section-empty-mark" aria-hidden="true">✦</span>
+          <h3>No stories here yet</h3>
+          <p>This section is being prepared by our newsroom. Check back soon.</p>
+          <a href="${window.location.pathname.includes("/navpages/") ? "../index.html" : "index.html"}">Back to the front page →</a>
+        </div>
+      `;
+
+    }
+
   }
 
   // Previous button
@@ -3172,12 +3252,18 @@ function sidebarCarousel() {
 
 sidebarCarousel();
 
+/* Mobile sticky area (ads + WhatsApp).
+   It sticks to the bottom of the screen until the reader reaches its
+   natural place in the page. The decision uses that natural place
+   (a placeholder that never moves) instead of the page height, which
+   keeps changing while images and cards load. A 40px margin stops it
+   flickering around the limit (e.g. when the phone's address bar
+   shows or hides). */
+
 function handleStickyAds(){
   const stickyArea=document.querySelector(".mobile-sticky-area");
-  const aside=document.querySelector(".aside");
-  const footer=document.querySelector("footer");
 
-  if(!stickyArea||!aside||!footer){
+  if(!stickyArea){
     return;
   }
 
@@ -3189,32 +3275,26 @@ function handleStickyAds(){
     stickyArea.parentNode.insertBefore(placeholder,stickyArea);
   }
 
-  const stickyHeight=stickyArea.offsetHeight;
+  const isSticky=stickyArea.classList.contains("is-sticky");
 
-  const H=document.documentElement.scrollHeight;
-  const F=footer.offsetHeight+stickyHeight;
+  /* Natural top of the area = top of the placeholder */
+  const naturalTop=placeholder.getBoundingClientRect().top;
+
   const V=window.innerHeight;
 
-  const h=H-F;
-  const fh=window.scrollY+V;
+  const MARGIN=40;
 
-  const stick=fh<h;
+  const shouldStick=isSticky
+    ? naturalTop>V-MARGIN
+    : naturalTop>V+MARGIN;
 
-  if(stick&&!stickyArea.classList.contains("is-sticky")){
+  if(shouldStick&&!isSticky){
 
-    placeholder.style.height=`${stickyHeight}px`;
-
-    const asideRect=aside.getBoundingClientRect();
-
-    stickyArea.style.left=
-      `${asideRect.left}px`;
-
-    stickyArea.style.width=
-      `${asideRect.width}px`;
+    placeholder.style.height=`${stickyArea.offsetHeight}px`;
 
     stickyArea.classList.add("is-sticky");
 
-  }else if(!stick&&stickyArea.classList.contains("is-sticky")){
+  }else if(!shouldStick&&isSticky){
 
     stickyArea.classList.remove("is-sticky");
 
@@ -3225,21 +3305,21 @@ function handleStickyAds(){
   }
 }
 
-window.addEventListener(
-  "scroll",
-  handleStickyAds,
-  {passive:true}
-);
+let stickyAdsFrame=0;
 
-window.addEventListener(
-  "resize",
-  handleStickyAds
-);
+function scheduleStickyAds(){
+  if(stickyAdsFrame) return;
 
-window.addEventListener(
-  "load",
-  handleStickyAds
-);
+  stickyAdsFrame=requestAnimationFrame(()=>{
+    stickyAdsFrame=0;
+    handleStickyAds();
+  });
+}
+
+window.addEventListener("scroll",scheduleStickyAds,{passive:true});
+window.addEventListener("resize",scheduleStickyAds);
+window.addEventListener("load",scheduleStickyAds);
+document.addEventListener("DOMContentLoaded",scheduleStickyAds);
 
 /*EPAPER - DAILY EDITION*/
 
@@ -3290,12 +3370,35 @@ function initEPaper() {
         }, timeUntilMidnight);
     }
 
+    /* No edition for yesterday: go back day by day (max 60 days) */
+
+    let daysBack = 1;
+
     epaperImage.addEventListener("error", () => {
-        const previousDate = getPreviousDate();
 
-        console.warn(`No ePaper found for ${previousDate}`);
+        daysBack += 1;
 
-        epaperImage.alt = "Today's ePaper is currently unavailable.";
+        if (daysBack > 60) {
+
+            epaperImage.removeAttribute("src");
+
+            epaperImage.alt = "";
+
+            document.getElementById("ePaper")?.classList.add("epaper-missing");
+
+            return;
+        }
+
+        const date = new Date();
+
+        date.setDate(date.getDate() - daysBack);
+
+        const day =
+            `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+        epaperImage.src = getImagePath(`ePaper/${day}.jpg`);
+
+        epaperImage.alt = `Today Newspaper ePaper - ${day}`;
     });
 
     loadEPaper();
@@ -3957,3 +4060,27 @@ window.addEventListener("resize", syncStickyHeaderHeight);
 window.addEventListener("load", syncStickyHeaderHeight);
 
 document.getElementById("logo")?.addEventListener("load", syncStickyHeaderHeight);
+
+
+
+/* Sidebar: "Open Hearts" box, shown on every page */
+
+function renderSidebarCharity() {
+
+  const box = document.getElementById("charityEvent");
+
+  if (!box || box.children.length) return;
+
+  const base =
+    /\/(navpages|charityEvent)\//.test(window.location.pathname) ? "../" : "";
+
+  box.innerHTML = `
+    <a class="side-cares" href="${base}charityEvent/charityEvents.html">
+      <img class="side-cares-logo" src="${encodeURI(`${base}charityEvent/campaign images/logos/open-hearts-text-dark.png`)}" alt="Open Hearts Foundation">
+      <strong>Help children in Africa and around the world</strong>
+      <span class="side-cares-link">See our next campaign →</span>
+    </a>
+  `;
+}
+
+document.addEventListener("DOMContentLoaded", renderSidebarCharity);

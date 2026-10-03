@@ -196,3 +196,1181 @@ ol li{
     color: var(--text-muted);
 
 }
+
+
+/* Top News lead story: readable white text on the photo */
+
+#topNewsGrids .featured .cardContent {
+
+    padding: 60px 22px 20px;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(2, 26, 63, 0.95) 0%,
+            rgba(2, 26, 63, 0.75) 55%,
+            transparent 100%
+        );
+
+}
+
+
+#topNewsGrids .featured .cardContent h3,
+#topNewsGrids .featured:hover .cardContent h3 {
+
+    color: #ffffff !important;
+
+    font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+
+}
+
+
+#topNewsGrids .featured .cardContent p {
+
+    color: rgba(255, 255, 255, 0.85) !important;
+
+}
+
+
+#topNewsGrids .featured .cardContent .date {
+
+    color: rgba(255, 255, 255, 0.75);
+
+}
+
+
+/* =========================================================
+   ABOUT PAGE
+   ========================================================= */
+
+.about-page {
+
+    padding: 40px 28px 60px;
+
+    max-width: 760px;
+
+    color: var(--text);
+
+}
+
+
+.about-kicker {
+
+    color: #b08a4a;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+html.dark-mode .about-kicker {
+
+    color: #d8b56a;
+
+}
+
+
+.about-intro h1 {
+
+    margin: 10px 0 18px;
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: clamp(2rem, 4vw, 3rem);
+
+    line-height: 1.1;
+
+}
+
+
+.about-lead {
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 1.3rem;
+
+    line-height: 1.5;
+
+}
+
+
+.about-page p {
+
+    margin: 0 0 14px;
+
+    color: var(--text-secondary);
+
+    line-height: 1.75;
+
+    text-align: left;
+
+}
+
+
+.about-block {
+
+    margin-top: 40px;
+
+    padding-top: 24px;
+
+    border-top: 1px solid var(--border);
+
+}
+
+
+.about-block h2 {
+
+    position: relative;
+
+    margin: 0 0 16px;
+
+    padding-bottom: 10px;
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 1.6rem;
+
+}
+
+
+.about-block h2::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: 0;
+
+    width: 48px;
+
+    height: 2px;
+
+    background: #b08a4a;
+
+}
+
+
+.about-contact ul {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+
+}
+
+
+.about-contact li {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    min-width: 0;
+
+}
+
+
+.about-icon {
+
+    display: flex;
+
+    flex: 0 0 44px;
+
+    align-items: center;
+
+    justify-content: center;
+
+    height: 44px;
+
+    border: 1px solid var(--border-dark);
+
+    border-radius: 50%;
+
+}
+
+
+.about-icon svg {
+
+    width: 20px;
+
+    height: 20px;
+
+    fill: none;
+
+    stroke: #b08a4a;
+
+    stroke-width: 1.6;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+}
+
+
+.about-contact li > span:last-child {
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+}
+
+
+.about-contact small {
+
+    color: var(--text-muted);
+
+    font-size: 11px;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+.about-contact a {
+
+    color: var(--text);
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+.about-contact a:hover {
+
+    color: #b08a4a;
+
+}
+
+
+/* Privacy notice: bottom banner */
+
+.privacy-banner {
+
+    position: fixed;
+
+    left: 16px;
+
+    right: 16px;
+
+    bottom: 16px;
+
+    z-index: 3000;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    padding: 16px 20px;
+
+    border-top: 2px solid #c9a45c;
+
+    background: #021a3f;
+
+    color: rgba(255, 255, 255, 0.85);
+
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.3);
+
+}
+
+
+.privacy-banner[hidden] {
+
+    display: none;
+
+}
+
+
+.privacy-banner p {
+
+    margin: 0;
+
+    font-size: 0.9rem;
+
+    line-height: 1.5;
+
+}
+
+
+.privacy-banner strong {
+
+    color: #ffffff;
+
+}
+
+
+.privacy-banner button {
+
+    flex: 0 0 auto;
+
+    padding: 10px 22px;
+
+    border: 0;
+
+    background: #c9a45c;
+
+    color: #021a3f;
+
+    font: inherit;
+
+    font-weight: 700;
+
+    letter-spacing: 0.1em;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+}
+
+
+@media (max-width: 746px) {
+
+    .about-page {
+
+        padding: 28px 16px 40px;
+
+    }
+
+
+    .about-contact ul {
+
+        grid-template-columns: minmax(0, 1fr);
+
+    }
+
+
+    .privacy-banner {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+}
+
+
+#pagination.hidden {
+
+    display: none;
+
+}
+
+
+.about-page,
+.about-page h1,
+.about-page h2 {
+
+    text-align: left;
+
+}
+
+
+/* =========================================================
+   ABOUT PAGE — v2 (old structure + new style)
+   ========================================================= */
+
+.about-page {
+
+    max-width: none;
+
+    padding: 0 0 60px;
+
+}
+
+
+.ab-hero {
+
+    position: relative;
+
+    padding: 56px 40px 50px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(circle at 85% 20%, rgba(201, 164, 92, 0.28), transparent 55%),
+        linear-gradient(135deg, #05306b 0%, #021a3f 100%);
+
+    color: #ffffff;
+
+}
+
+
+.ab-kicker {
+
+    color: #c9a45c;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+.ab-hero h1 {
+
+    margin: 12px 0 16px;
+
+    color: #ffffff;
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: clamp(2.2rem, 4.6vw, 3.6rem);
+
+    line-height: 1.05;
+
+}
+
+
+.ab-hero p {
+
+    max-width: 640px;
+
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.85) !important;
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 1.2rem;
+
+    line-height: 1.6;
+
+}
+
+
+.about-page h2 {
+
+    position: relative;
+
+    margin: 0 0 16px;
+
+    padding-bottom: 10px;
+
+    color: var(--text);
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 1.6rem;
+
+    text-align: left;
+
+}
+
+
+.about-page h2::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: 0;
+
+    width: 48px;
+
+    height: 2px;
+
+    background: #b08a4a;
+
+}
+
+
+.ab-story {
+
+    display: grid;
+
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+
+    gap: 40px;
+
+    padding: 44px 40px;
+
+}
+
+
+.ab-values {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 1px;
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+
+    background: var(--border);
+
+    border: 1px solid var(--border);
+
+    align-self: start;
+
+}
+
+
+.ab-values li {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    padding: 20px;
+
+    background: var(--surface);
+
+}
+
+
+.ab-values strong {
+
+    color: #b08a4a;
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 1.15rem;
+
+}
+
+
+html.dark-mode .ab-values strong {
+
+    color: #d8b56a;
+
+}
+
+
+.ab-values span {
+
+    color: var(--text-muted);
+
+    font-size: 0.88rem;
+
+    line-height: 1.5;
+
+}
+
+
+.ab-community {
+
+    margin: 0 40px;
+
+    padding: 36px 0;
+
+    border-top: 1px solid var(--border);
+
+    border-bottom: 1px solid var(--border);
+
+}
+
+
+.ab-thanks {
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-style: italic;
+
+    color: var(--text) !important;
+
+}
+
+
+.ab-bottom {
+
+    display: grid;
+
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+
+    gap: 32px;
+
+    padding: 40px 40px 0;
+
+}
+
+
+.ab-contact ul {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+
+}
+
+
+.ab-contact li {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    min-width: 0;
+
+}
+
+
+.ab-contact li > span:last-child {
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+}
+
+
+.ab-contact small {
+
+    color: var(--text-muted);
+
+    font-size: 11px;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+.ab-contact a {
+
+    color: var(--text);
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+.ab-contact a:hover {
+
+    color: #b08a4a;
+
+}
+
+
+/* The old "Our Policies" card, restyled */
+
+.ab-policy {
+
+    align-self: start;
+
+    padding: 28px 26px;
+
+    border-top: 3px solid #c9a45c;
+
+    background: var(--surface);
+
+    box-shadow: 0 12px 32px rgba(2, 26, 63, 0.10);
+
+    text-align: center;
+
+}
+
+
+.ab-policy h2 {
+
+    text-align: center !important;
+
+}
+
+
+.ab-policy h2::after {
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+}
+
+
+.ab-policy p {
+
+    text-align: center !important;
+
+    font-size: 0.92rem;
+
+}
+
+
+.ab-policy button {
+
+    margin-top: 6px;
+
+    padding: 11px 30px;
+
+    border: 0;
+
+    background: #032456;
+
+    color: #ffffff;
+
+    font: inherit;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    transition: background 0.25s ease, color 0.25s ease;
+
+}
+
+
+.ab-policy button:hover {
+
+    background: #c9a45c;
+
+    color: #021a3f;
+
+}
+
+
+html.dark-mode .ab-policy button {
+
+    background: #d8b56a;
+
+    color: #021a3f;
+
+}
+
+
+.ab-policy-done {
+
+    display: none;
+
+    margin-top: 6px;
+
+    color: #b08a4a;
+
+    font-weight: 700;
+
+    font-size: 0.85rem;
+
+}
+
+
+.ab-policy.is-accepted button {
+
+    display: none;
+
+}
+
+
+.ab-policy.is-accepted .ab-policy-done {
+
+    display: block;
+
+}
+
+
+@media (max-width: 900px) {
+
+    .ab-hero {
+
+        padding: 40px 16px 36px;
+
+    }
+
+
+    .ab-story,
+    .ab-bottom {
+
+        grid-template-columns: minmax(0, 1fr);
+
+        padding-left: 16px;
+
+        padding-right: 16px;
+
+    }
+
+
+    .ab-community {
+
+        margin: 0 16px;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .ab-values,
+    .ab-contact ul {
+
+        grid-template-columns: minmax(0, 1fr);
+
+    }
+
+}
+
+
+.about-page .ab-hero p {
+
+    color: rgba(255, 255, 255, 0.88) !important;
+
+}
+
+
+.about-page p,
+.about-page span,
+.about-page li {
+
+    text-align: left;
+
+}
+
+
+.ab-policy p {
+
+    text-align: center !important;
+
+}
+
+
+.ab-contact a[href^="mailto"] {
+
+    overflow-wrap: normal;
+
+    word-break: keep-all;
+
+    font-size: 0.95rem;
+
+}
+
+
+@media (min-width: 901px) {
+
+    .ab-contact ul {
+
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+
+    }
+
+}
+
+
+#aboutContainer .ab-hero p {
+
+    color: rgba(255, 255, 255, 0.88) !important;
+
+}
+
+
+#aboutContainer.about-page {
+
+    padding: 0 0 60px;
+
+    text-align: left;
+
+}
+
+
+/* =========================================================
+   ABOUT PAGE — original simple layout, light polish only
+   ========================================================= */
+
+#aboutContainer {
+
+    max-width: 860px;
+
+    padding: 28px 28px 50px;
+
+    text-align: left;
+
+}
+
+
+#aboutContainer section + section {
+
+    margin-top: 34px;
+
+}
+
+
+#aboutContainer h3 {
+
+    position: relative;
+
+    margin: 0 0 14px;
+
+    padding-bottom: 8px;
+
+    color: var(--text);
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 1.5rem;
+
+    font-weight: 600;
+
+}
+
+
+#aboutContainer h3::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: 0;
+
+    width: 40px;
+
+    height: 2px;
+
+    background: #b08a4a;
+
+}
+
+
+#aboutContainer p {
+
+    line-height: 1.75;
+
+}
+
+
+#aboutContainer .about-us p {
+
+    margin: 0 0 10px;
+
+}
+
+
+#aboutContainer a {
+
+    color: inherit;
+
+    text-decoration: none;
+
+}
+
+
+#aboutContainer a:hover {
+
+    color: #b08a4a;
+
+}
+
+
+/* "Our Policies" window: same shape, site colours */
+
+.popup {
+
+    border-top: 3px solid #c9a45c !important;
+
+}
+
+
+.popup h2 {
+
+    font-family: "Playfair Display", Georgia, serif;
+
+}
+
+
+.popup button {
+
+    background: #032456 !important;
+
+    color: #ffffff !important;
+
+    letter-spacing: 0.06em;
+
+    transition: background 0.25s ease, color 0.25s ease;
+
+}
+
+
+.popup button:hover {
+
+    background: #c9a45c !important;
+
+    color: #021a3f !important;
+
+}
+
+
+#aboutContainer,
+#aboutContainer p {
+
+    text-align: left !important;
+
+}
+
+
+#aboutContainer p {
+
+    margin: 0 0 14px;
+
+}
+
+
+#aboutContainer section + section {
+
+    margin-top: 40px;
+
+}
+
+
+#aboutContainer .about-thanks {
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-style: italic;
+
+    color: var(--text) !important;
+
+}
+
+
+#aboutContainer .about-us {
+
+    padding: 0;
+
+    margin-left: 0;
+
+}
+
+
+.about-contact-list {
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+
+}
+
+
+.about-contact-list li {
+
+    display: grid;
+
+    grid-template-columns: 28px minmax(0, 1fr) auto;
+
+    align-items: baseline;
+
+    gap: 10px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid var(--border);
+
+}
+
+
+.about-contact-list li:first-child {
+
+    border-top: 1px solid var(--border);
+
+}
+
+
+.about-contact-list a {
+
+    font-weight: 600;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+.about-contact-list small {
+
+    color: var(--text-muted);
+
+    font-size: 11px;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+@media (max-width: 600px) {
+
+    .about-contact-list li {
+
+        grid-template-columns: 28px minmax(0, 1fr);
+
+    }
+
+
+    .about-contact-list small {
+
+        grid-column: 2;
+
+    }
+
+}

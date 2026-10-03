@@ -93,7 +93,7 @@
     "date": "2020-03-21T15:36:59+01:00",
     "author": "",
     "source": "",
-    "view": 17395
+    "view": 17396
   },
   {
     "id": 9,
@@ -117,7 +117,7 @@
     "date": "2020-03-22T17:06:19+01:00",
     "author": "",
     "source": "",
-    "view": 3351
+    "view": 3352
   },
   {
     "id": 11,
@@ -249,7 +249,7 @@
     "date": "2020-03-27T12:07:17+01:00",
     "author": "",
     "source": "",
-    "view": 3423
+    "view": 3424
   },
   {
     "id": 22,
@@ -73528,7 +73528,8 @@
     "img": "University of Benin campus and officials during the launch of its development initiative.",
     "date": "2026-07-05T15:00:00+01:00",
     "author": "",
-    "source": "University of Benin"
+    "source": "University of Benin",
+    "view": 1
   },
   {
     "id": 6139,
@@ -73748,7 +73749,8 @@
     "img": "Students-competing-NEPL/Seplat2026.jpeg",
     "date": "2026-07-06T10:00:00+01:00",
     "author": "",
-    "source": "NEPL/Seplat Energy Joint Venture"
+    "source": "NEPL/Seplat Energy Joint Venture",
+    "view": 1
   },
   {
     "id": 6159,
@@ -74078,7 +74080,8 @@
     "img": "Members of Nigeria's House of Representatives during plenary as lawmakers consider a constitutional proposal for state police.",
     "date": "2026-07-15T12:00:00+01:00",
     "author": "",
-    "source": "House of Representatives"
+    "source": "House of Representatives",
+    "view": 1
   },
   {
     "id": 6189,
@@ -74496,7 +74499,8 @@
     "img": "Nigerian and South African foreign ministers meeting in Abuja for diplomatic talks aimed at easing tensions between the two countries.",
     "date": "2026-07-28T10:36:51+01:00",
     "author": "",
-    "source": "Reuters"
+    "source": "Reuters",
+    "view": 1
   },
   {
     "id": 6227,
@@ -74507,7 +74511,8 @@
     "img": "Nigerian security and arms-control officials overseeing the destruction of seized illicit and obsolete firearms during a national weapons-disposal exercise.",
     "date": "2026-07-30T17:00:00+01:00",
     "author": "",
-    "source": "Reuters"
+    "source": "Reuters",
+    "view": 1
   },
   {
     "id": 6228,
@@ -74518,7 +74523,8 @@
     "img": "Nigeria's Finance Minister speaking during an economic briefing on government revenue, debt servicing and ongoing economic reforms in Abuja.",
     "date": "2026-07-30T16:36:24+01:00",
     "author": "",
-    "source": "Reuters"
+    "source": "Reuters",
+    "view": 1
   },
   {
     "id": 6229,
@@ -74529,7 +74535,8 @@
     "img": "Securities and Exchange Commission officials reviewing Nigeria's digital-asset regulatory framework during a financial-sector briefing in Abuja.",
     "date": "2026-07-31T14:00:00+01:00",
     "author": "",
-    "source": "Securities and Exchange Commission Nigeria"
+    "source": "Securities and Exchange Commission Nigeria",
+    "view": 1
   },
   {
     "id": 6230,
@@ -74878,7 +74885,7 @@
     "date": "2026-10-01T10:00:00+01:00",
     "author": "",
     "source": "",
-    "view": "",
+    "view": 1,
     "breaking": true
   },
   {

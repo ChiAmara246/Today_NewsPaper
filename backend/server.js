@@ -240,6 +240,8 @@ async function createFlutterwaveCheckout(donation) {
                             donation.phone
                     },
 
+                    ...(donation.meta ? { meta: donation.meta } : {}),
+
                     customizations: {
                         title:
                             "Today Newspaper Donation",
@@ -1906,9 +1908,11 @@ app.delete(
 
 /* =====================================================
    PROPOSE AN IDEA — $1, paid with Flutterwave
-   The idea is created as "awaiting_payment", becomes
-   "pending" once paid, and is published only when the
-   newsroom sets it to "approved".
+   Nothing is saved until the payment is confirmed.
+   The proposal waits in memory (and in the payment's
+   metadata) and is dropped if the reader does not pay.
+   Once paid it is written to ideas.json as "pending";
+   the newsroom publishes it by setting "approved".
 ===================================================== */
 
 const IDEA_FEE = { amount: 1, currency: "USD" };
@@ -1917,6 +1921,11 @@ const IDEA_CATEGORIES = [
     "Education", "Water", "Health", "Food",
     "Christmas", "Environment", "Skills", "Other"
 ];
+
+/* reference → proposal, removed after 30 minutes if unpaid */
+const pendingProposals = new Map();
+
+const PROPOSAL_TTL = 30 * 60 * 1000;
 
 
 function cleanText(value, max) {
@@ -1982,34 +1991,39 @@ app.post(
         }
 
 
-        const idea = {
-            id: ideas.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0) + 1,
+        const proposal = {
             title,
             location,
             category,
             why,
             author,
             anonymous,
-            votes: 0,
-            status: "awaiting_payment",
-            reference: `TNP-IDEA-${Date.now()}`,
             email,
-            fee: IDEA_FEE,
-            createdAt: new Date().toISOString()
+            reference: `TNP-IDEA-${Date.now()}`
         };
 
 
+        let checkoutUrl;
+
         try {
 
-            idea.checkoutUrl =
+            checkoutUrl =
                 await createFlutterwaveCheckout({
-                    reference: idea.reference,
+                    reference: proposal.reference,
                     amount: IDEA_FEE.amount,
                     currency: IDEA_FEE.currency,
                     email,
                     donorName: author || "Anonymous reader",
                     phone: "",
-                    activityHeadline: `Idea proposal: ${title}`
+                    activityHeadline: `Idea proposal: ${title}`,
+                    meta: {
+                        ideaTitle: title,
+                        ideaLocation: location,
+                        ideaCategory: category,
+                        ideaWhy: why,
+                        ideaAuthor: author,
+                        ideaAnonymous: anonymous ? "yes" : "no"
+                    }
                 });
 
         } catch (error) {
@@ -2023,58 +2037,115 @@ app.post(
         }
 
 
-        ideas.push(idea);
+        pendingProposals.set(proposal.reference, proposal);
 
-        saveIdeas();
+        setTimeout(
+            () => pendingProposals.delete(proposal.reference),
+            PROPOSAL_TTL
+        ).unref?.();
 
 
         res.status(201).json({
-            reference: idea.reference,
-            checkoutUrl: idea.checkoutUrl
+            reference: proposal.reference,
+            checkoutUrl
         });
 
     }
 );
 
 
-/* Checks the payment with Flutterwave (never trust the browser) */
+/* Rebuilds the proposal from the payment metadata
+   (used if the server restarted while the reader was paying) */
 
-async function verifyIdeaPayment(idea, transactionId) {
+function proposalFromTransaction(transaction) {
 
-    if (idea.status !== "awaiting_payment") {
-        return idea.status;
+    const meta = transaction && transaction.meta;
+
+    if (!meta || !meta.ideaTitle) {
+        return null;
+    }
+
+    const anonymous = meta.ideaAnonymous === "yes";
+
+    return {
+        title: cleanText(meta.ideaTitle, 90),
+        location: cleanText(meta.ideaLocation, 80),
+        category: IDEA_CATEGORIES.includes(meta.ideaCategory) ? meta.ideaCategory : "Other",
+        why: cleanText(meta.ideaWhy, 400),
+        author: anonymous ? "" : cleanText(meta.ideaAuthor, 60),
+        anonymous,
+        email: cleanText(transaction.customer && transaction.customer.email, 120),
+        reference: transaction.tx_ref
+    };
+
+}
+
+
+/* Checks the payment with Flutterwave (never trust the browser).
+   Paid → saved as "pending". Not paid → dropped. */
+
+async function verifyIdeaPayment(reference, transactionId) {
+
+    const saved =
+        ideas.find(item => item.reference === reference);
+
+    if (saved) {
+        return { status: saved.status, title: saved.title };
     }
 
 
     const transaction =
-        await fetchFlutterwaveTransaction(idea.reference, transactionId);
+        await fetchFlutterwaveTransaction(reference, transactionId);
 
 
-    const matches =
+    const paid =
         transaction &&
-        transaction.tx_ref === idea.reference &&
+        transaction.tx_ref === reference &&
         transaction.currency === IDEA_FEE.currency &&
-        Number(transaction.amount) >= IDEA_FEE.amount;
+        Number(transaction.amount) >= IDEA_FEE.amount &&
+        transaction.status === "successful";
 
 
-    if (matches && transaction.status === "successful") {
+    const proposal =
+        pendingProposals.get(reference) ||
+        proposalFromTransaction(transaction);
 
-        idea.status = "pending";
 
-        idea.paidAt = new Date().toISOString();
+    if (!paid || !proposal) {
 
-        idea.transactionId = transaction.id;
+        pendingProposals.delete(reference);
 
-        saveIdeas();
-
-        return "pending";
+        return { status: "failed", title: proposal ? proposal.title : "" };
 
     }
 
 
-    return transaction && transaction.status === "pending"
-        ? "awaiting_payment"
-        : "failed";
+    const idea = {
+        id: ideas.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0) + 1,
+        title: proposal.title,
+        location: proposal.location,
+        category: proposal.category,
+        why: proposal.why,
+        author: proposal.author,
+        anonymous: proposal.anonymous,
+        votes: 0,
+        status: "pending",
+        reference,
+        email: proposal.email,
+        fee: IDEA_FEE,
+        transactionId: transaction.id,
+        createdAt: new Date().toISOString()
+    };
+
+
+    ideas.push(idea);
+
+    saveIdeas();
+
+    pendingProposals.delete(reference);
+
+
+    return { status: "pending", title: idea.title };
 
 }
 
@@ -2083,11 +2154,11 @@ app.post(
     "/api/ideas/proposals/:reference/verify",
     async (req, res) => {
 
-        const idea =
-            ideas.find(item => item.reference === req.params.reference);
+        const reference =
+            String(req.params.reference || "");
 
 
-        if (!idea) {
+        if (!reference.startsWith("TNP-IDEA-")) {
 
             return res.status(404).json({
                 error: "Proposal not found."
@@ -2098,17 +2169,13 @@ app.post(
 
         try {
 
-            const status =
+            const result =
                 await verifyIdeaPayment(
-                    idea,
+                    reference,
                     req.body && req.body.transactionId
                 );
 
-
-            res.json({
-                status,
-                title: idea.title
-            });
+            res.json(result);
 
         } catch (error) {
 
@@ -3008,18 +3075,14 @@ app.post(
 
             /* Idea proposals use the same webhook */
 
-            const idea =
-                ideas.find(item => item.reference === event.data.tx_ref);
-
-
-            if (idea) {
+            if (String(event.data.tx_ref || "").startsWith("TNP-IDEA-")) {
 
                 try {
 
-                    const status =
-                        await verifyIdeaPayment(idea, event.data.id);
+                    const result =
+                        await verifyIdeaPayment(event.data.tx_ref, event.data.id);
 
-                    console.log(`Webhook: ${idea.reference} → ${status}`);
+                    console.log(`Webhook: ${event.data.tx_ref} → ${result.status}`);
 
                 } catch (error) {
 

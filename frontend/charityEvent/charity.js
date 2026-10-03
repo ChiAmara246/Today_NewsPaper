@@ -3429,6 +3429,21 @@ function renderCharityCards(charities, container, showDonate) {
 
             `;
             
+            /* Missing photo: branded placeholder */
+
+            const cardImage =
+                card.querySelector(".charity-image");
+
+            cardImage?.addEventListener(
+                "error",
+                () => {
+                    cardImage.alt = "";
+                    cardImage.src = getImagePath(IMAGE_PLACEHOLDER);
+                },
+                { once: true }
+            );
+
+
             /* =============================================
             REMINDER
             ============================================= */
@@ -3793,10 +3808,10 @@ function formatCharityMoney(amount, currency) {
     try {
 
         return new Intl.NumberFormat(
-            "en-NG",
+            "en-US",
             {
                 style: "currency",
-                currency: currency || "NGN",
+                currency: currency || "USD",
                 maximumFractionDigits: 0
             }
         ).format(
@@ -4012,7 +4027,7 @@ function getCharityFundraising(charity) {
     return {
         raised,
         goal,
-        currency: fundraising.currency || "NGN",
+        currency: fundraising.currency || "USD",
         updatedAt: fundraising.updatedAt || "",
         percent: Math.round(raised / goal * 100)
     };
@@ -4140,10 +4155,10 @@ function bindCharityActions(container, charity) {
    latestWork.html?id=<charity id>
 ===================================================== */
 
-/* Donor name colours (amounts in the campaign currency) */
+/* Donor name colours (amounts in USD) */
 
-const DONOR_TIER_GOLD = 100000;
-const DONOR_TIER_SILVER = 25000;
+const DONOR_TIER_GOLD = 100;
+const DONOR_TIER_SILVER = 25;
 
 const PILE_PHOTOS = 4;
 
@@ -4229,7 +4244,7 @@ function renderCharityDetail(container, charity) {
 
 
     const currency =
-        fundraising ? fundraising.currency : "NGN";
+        fundraising ? fundraising.currency : "USD";
 
 
     const results =
@@ -4480,46 +4495,6 @@ function renderCharityDetail(container, charity) {
             : "";
 
 
-    /* ---------- Thank you: sponsors (logos) ---------- */
-
-    const sponsors =
-        asCharityArray(charity.partners)
-            .filter(item => item.name || item.logo)
-            .sort((a, b) => Number(Boolean(b.main)) - Number(Boolean(a.main)));
-
-
-    const sponsorsHtml =
-        sponsors.length
-            ? `
-                <div class="lw-ticker-sponsors">
-                    <span class="lw-ticker-label"><i class="fa-solid fa-handshake" aria-hidden="true"></i>Sponsors</span>
-                    <ul class="lw-sponsors">
-                        ${sponsors.map(item => {
-
-                            const inner = `
-                                <span class="lw-sponsor-logo">
-                                    ${item.logo
-                                        ? `<img src="${e(getImagePath(item.logo))}" alt="${e(item.name)}" loading="lazy">`
-                                        : `<span>${e(item.name)}</span>`}
-                                </span>
-                                ${item.contribution ? `<span class="lw-sponsor-note">${e(item.contribution)}</span>` : ""}
-                            `;
-
-                            return `
-                                <li class="${item.main ? "lw-sponsor--main" : ""}" title="${e(item.name)}">
-                                    ${item.url
-                                        ? `<a href="${e(item.url)}" target="_blank" rel="noopener noreferrer">${inner}</a>`
-                                        : inner}
-                                </li>
-                            `;
-
-                        }).join("")}
-                    </ul>
-                </div>
-              `
-            : "";
-
-
     /* ---------- Thank you: donors + volunteers ticker ---------- */
 
     const renderThanks = donorList => {
@@ -4671,8 +4646,13 @@ function renderCharityDetail(container, charity) {
 
     fillCharitySide(
         "thanksTicker",
-        sponsorsHtml + tickerHtml
+        tickerHtml
     );
+
+
+    /* Footer partners: Today Newspaper + this campaign's sponsors */
+
+    renderCharityPartnersRow([charity]);
 
 
     autoScrollCharityTicker(
@@ -4966,6 +4946,7 @@ function autoScrollCharityTicker(windowEl) {
 
 
     const horizontal = () =>
+        Boolean(windowEl.closest("footer")) ||
         window.matchMedia("(max-width: 900px)").matches;
 
 
@@ -5516,10 +5497,10 @@ function formatCharityMoneyShort(amount, currency) {
     try {
 
         return new Intl.NumberFormat(
-            "en-NG",
+            "en-US",
             {
                 style: "currency",
-                currency: currency || "NGN",
+                currency: currency || "USD",
                 notation: "compact",
                 maximumFractionDigits: 2
             }
@@ -6217,6 +6198,10 @@ function initCharityNav() {
 
     nav.classList.add("cw-nav");
 
+    document.querySelector(".subnav")?.classList.add("cw-subnav");
+
+    document.documentElement.classList.add("cw-nav-open");
+
     nav.setAttribute("aria-expanded", "true");
 
 
@@ -6248,6 +6233,8 @@ function initCharityNav() {
         bar.classList.toggle("cw-navbar--open", open);
 
         document.documentElement.classList.toggle("cw-nav-open", open);
+
+        document.querySelector(".subnav")?.classList.toggle("cw-subnav-collapsed", !open);
 
         nav.setAttribute("aria-expanded", String(open));
 
@@ -6733,7 +6720,7 @@ function buildCharityPoster(charity, format = "responsive") {
         <div class="cp-poster-inner">
 
             <div class="cp-poster-top">
-                <span class="cp-poster-brand">Today Cares</span>
+                <img class="cp-poster-brand" src="campaign images/logos/open-hearts-text-dark.png" alt="Open Hearts Foundation">
                 <span>Campaign ${e(year)}</span>
             </div>
 
@@ -6827,7 +6814,7 @@ function renderCharityFrontPage(charity) {
             ${buildCharityPoster(charity, "responsive")}
             <figcaption class="cp-caption">
                 Official campaign poster. Photos of the event will be published after
-                ${e(charityShortDate(charity.date))}. — Today Cares
+                ${e(charityShortDate(charity.date))}. — Open Hearts
             </figcaption>
         </figure>
 
@@ -7428,7 +7415,7 @@ function renderCharityImpact() {
 
     const format = (figure, value) =>
         figure.money
-            ? formatCharityMoneyShort(value, "NGN")
+            ? formatCharityMoneyShort(Math.round(value), "USD")
             : Math.round(value).toLocaleString("en-NG");
 
 
@@ -7863,7 +7850,7 @@ function openCharityProposalForm() {
                 <span class="donation-label">Readers' letters</span>
                 <h2>Propose an idea</h2>
                 <p>
-                    Tell us what Today Cares should do next. Your idea is published after
+                    Tell us what Open Hearts should do next. Your idea is published after
                     review by our newsroom; at 5,000 votes it becomes a campaign.
                 </p>
             </div>
@@ -8098,19 +8085,12 @@ async function showIdeaProposalVerification(reference, transactionId) {
             text.textContent =
                 `“${result.title}” will be published after review by our newsroom.`;
 
-        } else if (result.status === "awaiting_payment") {
-
-            title.textContent = "Payment still processing";
-
-            text.textContent =
-                "Flutterwave has not confirmed your payment yet. We will publish your idea once it is confirmed.";
-
         } else {
 
             title.textContent = "Payment not completed";
 
             text.textContent =
-                "Your idea was not sent because the payment did not go through. You can try again.";
+                "Please complete the payment to publish your proposal.";
 
         }
 
@@ -8306,7 +8286,7 @@ function charityShortName(name) {
 }
 
 
-async function renderCharityThanksBand() {
+async function renderCharityThanksBand(pastCharities = latestCharityData) {
 
     const band =
         document.getElementById("cpThanks");
@@ -8318,7 +8298,7 @@ async function renderCharityThanksBand() {
 
 
     const recent =
-        latestCharityData.slice(0, 6);
+        pastCharities.slice(0, 6);
 
 
     const donorLists =
@@ -8392,6 +8372,19 @@ function renderCharityPartnersRow(charities) {
         new Map();
 
 
+    /* Today Newspaper is always the first partner */
+
+    const darkMode =
+        document.documentElement.classList.contains("dark-mode");
+
+    seen.set("today newspaper", {
+        name: "Today Newspaper",
+        logo: darkMode ? "logoDarkMode.jpg" : "logoDefaultMode.jpg",
+        url: "../index.html",
+        own: true
+    });
+
+
     charities.forEach(charity => {
 
         asCharityArray(charity.partners).forEach(partner => {
@@ -8414,6 +8407,7 @@ function renderCharityPartnersRow(charities) {
     }
 
 
+
     const e =
         escapeCharityHtml;
 
@@ -8428,8 +8422,11 @@ function renderCharityPartnersRow(charities) {
                         ? `<img src="${e(getImagePath(partner.logo))}" alt="${e(partner.name)}" loading="lazy">`
                         : `<span>${e(partner.name)}</span>`;
 
-                return `<li>${partner.url
-                    ? `<a href="${e(partner.url)}" target="_blank" rel="noopener noreferrer">${inner}</a>`
+                const external =
+                    partner.own ? "" : ' target="_blank" rel="noopener noreferrer"';
+
+                return `<li${partner.own ? ' class="cp-partner-own"' : ""}>${partner.url
+                    ? `<a href="${e(partner.url)}"${external}>${inner}</a>`
                     : inner}</li>`;
 
             }).join("")}
@@ -8437,6 +8434,55 @@ function renderCharityPartnersRow(charities) {
     `;
 
     row.hidden = false;
+
+}
+
+
+/* Footer (thank you + partners) on the detail pages */
+
+async function initCharityFooter() {
+
+    if (
+        !document.getElementById("cpThanks") ||
+        document.getElementById("cpImpact")
+    ) {
+
+        /* latestWork: footer filled by the campaign itself */
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(`${API_BASE_URL}/api/charities`);
+
+        const data =
+            await response.json();
+
+        const charities =
+            Array.isArray(data.charities) ? data.charities : [];
+
+        const past =
+            charities
+                .filter(charity =>
+                    !Number.isNaN(new Date(charity.date).getTime()) &&
+                    !isUpcomingCharity(charity)
+                )
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+
+        renderCharityThanksBand(past);
+
+        renderCharityPartnersRow(charities);
+
+    } catch (error) {
+
+        console.error("Failed to load the charity footer:", error);
+
+        renderCharityPartnersRow([]);
+
+    }
 
 }
 
@@ -8535,6 +8581,8 @@ document.addEventListener(
         }
 
         initCharityNav();
+
+        initCharityFooter();
 
         handleFlutterwaveRedirect();
 
