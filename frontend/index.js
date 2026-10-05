@@ -4147,4 +4147,3 @@ function renderSidebarCharity() {
 }
 
 document.addEventListener("DOMContentLoaded", renderSidebarCharity);
-

@@ -5,6 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const cors = require("cors");
 const webpush = require("web-push");
+const store = require("./store");
 
 webpush.setVapidDetails(
     process.env.VAPID_SUBJECT,
@@ -86,17 +87,9 @@ const donationsPath =
         "donations.json"
     );
 
-let donations =
-    JSON.parse(
-        fs.readFileSync(
-            donationsPath,
-            "utf8"
-        )
-    );
+/* Loaded from storage when the server starts (see start()) */
 
-console.log(
-    `Loaded ${donations.length} donations.`
-);
+let donations = [];
 
 
 /* =====================================================
@@ -136,14 +129,11 @@ const FRONTEND_URL =
 
 function saveDonations() {
 
-    fs.writeFileSync(
-        donationsPath,
-        JSON.stringify(
-            donations,
-            null,
-            2
-        ),
-        "utf8"
+    store.saveList(
+        "donations",
+        "donations.json",
+        donations,
+        donation => donation.reference
     );
 
 }
@@ -1441,91 +1431,15 @@ app.get(
 
 /* =====================================================
    ARTICLE VIEWS
-   +1 on "view" in index.json when someone opens
-   an article, only once per device.
-   Each device sends its own visitorId (saved in
-   its browser). Devices already counted are kept
-   in data/views.json.
+   +1 view when someone opens an article, only once
+   per device. Each device sends its own visitorId
+   (saved in its browser). The count is stored by
+   store.js (MongoDB), never in index.json.
 ===================================================== */
-
-const viewsPath =
-    path.join(
-        __dirname,
-        "data",
-        "views.json"
-    );
-
-
-let articleViews =
-    fs.existsSync(viewsPath)
-        ? JSON.parse(
-            fs.readFileSync(
-                viewsPath,
-                "utf8"
-            )
-        )
-        : {};
-
-
-/*
- * index.json is large: save at most every 5 seconds
- * instead of on every single view.
- */
-
-let viewsSaveTimer = null;
-
-function scheduleViewsSave() {
-
-    if (viewsSaveTimer) {
-        return;
-    }
-
-
-    viewsSaveTimer =
-        setTimeout(
-            () => {
-
-                viewsSaveTimer = null;
-
-                try {
-
-                    fs.writeFileSync(
-                        articlesPath,
-                        JSON.stringify(
-                            articles,
-                            null,
-                            2
-                        ),
-                        "utf8"
-                    );
-
-                    fs.writeFileSync(
-                        viewsPath,
-                        JSON.stringify(
-                            articleViews
-                        ),
-                        "utf8"
-                    );
-
-                } catch (error) {
-
-                    console.error(
-                        "Unable to save article views:",
-                        error
-                    );
-
-                }
-
-            },
-            5000
-        );
-
-}
-
 
 app.post(
     "/api/articles/:id/view",
-    (req, res) => {
+    async (req, res) => {
 
         const article =
             articles.find(
@@ -1565,41 +1479,42 @@ app.post(
         }
 
 
-        const key =
-            String(article.id);
+        try {
+
+            const counted =
+                await store.addView(
+                    article.id,
+                    visitorId
+                );
 
 
-        if (!articleViews[key]) {
-            articleViews[key] = [];
-        }
+            if (counted) {
+
+                article.view =
+                    (Number(article.view) || 0) + 1;
+
+            }
 
 
-        const alreadyCounted =
-            articleViews[key].includes(
-                visitorId
+            res.json({
+                views:
+                    Number(article.view) || 0,
+                counted
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Unable to save article view:",
+                error.message
             );
 
-
-        if (!alreadyCounted) {
-
-            articleViews[key].push(
-                visitorId
-            );
-
-            article.view =
-                (Number(article.view) || 0) + 1;
-
-            scheduleViewsSave();
+            res.status(500).json({
+                error:
+                    "Unable to save the view."
+            });
 
         }
-
-
-        res.json({
-            views:
-                Number(article.view) || 0,
-            counted:
-                !alreadyCounted
-        });
 
     }
 );
@@ -1653,11 +1568,9 @@ function readJsonFile(filePath, fallback) {
 }
 
 
-let ideas =
-    readJsonFile(ideasPath, []);
+let ideas = [];
 
-let ideaVotes =
-    readJsonFile(ideaVotesPath, []);
+let ideaVotes = [];
 
 
 const IDEA_GOAL_VOTES = 5000;
@@ -1667,9 +1580,19 @@ const IDEA_VOTES_PER_IP_PER_DAY = 30;
 
 function saveIdeas() {
 
-    fs.writeFileSync(ideasPath, JSON.stringify(ideas, null, 2));
+    store.saveList(
+        "ideas",
+        "ideas.json",
+        ideas,
+        idea => idea.id
+    );
 
-    fs.writeFileSync(ideaVotesPath, JSON.stringify(ideaVotes, null, 2));
+    store.saveList(
+        "ideaVotes",
+        "idea-votes.json",
+        ideaVotes,
+        vote => `${vote.ideaId}|${vote.deviceId}`
+    );
 
 }
 
@@ -2869,15 +2792,7 @@ app.patch(
                SAVE DONATION
             ========================================= */
 
-            fs.writeFileSync(
-                donationsPath,
-                JSON.stringify(
-                    donations,
-                    null,
-                    2
-                ),
-                "utf8"
-            );
+            saveDonations();
 
 
             /* =========================================
@@ -3167,15 +3082,7 @@ app.post("/api/donations/:reference/push-subscription", (req, res) => {
 
     try {
 
-        fs.writeFileSync(
-            donationsPath,
-            JSON.stringify(
-                donations,
-                null,
-                2
-            ),
-            "utf8"
-        );
+        saveDonations();
 
         console.log(
             `Push subscription attached: ${reference}`
@@ -3216,27 +3123,19 @@ const remindersPath =
     );
 
 
-let charityReminders =
-    fs.existsSync(remindersPath)
-        ? JSON.parse(
-            fs.readFileSync(
-                remindersPath,
-                "utf8"
-            )
-        )
-        : [];
+/* Loaded from storage when the server starts (see start()) */
+
+let charityReminders = [];
 
 
 function saveCharityReminders() {
 
-    fs.writeFileSync(
-        remindersPath,
-        JSON.stringify(
-            charityReminders,
-            null,
-            2
-        ),
-        "utf8"
+    store.saveList(
+        "reminders",
+        "reminders.json",
+        charityReminders,
+        reminder =>
+            `${reminder.charityId}|${reminder.subscription.endpoint}`
     );
 
 }
@@ -4052,33 +3951,11 @@ async function processDonations() {
 
     if (changed) {
 
-        fs.writeFileSync(
-            donationsPath,
-            JSON.stringify(
-                donations,
-                null,
-                2
-            ),
-            "utf8"
-        );
+        saveDonations();
 
     }
 
 }
-
-
-/* =====================================================
-   RUN DONATION PROCESS EVERY MINUTE
-===================================================== */
-
-setInterval(
-    () => {
-        processDonations();
-        processCharityReminders();
-    },
-    60 *
-    1000
-);
 
 
 /* =====================================================
@@ -4092,56 +3969,117 @@ require("./ssr").registerSsr(
 
 
 /* =====================================================
-   RUN ON SERVER START
+   START
+   Load the saved data first, then start the
+   background tasks and accept visitors.
+   (Starting earlier could save empty lists over
+   the real data.)
 ===================================================== */
 
-processDonations();
+async function start() {
 
-processCharityReminders();
+    await store.init();
 
 
-/* =====================================================
-   SERVER
-===================================================== */
+    donations =
+        await store.loadList(
+            "donations",
+            "donations.json"
+        );
 
-const server =
-    app.listen(
-        PORT,
+    charityReminders =
+        await store.loadList(
+            "reminders",
+            "reminders.json"
+        );
+
+    ideas =
+        await store.loadList(
+            "ideas",
+            "ideas.json"
+        );
+
+    ideaVotes =
+        await store.loadList(
+            "ideaVotes",
+            "idea-votes.json"
+        );
+
+
+    /* Views counted on the site, added to index.json values */
+
+    const viewCounts =
+        await store.loadViewCounts();
+
+    for (const article of articles) {
+
+        const extra =
+            viewCounts[String(article.id)];
+
+        if (extra) {
+            article.view =
+                (Number(article.view) || 0) + extra;
+        }
+
+    }
+
+
+    console.log(
+        `Loaded ${donations.length} donations, ${charityReminders.length} reminders, ${ideas.length} ideas, ${ideaVotes.length} idea votes.`
+    );
+
+
+    /* Background tasks: now, then every minute */
+
+    processDonations();
+
+    processCharityReminders();
+
+    setInterval(
         () => {
+            processDonations();
+            processCharityReminders();
+        },
+        60 *
+        1000
+    );
 
-            console.log(
-                `Backend running on port ${PORT}`
-            );
 
-            console.log(
-                "Server address:",
-                server.address()
+    const server =
+        app.listen(
+            PORT,
+            () => {
+
+                console.log(
+                    `Backend running on port ${PORT}`
+                );
+
+            }
+        );
+
+
+    server.on(
+        "error",
+        err => {
+
+            console.error(
+                "SERVER ERROR:",
+                err
             );
 
         }
     );
 
-
-server.on(
-    "close",
-    () => {
-
-        console.log(
-            "SERVER CLOSED"
-        );
-
-    }
-);
+}
 
 
-server.on(
-    "error",
-    err => {
+start().catch(error => {
 
-        console.error(
-            "SERVER ERROR:",
-            err
-        );
+    console.error(
+        "Unable to start the server:",
+        error
+    );
 
-    }
-);
+    process.exit(1);
+
+});
