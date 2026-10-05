@@ -442,3 +442,404 @@
 .share-article-btn:active {
     transform: scale(0.96);
 }
+
+/* =========================================================
+   BREADCRUMB · AUTHOR LINK · AUTHOR PAGE · JOB BOX
+   ========================================================= */
+
+.breadcrumb ol {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 4px 0;
+
+  margin: 0 0 14px;
+
+  padding: 0;
+
+  list-style: none;
+
+  color: var(--text-muted);
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+
+}
+
+
+.breadcrumb li {
+
+  display: flex;
+
+  align-items: center;
+
+  min-width: 0;
+
+}
+
+
+.breadcrumb li + li::before {
+
+  content: "›";
+
+  margin: 0 8px;
+
+  color: #b08a4a;
+
+}
+
+
+.breadcrumb a {
+
+  color: var(--text-muted);
+
+  text-decoration: none;
+
+}
+
+
+.breadcrumb a:hover {
+
+  color: #b08a4a;
+
+}
+
+
+.breadcrumb [aria-current] span {
+
+  overflow: hidden;
+
+  max-width: 320px;
+
+  color: var(--text-secondary);
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+}
+
+
+.article-author-link {
+
+  color: inherit;
+
+  text-decoration: none;
+
+  border-bottom: 1px solid transparent;
+
+  transition: border-color 0.2s ease, color 0.2s ease;
+
+}
+
+
+.article-author-link:hover {
+
+  color: #b08a4a;
+
+  border-bottom-color: #b08a4a;
+
+}
+
+
+/* Author page */
+
+.author-head {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 20px;
+
+  margin: 6px 0 28px;
+
+  padding-bottom: 24px;
+
+  border-bottom: 2px solid var(--text);
+
+  position: static;
+
+  background: none;
+
+}
+
+
+.author-avatar {
+
+  display: flex;
+
+  flex: 0 0 72px;
+
+  align-items: center;
+
+  justify-content: center;
+
+  height: 72px;
+
+  border: 2px solid #c9a45c;
+
+  border-radius: 50%;
+
+  background: #032456;
+
+  color: #ffffff;
+
+  font-family: "Playfair Display", Georgia, serif;
+
+  font-size: 1.6rem;
+
+  font-weight: 700;
+
+}
+
+
+.author-kicker {
+
+  color: #b08a4a;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 2.5px;
+
+  text-transform: uppercase;
+
+}
+
+
+.author-head h1 {
+
+  margin: 4px 0 6px;
+
+  font-family: "Playfair Display", Georgia, serif;
+
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+
+}
+
+
+.author-head p {
+
+  margin: 0;
+
+  color: var(--text-muted);
+
+}
+
+
+.author-list {
+
+  margin: 0;
+
+  padding: 0;
+
+  list-style: none;
+
+}
+
+
+.author-item a {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+
+  padding: 18px 0;
+
+  border-bottom: 1px solid var(--border);
+
+  color: inherit;
+
+  text-decoration: none;
+
+}
+
+
+.author-item-meta {
+
+  color: #b08a4a;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+
+}
+
+
+.author-item-title {
+
+  color: var(--text);
+
+  font-family: "Playfair Display", Georgia, serif;
+
+  font-size: 1.25rem;
+
+  font-weight: 600;
+
+  line-height: 1.3;
+
+  transition: color 0.2s ease;
+
+}
+
+
+.author-item a:hover .author-item-title {
+
+  color: #b08a4a;
+
+}
+
+
+.author-item-summary {
+
+  color: var(--text-muted);
+
+  line-height: 1.6;
+
+}
+
+
+.author-pager {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-top: 26px;
+
+  color: var(--text-muted);
+
+  font-size: 13px;
+
+}
+
+
+.author-pager a {
+
+  color: #b08a4a;
+
+  font-weight: 700;
+
+  text-decoration: none;
+
+}
+
+
+/* Job offer box */
+
+.job-box {
+
+  margin: 0 0 30px;
+
+  padding: 20px 22px;
+
+  border-left: 3px solid #c9a45c;
+
+  background: var(--surface);
+
+  font-size: 0.95rem;
+
+  line-height: 1.5;
+
+}
+
+
+.job-box dl {
+
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+
+  gap: 12px 20px;
+
+  margin: 0 0 14px;
+
+}
+
+
+.job-box dt {
+
+  color: var(--text-muted);
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+
+}
+
+
+.job-box dd {
+
+  margin: 2px 0 0;
+
+  color: var(--text);
+
+  font-weight: 600;
+
+}
+
+
+.job-apply {
+
+  display: inline-block;
+
+  padding: 10px 20px;
+
+  background: #032456;
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+
+  text-decoration: none;
+
+}
+
+
+.job-apply:hover {
+
+  background: #c9a45c;
+
+  color: #021a3f;
+
+}
+
+
+@media (max-width: 600px) {
+
+  .author-head {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+  }
+
+}

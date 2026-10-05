@@ -1,5 +1,12 @@
 const params = new URLSearchParams(window.location.search);
-const articleId = Number(params.get("id"));
+
+/* Server-rendered pages (/article/12-headline) give the id directly */
+const articleId =
+    Number(window.__ARTICLE_ID__ || params.get("id"));
+
+/* True when the server already filled the page */
+const serverRendered =
+    Boolean(window.__ARTICLE_ID__);
 
 async function loadRelatedArticles(articleId) {
 
@@ -62,9 +69,7 @@ async function loadRelatedArticles(articleId) {
                 card.addEventListener(
                     "click",
                     () => {
-                        openArticle(
-                            article.id
-                        );
+                        openArticle(article.id, article.headline);
                     }
                 );
 
@@ -261,6 +266,21 @@ async function registerArticleView(articleId, viewsElement) {
 
 
 async function loadArticle() {
+
+    /* Server-rendered: content is already there, only add the live parts */
+    if (serverRendered) {
+
+        const viewsElement =
+            document.getElementById("articleViews");
+
+        registerArticleView(articleId, viewsElement);
+
+        positionRelatedStories();
+
+        loadRelatedArticles(articleId);
+
+        return;
+    }
 
     showArticleSkeleton();
 

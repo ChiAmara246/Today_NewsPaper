@@ -6212,3 +6212,68 @@ nav .nav-emblem .emblem-dark {
   margin-bottom: 4px;
 
 }
+
+
+/* Phones: keep the Open Hearts emblem visible in the nav bar */
+
+@media (max-width: 746px) {
+
+  nav .navlist {
+
+    display: flex !important;
+
+    order: 4;
+
+    flex: 0 0 auto;
+
+    margin: 0;
+
+  }
+
+
+  nav .navlist > li:not(.nav-emblem) {
+
+    display: none;
+
+  }
+
+
+  nav .nav-emblem a {
+
+    padding: 0 0 0 4px;
+
+  }
+
+
+  nav .nav-emblem img {
+
+    height: 34px;
+
+  }
+
+}
+
+
+/* Card headlines are links (for search engines): keep the card look */
+
+.card h3 a,
+.cardContent h3 a {
+
+  color: inherit;
+
+  text-decoration: none;
+
+}
+
+
+.seo-pager {
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 20px;
+
+  margin: 20px 0;
+
+}

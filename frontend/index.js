@@ -2,11 +2,21 @@
    GLOBAL DATA
 ========================= */
 
+/* Pages served by the Express server (todaynewspaperng.com, or
+   localhost:3000 in development) call the API on the same domain. */
+
+const SERVED_BY_EXPRESS =
+    /(^|\.)todaynewspaperng\.com$/.test(window.location.hostname) ||
+    window.location.port === "3000" ||
+    window.location.hostname.endsWith(".onrender.com");
+
 const API_BASE_URL =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1"
-        ? "http://localhost:3000"
-        : "https://today-newspaper-api.onrender.com";
+    SERVED_BY_EXPRESS
+        ? ""
+        : window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1"
+            ? "http://localhost:3000"
+            : "https://today-newspaper-api.onrender.com";
 
 document.querySelectorAll("nav a").forEach(link => {
 
@@ -21,7 +31,7 @@ document.querySelectorAll("nav a").forEach(link => {
 const IMAGE_PLACEHOLDER = "placeholder.svg";
 
 
-function getImagePath(img) {
+function getImagePath(img, width) {
 
     // External URL
     if (/^(https?:)?\/\//.test(img)) {
@@ -31,6 +41,16 @@ function getImagePath(img) {
     // Empty value or a description instead of a file name
     if (!img || !/\.(jpe?g|png|gif|webp|avif|svg)$/i.test(String(img).trim())) {
         img = IMAGE_PLACEHOLDER;
+    }
+
+    // Served by Express: compressed, resized copy (/img/640/photo.jpg)
+    if (
+        width &&
+        typeof SERVED_BY_EXPRESS !== "undefined" &&
+        SERVED_BY_EXPRESS &&
+        /\.(jpe?g|png|webp|avif)$/i.test(img)
+    ) {
+        return `/img/${width}/${encodeURI(String(img).trim())}`;
     }
 
     // Pages inside folders that sit directly under /frontend/
@@ -171,12 +191,33 @@ async function fetchEditorsPicksFromAPI() {
     return await response.json();
 }
 
-function openArticle(id) {
+function articleSlug(text) {
+  return String(text || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+}
+
+function articleUrl(id, headline) {
+
+  /* Clean, server-rendered address: /article/12-the-headline */
+  if (SERVED_BY_EXPRESS) {
+    const slug = articleSlug(headline);
+    return `/article/${encodeURIComponent(id)}${slug ? `-${slug}` : ""}`;
+  }
+
   const articlePath = window.location.pathname.includes("/navpages/")
     ? "../article.html"
     : "article.html";
 
-  window.location.href = `${articlePath}?id=${id}`;
+  return `${articlePath}?id=${id}`;
+}
+
+function openArticle(id, headline) {
+  window.location.href = articleUrl(id, headline);
 }
 
 function formatPublicationDate(dateString) {
@@ -235,6 +276,7 @@ function createNewsCard(article, type = "standard", showCategory = false) {
 const card = document.createElement("article");
 card.classList.add("card");
 card.dataset.id = article.id;
+card.dataset.headline = article.headline || "";
 
 if (type === "featured") {
 card.classList.add("featured");
@@ -247,7 +289,10 @@ card.classList.add("side-card");
 const image = document.createElement("img");
 image.loading = "lazy";
 image.decoding = "async";
-image.src = getImagePath(article.img);
+image.src = getImagePath(
+  article.img,
+  type === "featured" ? 960 : 640
+);
 image.alt = article.headline;
 
 const cardContent = document.createElement("div");
@@ -261,7 +306,13 @@ cardContent.appendChild(categoryTag);
 }
 
 const headline = document.createElement("h3");
-headline.textContent = article.headline;
+
+/* A real link, so search engines can follow it */
+const headlineLink = document.createElement("a");
+headlineLink.href = articleUrl(article.id, article.headline);
+headlineLink.textContent = article.headline;
+headline.appendChild(headlineLink);
+
 cardContent.appendChild(headline);
 
 let summary = null;
@@ -291,7 +342,7 @@ card.appendChild(image);
 card.appendChild(cardContent);
 
 card.addEventListener("click", () => {
-openArticle(article.id);
+openArticle(article.id, article.headline);
 });
 
 return card;
@@ -380,6 +431,9 @@ function renderTopNews(articles) {
     heroCard.dataset.id =
         hero.id;
 
+    heroCard.dataset.headline =
+        hero.headline || "";
+
 
     // HERO IMAGE
 
@@ -387,7 +441,7 @@ function renderTopNews(articles) {
         document.createElement("img");
 
     heroImage.src =
-        getImagePath(hero.img);
+        getImagePath(hero.img, 960);
 
     heroImage.alt =
         hero.headline;
@@ -550,9 +604,7 @@ function renderTopNews(articles) {
 
         if (!card) return;
 
-        openArticle(
-            card.dataset.id
-        );
+        openArticle(card.dataset.id, card.dataset.headline);
 
     };
 
@@ -1619,7 +1671,7 @@ if (slider) {
                 return;
             }
 
-            openArticle(news[shownIndex].id);
+            openArticle(news[shownIndex].id, news[shownIndex].headline || news[shownIndex].title);
 
         }
     );
@@ -1695,6 +1747,10 @@ dots.forEach(dot => {
 });
 
 function showLoadingCards(container, count = 4) {
+
+  /* Server-rendered cards stay visible until the fresh ones arrive */
+  if (container.querySelector("[data-ssr]")) return;
+
   container.innerHTML = "";
 
   for (let i = 0; i < count; i++) {
@@ -1962,7 +2018,7 @@ function renderMostRead(articles) {
     `;
 
     item.addEventListener("click", () => {
-      openArticle(article.id);
+      openArticle(article.id, article.headline);
     });
 
     container.appendChild(item);
@@ -2214,9 +2270,7 @@ async function loadArticles(containerId, category, limit = 6, page = 1) {
                             "click",
                             () => {
 
-                                openArticle(
-                                    card.dataset.id
-                                );
+                                openArticle(card.dataset.id, card.dataset.headline);
 
                             }
                         );
@@ -2234,9 +2288,7 @@ async function loadArticles(containerId, category, limit = 6, page = 1) {
                                 "click",
                                 () => {
 
-                                    openArticle(
-                                        card.dataset.id
-                                    );
+                                    openArticle(card.dataset.id, card.dataset.headline);
 
                                 }
                             );
@@ -2892,7 +2944,9 @@ function setArticleGridLayout(container) {
 
     }
 }
-let currentPage = 1;
+/* Start on the page given in the address (?page=3) */
+let currentPage =
+  Math.max(1, Number(new URLSearchParams(window.location.search).get("page")) || 1);
 let totalPages = 1;
 const limit = 4;
 
@@ -2915,6 +2969,15 @@ if (pagination) {
   }
 
   async function renderPage(page) {
+
+    /* Keep the page number in the address (shareable, crawlable) */
+    const pageUrl = new URL(window.location.href);
+    if (page > 1) {
+      pageUrl.searchParams.set("page", page);
+    } else {
+      pageUrl.searchParams.delete("page");
+    }
+    window.history.replaceState({}, "", pageUrl);
 
     totalPages = await loadArticles(
       "articlesGrid",
@@ -3175,7 +3238,7 @@ if (
 
 }
 
-const pageCategories = {"education.html": "Education", "politics.html": "Politics", "entertainment.html": "Entertainment", "announces.html": "Announces", "economy.html": "Economy", "laugh.html": "Laugh", "pressEvent.html": "Press & Events", "today.html": "Trending"};
+const pageCategories = {"education.html": "Education", "politics.html": "Politics", "entertainment.html": "Entertainment", "announces.html": "Announces", "economy.html": "Economy", "offTheRecord.html": "Off the Record", "pressEvent.html": "Press & Events", "today.html": "Trending"};
 const currentPageName = window.location.pathname.split("/").pop();
 
 function sidebarCarousel() {
