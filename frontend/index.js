@@ -129,6 +129,28 @@ async function fetchArticlesFromAPI(
     return await response.json();
 }
 
+/* Last good homepage data, shown if the server is unreachable */
+
+function saveHomeBackup(name, data) {
+
+    try {
+        localStorage.setItem(`tnpHomeBackup_${name}`, JSON.stringify(data));
+    } catch (error) {
+        /* storage full or blocked: nothing to do */
+    }
+
+}
+
+function readHomeBackup(name) {
+
+    try {
+        return JSON.parse(localStorage.getItem(`tnpHomeBackup_${name}`) || "null");
+    } catch (error) {
+        return null;
+    }
+
+}
+
 async function fetchTopNewsFromAPI() {
 
     const response =
@@ -2025,10 +2047,20 @@ let categoryPageWidth = null;
 
 async function loadMostRead() {
 
+    /* Last copy right away, then the fresh list (kept if the server is down) */
+
+    const backup = readHomeBackup("mostRead");
+
+    if (backup && Array.isArray(backup.articles) && backup.articles.length) {
+        renderMostRead(backup.articles);
+    }
+
     try {
 
         const result =
             await fetchMostReadFromAPI();
+
+        saveHomeBackup("mostRead", result);
 
         renderMostRead(
             result.articles
@@ -2120,11 +2152,15 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
     const cacheKey =
         `pageCache_${containerId}_${category || "all"}_${page}`;
 
+    let shownFromCache = false;
+
+    let cachedTotalPages = 1;
+
 
     if (!isCategoryPage) {
 
         const cachedPage =
-            sessionStorage.getItem(
+            localStorage.getItem(
                 cacheKey
             );
 
@@ -2291,7 +2327,10 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
                 }
 
 
-                return saved.totalPages;
+                /* Shown right away; the fresh list replaces it below */
+                shownFromCache = true;
+
+                cachedTotalPages = saved.totalPages;
 
             } catch (error) {
 
@@ -2301,7 +2340,7 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
                 );
 
 
-                sessionStorage.removeItem(
+                localStorage.removeItem(
                     cacheKey
                 );
             }
@@ -2377,10 +2416,12 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
        LOADING
     ===================================================== */
 
-    showLoadingCards(
-        container,
-        pageLimit
-    );
+    if (!shownFromCache) {
+        showLoadingCards(
+            container,
+            pageLimit
+        );
+    }
 
 
     /* =====================================================
@@ -2495,10 +2536,12 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
        LOADING LATEST NEWS
     ===================================================== */
 
-    showLoadingCards(
-        container,
-        pageLimit
-    );
+    if (!shownFromCache) {
+        showLoadingCards(
+            container,
+            pageLimit
+        );
+    }
 
 
     /* =====================================================
@@ -2552,6 +2595,12 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
             "Failed to load articles from backend:",
             err
         );
+
+
+        /* Server unreachable: the last copy stays on screen */
+        if (shownFromCache) {
+            return cachedTotalPages;
+        }
 
 
         showFailedCards(
@@ -2648,7 +2697,7 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
 
         try {
 
-            sessionStorage.setItem(
+            localStorage.setItem(
                 cacheKey,
                 JSON.stringify({
 
@@ -3099,7 +3148,7 @@ if (pagination) {
 
 async function loadHomePage() {
 
-    // Skeletons in every section right away
+    // Skeletons only in sections the server did not already fill
     [
         ["topnewsGrid", 3],
         ["newsGridEducation", 3],
@@ -3108,7 +3157,7 @@ async function loadHomePage() {
         ["newsGridEditor", 4]
     ].forEach(([id, count]) => {
         const grid = document.getElementById(id);
-        if (grid) {
+        if (grid && !grid.children.length) {
             showLoadingCards(grid, count);
         }
     });
@@ -3119,6 +3168,20 @@ async function loadHomePage() {
         // =====================================
         // TOP NEWS
         // =====================================
+
+        /* Show the last Top News right away (back/forward, slow server),
+           then refresh it with the server's answer */
+
+        const topBackup = readHomeBackup("topNews");
+
+        const topGrid = document.getElementById("topnewsGrid");
+
+        const topFromServer =
+            topGrid && topGrid.querySelector("article:not(.skeleton)");
+
+        if (!topFromServer && topBackup && topBackup.hero) {
+            renderTopNews([topBackup.hero, ...(topBackup.side || [])]);
+        }
 
         try {
 
@@ -3137,13 +3200,19 @@ async function loadHomePage() {
             const result =
                 await response.json();
 
+            const changed =
+                JSON.stringify(result) !== JSON.stringify(topBackup);
 
-            renderTopNews(
-                [
-                    result.hero,
-                    ...result.side
-                ]
-            );
+            saveHomeBackup("topNews", result);
+
+            if (changed) {
+                renderTopNews(
+                    [
+                        result.hero,
+                        ...result.side
+                    ]
+                );
+            }
 
         } catch (err) {
 
@@ -3152,22 +3221,45 @@ async function loadHomePage() {
                 err
             );
 
+            /* Server unreachable: the last Top News stays on screen */
+
         }
         // =====================================
         // EDITOR'S PICKS
         // =====================================
+
+        const editorsBackup = readHomeBackup("editorsPicks");
+
+        const editorsGrid = document.getElementById("newsGridEditor");
+
+        const editorsFromServer =
+            editorsGrid && editorsGrid.querySelector("article:not(.skeleton)");
+
+        if (!editorsFromServer && editorsBackup && Array.isArray(editorsBackup.articles) && editorsBackup.articles.length) {
+            renderEditorCards(
+                document.getElementById("newsGridEditor"),
+                editorsBackup.articles
+            );
+        }
 
         try {
 
             const result =
                 await fetchEditorsPicksFromAPI();
 
-            renderEditorCards(
-                document.getElementById(
-                    "newsGridEditor"
-                ),
-                result.articles
-            );
+            const changed =
+                JSON.stringify(result) !== JSON.stringify(editorsBackup);
+
+            saveHomeBackup("editorsPicks", result);
+
+            if (changed) {
+                renderEditorCards(
+                    document.getElementById(
+                        "newsGridEditor"
+                    ),
+                    result.articles
+                );
+            }
 
         } catch (err) {
 
@@ -3175,6 +3267,8 @@ async function loadHomePage() {
                 "Failed to load Editor's Picks:",
                 err
             );
+
+            /* Server unreachable: the last Editor's Picks stay on screen */
 
         }
 
