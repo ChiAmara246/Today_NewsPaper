@@ -472,29 +472,6 @@ function sortedArticles(data) {
 
 
 /* =====================================================
-   OPEN HEARTS FOUNDATION: PRIVATE UNTIL LAUNCH
-   Charity and donation data are not served until
-   CHARITY_OPEN=true (the payment webhook stays open).
-===================================================== */
-
-if (process.env.CHARITY_OPEN !== "true") {
-
-    app.use(
-        ["/api/charities", "/api/donations"],
-        (req, res) => {
-
-            res.status(503).json({
-                error:
-                    "The Open Hearts Foundation is not yet open to the public."
-            });
-
-        }
-    );
-
-}
-
-
-/* =====================================================
    BREAKING NEWS EXCLUSIVITY
    Articles shown in the Breaking News slider (the 4 newest
    with "breaking": true) appear nowhere else until the flag
