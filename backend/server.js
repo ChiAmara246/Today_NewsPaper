@@ -503,7 +503,8 @@ function breakingArticles() {
       and real reader views, minus a variety penalty:
       never the same story twice in a row, and less
       chance for the category/subject of recent front pages.
-   Chosen once an hour so the front page stays stable.
+   A front page stays 15 hours, unless a clearly more
+   important story is published meanwhile.
 ===================================================== */
 
 /* Views from real readers only (not the automatic growth) */
@@ -519,8 +520,12 @@ const CATEGORY_WEIGHT = {
     Entertainment: 4
 };
 
+/* How long a front page stays before the next one */
+const FRONT_PAGE_HOURS = 15;
+
 let frontPageCache = {
     id: null,
+    chosenAt: 0,
     expires: 0
 };
 
@@ -609,9 +614,32 @@ function frontPageStory(sorted) {
     const cached = frontPageCache.expires > now &&
         sorted.find(article => String(article.id) === frontPageCache.id);
 
-    if (cached) return cached;
+    const manualNow = manualFeatured(sorted, now);
 
-    let hero = manualFeatured(sorted, now);
+    if (cached && !(manualNow && manualNow !== cached)) {
+
+        /* Exception: a story published since then that is clearly more
+           important takes the front page right away */
+
+        const last14d = sorted.filter(article =>
+            now - Date.parse(article.date) <= 14 * 24 * FRONT_HOUR
+        );
+
+        const cachedScore = scoreStory(cached, last14d, now, 48);
+
+        const breaking = sorted.find(article =>
+            Date.parse(article.date) > frontPageCache.chosenAt &&
+            hasRealPhoto(article) &&
+            scoreStory(article, last14d, now, 48) - varietyPenalty(article) >= cachedScore + 25
+        );
+
+        if (!breaking || cached.featured === true) return cached;
+
+        frontPageCache.expires = 0;
+
+    }
+
+    let hero = manualNow;
 
     if (!hero) {
 
@@ -666,7 +694,8 @@ function frontPageStory(sorted) {
 
     frontPageCache = {
         id: String(hero.id),
-        expires: now + FRONT_HOUR
+        chosenAt: now,
+        expires: now + FRONT_PAGE_HOURS * FRONT_HOUR
     };
 
     return hero;
