@@ -6282,3 +6282,8 @@ nav .nav-emblem .emblem-dark {
 .en-cours{
   display: none !important;
 }
+
+/* Editor's Picks: category tags are placed inside their own card */
+#newsGridEditor .card {
+  position: relative;
+}
