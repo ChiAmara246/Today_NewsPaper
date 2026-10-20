@@ -13,6 +13,9 @@
    - everything else          static frontend files
 ===================================================== */
 
+/* Open Hearts Foundation pages are private until CHARITY_OPEN=true */
+const CHARITY_OPEN = process.env.CHARITY_OPEN === "true";
+
 const path = require("path");
 const fs = require("fs");
 const express = require("express");
@@ -1150,7 +1153,7 @@ const SECTION_PAGES = [
     "navpages/pressEvent.html",
     "navpages/offTheRecord.html",
     "navpages/about.html",
-    "charityEvent/charityEvents.html"
+    ...(CHARITY_OPEN ? ["charityEvent/charityEvents.html"] : [])
 ];
 
 
@@ -1230,7 +1233,67 @@ function newsSitemapXml(articles) {
 
 /* ---------- routes ---------- */
 
+const CHARITY_NOTICE_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Open Hearts Foundation | Today Newspaper</title>
+  <style>
+    :root { --primary: #0a2a5c; --gold: #c9a45c; --text: #1d2733; --muted: #5b6573; --bg: #f5f6f8; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+           padding: 24px; background: var(--bg); color: var(--text);
+           font-family: Georgia, "Times New Roman", serif; }
+    .notice { max-width: 560px; width: 100%; background: #fff; border-top: 4px solid var(--gold);
+              border-radius: 6px; box-shadow: 0 12px 34px rgba(10, 42, 92, .12); padding: 40px 36px; text-align: center; }
+    .badge { display: inline-block; font: 600 .7rem/1 Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase;
+             color: var(--primary); border: 1px solid var(--primary); padding: 7px 12px; margin-bottom: 22px; }
+    h1 { margin: 0 0 14px; font-size: 1.7rem; color: var(--primary); }
+    p { margin: 0 0 14px; line-height: 1.6; color: var(--muted); font-family: Arial, sans-serif; font-size: .98rem; }
+    a.contact { color: var(--primary); }
+    a.back { display: inline-block; margin-top: 14px; padding: 12px 22px; background: var(--primary); color: #fff;
+             text-decoration: none; font: 600 .85rem Arial, sans-serif; letter-spacing: .05em; border-radius: 4px; }
+    a.back:hover { background: #0c3575; }
+  </style>
+</head>
+<body>
+  <main class="notice">
+    <span class="badge">Private &middot; Restricted access</span>
+    <h1>Open Hearts Foundation</h1>
+    <p>This area is not yet open to the public. Our team is finalising the Open Hearts Foundation programme, and access is restricted until its official launch.</p>
+    <p>Thank you for your interest. For partnership or other enquiries, please contact us at
+       <a class="contact" href="mailto:infos@todaynewspaperng.com">infos@todaynewspaperng.com</a>.</p>
+    <a class="back" href="/">Back to Today Newspaper</a>
+  </main>
+</body>
+</html>`;
+
+
 function registerSsr(app, getArticles) {
+
+    /* Open Hearts Foundation is not open yet: its pages show a private
+       notice and their content is not sent (set CHARITY_OPEN=true to open) */
+
+    if (!CHARITY_OPEN) {
+
+        app.use("/charityEvent", (req, res, next) => {
+
+            if (req.method !== "GET" || !/(^\/$|\.html$)/i.test(req.path)) {
+                return next();
+            }
+
+            res.status(503)
+                .set("Retry-After", "86400")
+                .set("X-Robots-Tag", "noindex")
+                .type("html")
+                .send(CHARITY_NOTICE_HTML);
+
+        });
+
+    }
+
 
     const findArticle = id =>
         getArticles().find(item => String(item.id) === String(id));
