@@ -6,6 +6,7 @@ const fs = require("fs");
 const cors = require("cors");
 const webpush = require("web-push");
 const store = require("./store");
+const { applyViewGrowth } = require("./viewGrowth");
 
 webpush.setVapidDetails(
     process.env.VAPID_SUBJECT,
@@ -4015,6 +4016,12 @@ async function start() {
 
         const extra =
             viewCounts[String(article.id)];
+
+        /* Recent articles: views grow from 0 (see viewGrowth.js) */
+
+        if (applyViewGrowth(article, extra)) {
+            continue;
+        }
 
         if (extra) {
             article.view =
