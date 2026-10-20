@@ -4217,8 +4217,8 @@ function showCharityNotice() {
         <img class="charity-notice-emblem" src="${encodeURI(`${base}charityEvent/campaign images/logos/${emblem}`)}" alt="">
         <span class="charity-notice-badge">Back very soon</span>
         <h2 id="charityNoticeTitle">Open Hearts Foundation</h2>
-        <p class="charity-notice-lead">You will be able to donate very soon.</p>
-        <p>Our charity and events space is undergoing maintenance while we get everything ready for you. Soon, you will be able to donate, support our campaigns and lend a helping hand to children and communities in need.</p>
+        <p class="charity-notice-lead">You will be able to continue to donate very soon.</p>
+        <p>Our charity and events space is undergoing maintenance while we get everything ready for you. Soon, you will be able to continue to donate, support our campaigns and lend a helping hand to children and communities in need.</p>
         <p class="charity-notice-thanks">Thank you for your kindness and your patience. Together, we can make a real difference.</p>
         <button type="button" class="charity-notice-close">OK</button>
       </div>
