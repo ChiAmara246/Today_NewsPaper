@@ -493,6 +493,128 @@ function breakingArticles() {
 }
 
 
+/* =====================================================
+   FRONT PAGE STORY (homepage Top News hero)
+   1. A story marked "featured": true, for 24 hours after
+      publication (or until "featuredUntil").
+   2. Otherwise the most important story of the last
+      48 hours with a real photo, scored on freshness,
+      an ongoing subject, category and real reader views.
+   Chosen once an hour so the front page stays stable.
+===================================================== */
+
+/* Views from real readers only (not the automatic growth) */
+const realViews = new Map();
+
+const FRONT_HOUR = 60 * 60 * 1000;
+
+const CATEGORY_WEIGHT = {
+    Politics: 10,
+    Trending: 10,
+    Economy: 10,
+    Education: 8,
+    Entertainment: 4
+};
+
+let frontPageCache = {
+    id: null,
+    expires: 0
+};
+
+
+function hasRealPhoto(article) {
+
+    const img = String(article.img || "").trim();
+
+    return /\.(jpe?g|png|webp|avif)$/i.test(img) && !/placeholder/i.test(img);
+
+}
+
+
+function manualFeatured(list, now) {
+
+    return list.find(article => {
+
+        if (article.featured !== true) return false;
+
+        const until = article.featuredUntil
+            ? Date.parse(`${article.featuredUntil}T23:59:59+01:00`)
+            : Date.parse(article.date) + 24 * FRONT_HOUR;
+
+        return now <= until;
+
+    });
+
+}
+
+
+function scoreStory(article, recent, now) {
+
+    const age = (now - Date.parse(article.date)) / FRONT_HOUR;
+
+    const freshness = Math.max(0, 1 - age / 48) * 50;
+
+    const words = headlineKeywords(article.headline);
+
+    const followUps = recent.filter(other =>
+        other.id !== article.id &&
+        headlineKeywords(other.headline).filter(word => words.includes(word)).length >= 2
+    ).length;
+
+    const subject = Math.min(followUps, 5) * 6;
+
+    const category = CATEGORY_WEIGHT[article.category] || 2;
+
+    const readers = Math.min(Math.log2(1 + (realViews.get(String(article.id)) || 0)) * 4, 20);
+
+    return freshness + subject + category + readers;
+
+}
+
+
+function frontPageStory(sorted) {
+
+    const now = Date.now();
+
+    const cached = frontPageCache.expires > now &&
+        sorted.find(article => String(article.id) === frontPageCache.id);
+
+    if (cached) return cached;
+
+    const manual = manualFeatured(sorted, now);
+
+    let hero = manual;
+
+    if (!hero) {
+
+        const last48 = sorted.filter(article =>
+            now - Date.parse(article.date) <= 48 * FRONT_HOUR &&
+            hasRealPhoto(article)
+        );
+
+        const last14d = sorted.filter(article =>
+            now - Date.parse(article.date) <= 14 * 24 * FRONT_HOUR
+        );
+
+        hero = last48
+            .map(article => ({ article, score: scoreStory(article, last14d, now) }))
+            .sort((a, b) => b.score - a.score)
+            .map(item => item.article)[0];
+
+    }
+
+    hero = hero || sorted.find(hasRealPhoto) || sorted[0];
+
+    frontPageCache = {
+        id: String(hero.id),
+        expires: now + FRONT_HOUR
+    };
+
+    return hero;
+
+}
+
+
 /* Meaningful headline words, for related stories */
 
 const HEADLINE_STOPWORDS = new Set((
@@ -686,8 +808,7 @@ app.get(
             );
 
 
-        /* HERO: the story the newsroom marked "featured": true
-           (newest one), otherwise the newest story */
+        /* HERO: see FRONT PAGE STORY above */
 
         if (!sorted.length) {
 
@@ -699,11 +820,7 @@ app.get(
         }
 
         const hero =
-            sorted.find(
-                article =>
-                    article.featured === true
-            ) ||
-            sorted[0];
+            frontPageStory(sorted);
 
 
         /* SIDE: the two newest stories, each from a different
@@ -1611,6 +1728,11 @@ app.post(
 
                 article.view =
                     (Number(article.view) || 0) + 1;
+
+                realViews.set(
+                    String(article.id),
+                    (realViews.get(String(article.id)) || 0) + 1
+                );
 
             }
 
@@ -4134,6 +4256,10 @@ async function start() {
 
         const extra =
             viewCounts[String(article.id)];
+
+        if (extra) {
+            realViews.set(String(article.id), Number(extra) || 0);
+        }
 
         /* Recent articles: views grow from 0 (see viewGrowth.js) */
 
