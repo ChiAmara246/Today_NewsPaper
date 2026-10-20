@@ -656,7 +656,7 @@ function cardHtml(article, { type = "standard", showCategory = false, width = 64
 <article class="${classes}" data-id="${escapeHtml(article.id)}" data-headline="${escapeHtml(article.headline)}" data-ssr="1">
   <img loading="lazy" decoding="async" src="${cardImageSrc(article.img, width)}" alt="${escapeHtml(article.headline)}">
   <div class="cardContent">
-    ${showCategory ? `<span class="categoryTag">${escapeHtml(article.category)}</span>` : ""}
+    ${showCategory ? `<span class="categoryTag">${escapeHtml(sectionLabel(article.category))}</span>` : ""}
     <h3><a href="${articlePath(article)}">${escapeHtml(article.headline)}</a></h3>
     ${type !== "side" ? `<p>${escapeHtml(shortText(article.summary, 220))}</p>` : ""}
     <span class="date"><time datetime="${escapeHtml(article.date)}">${escapeHtml(displayDate(article.date))}</time></span>

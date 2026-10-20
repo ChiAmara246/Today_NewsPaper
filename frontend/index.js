@@ -65,6 +65,20 @@ function getImagePath(img, width) {
         : `images/${img}`;
 }
 
+/* Reader-facing name of a category (internal names stay in index.json) */
+function categoryLabel(category) {
+
+    const key = String(category || "").trim().toLowerCase();
+
+    if (key === "announces" || key === "jobs") return "Jobs & Opportunities";
+
+    if (key === "trending") return "Trending News";
+
+    return String(category || "News").trim() || "News";
+
+}
+
+
 async function fetchArticlesFromAPI(
     category = "",
     page = 1,
@@ -310,7 +324,7 @@ cardContent.classList.add("cardContent");
 if (showCategory) {
 const categoryTag = document.createElement("span");
 categoryTag.classList.add("categoryTag");
-categoryTag.textContent = article.category;
+categoryTag.textContent = categoryLabel(article.category);
 cardContent.appendChild(categoryTag);
 }
 
