@@ -4182,9 +4182,9 @@ document.addEventListener("DOMContentLoaded", renderSidebarCharity);
 
 
 /* =====================================================
-   OPEN HEARTS FOUNDATION: UNDER CONSTRUCTION
+   OPEN HEARTS FOUNDATION: MAINTENANCE MESSAGE
    Links to the charity section (heart in the menu,
-   sidebar box) show a polite message instead of opening
+   sidebar box) show a maintenance message instead of opening
    it. The section itself is untouched; set to true to
    open it again.
 ===================================================== */
@@ -4215,12 +4215,12 @@ function showCharityNotice() {
     notice.innerHTML = `
       <div class="charity-notice-box">
         <img class="charity-notice-emblem" src="${encodeURI(`${base}charityEvent/campaign images/logos/${emblem}`)}" alt="">
-        <span class="charity-notice-badge">Coming soon</span>
+        <span class="charity-notice-badge">Under maintenance</span>
         <h2 id="charityNoticeTitle">Open Hearts Foundation</h2>
-        <p class="charity-notice-lead">Our charity and events space is almost ready.</p>
-        <p>We are putting together our campaigns and archives so you can follow every initiative from the very beginning.</p>
-        <p class="charity-notice-thanks">Thank you for your patience. We look forward to welcoming you very soon.</p>
-        <button type="button" class="charity-notice-close">Got it</button>
+        <p class="charity-notice-lead">This section is temporarily unavailable.</p>
+        <p>We are currently carrying out maintenance on our charity and events space. Please check back a little later.</p>
+        <p class="charity-notice-thanks">We apologise for the inconvenience and thank you for your understanding.</p>
+        <button type="button" class="charity-notice-close">OK</button>
       </div>
     `;
 
