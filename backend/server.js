@@ -472,6 +472,45 @@ function sortedArticles(data) {
 
 
 /* =====================================================
+   BREAKING NEWS EXCLUSIVITY
+   Articles shown in the Breaking News slider (the 4 newest
+   with "breaking": true) appear nowhere else until the flag
+   is removed. Their own article page still works.
+===================================================== */
+
+function breakingArticles() {
+
+    return sortedArticles(
+        articles.filter(
+            article =>
+                article.breaking === true
+        )
+    ).slice(
+        0,
+        4
+    );
+
+}
+
+
+function listedArticles() {
+
+    const breakingIds =
+        new Set(
+            breakingArticles().map(
+                article => String(article.id)
+            )
+        );
+
+    return articles.filter(
+        article =>
+            !breakingIds.has(String(article.id))
+    );
+
+}
+
+
+/* =====================================================
    GENERAL ARTICLES
 ===================================================== */
 
@@ -496,7 +535,7 @@ app.get(
 
 
         let data =
-            [...articles];
+            listedArticles();
 
 
         /* FILTER CATEGORY */
@@ -593,15 +632,7 @@ app.get(
     (req, res) => {
 
         const breaking =
-            sortedArticles(
-                articles.filter(
-                    article =>
-                        article.breaking === true
-                )
-            ).slice(
-                0,
-                4
-            );
+            breakingArticles();
 
 
         res.json({
@@ -623,7 +654,7 @@ app.get(
 
         const sorted =
             sortedArticles(
-                articles
+                listedArticles()
             );
 
 
@@ -732,7 +763,7 @@ app.get(
         /* CATEGORY ARTICLES */
 
         const candidates =
-            articles
+            listedArticles()
                 .filter(
                     article => {
 
@@ -799,7 +830,7 @@ app.get(
     (req, res) => {
 
         const mostRead =
-            [...articles]
+            listedArticles()
                 .filter(
                     article =>
                         typeof article.fullStory ===
@@ -869,7 +900,7 @@ app.get(
                 editorsPicksCache.ids
                     .map(
                         id =>
-                            articles.find(
+                            listedArticles().find(
                                 article =>
                                     String(
                                         article.id
@@ -917,7 +948,7 @@ app.get(
 
 
         const eligible =
-            articles.filter(
+            listedArticles().filter(
                 article => {
 
                     const time =
@@ -1141,7 +1172,7 @@ app.get(
         ============================================= */
 
         let related =
-            articles.filter(
+            listedArticles().filter(
                 article =>
                     String(article.id) !==
                         String(articleId) &&
@@ -1164,7 +1195,7 @@ app.get(
         ) {
 
             const extra =
-                articles.filter(
+                listedArticles().filter(
                     article =>
                         String(article.id) !==
                             String(articleId) &&
@@ -1268,7 +1299,7 @@ app.get(
         ============================================= */
 
         const results =
-            articles.filter(
+            listedArticles().filter(
                 article => {
 
                     const headline =

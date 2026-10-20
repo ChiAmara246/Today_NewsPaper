@@ -74859,8 +74859,7 @@
     "date": "2026-10-01T08:00:00+01:00",
     "author": "",
     "source": "",
-    "view": 1,
-    "breaking": true
+    "view": 1
   },
   {
     "id": 6257,
@@ -74872,8 +74871,7 @@
     "date": "2026-10-01T09:00:00+01:00",
     "author": "",
     "source": "",
-    "view": "",
-    "breaking": true
+    "view": ""
   },
   {
     "id": 6258,
@@ -74885,8 +74883,7 @@
     "date": "2026-10-01T10:00:00+01:00",
     "author": "",
     "source": "",
-    "view": 1,
-    "breaking": true
+    "view": 1
   },
   {
     "id": 6259,
@@ -74898,8 +74895,7 @@
     "date": "2026-10-01T11:00:00+01:00",
     "author": "",
     "source": "",
-    "view": 1,
-    "breaking": true
+    "view": 1
   },
   {
     "id": 6260,
@@ -77623,7 +77619,8 @@
     "date": "2026-10-17T13:00:00+01:00",
     "author": "",
     "source": "",
-    "view": 14541
+    "view": 14541,
+    "breaking": true
   },
   {
     "id": 6487,
@@ -77899,7 +77896,8 @@
     "date": "2026-10-17T15:00:00+01:00",
     "author": "",
     "source": "",
-    "view": 12325
+    "view": 12325,
+    "breaking": true
   },
   {
     "id": 6510,
@@ -77923,7 +77921,8 @@
     "date": "2026-10-17T16:00:00+01:00",
     "author": "",
     "source": "",
-    "view": 8853
+    "view": 8853,
+    "breaking": true
   },
   {
     "id": 6512,
@@ -78355,7 +78354,8 @@
     "date": "2026-10-15T10:00:00+01:00",
     "author": "",
     "source": "Premium Times",
-    "view": 11097
+    "view": 11097,
+    "breaking": true
   },
   {
     "id": 6548,
