@@ -1,6 +1,6 @@
 /* =====================================================
    VIEW GROWTH
-   Articles published from START_DATE onwards start
+   Articles published from START_DATE (20 Aug 2026) onwards start
    at 0 views and climb, at an irregular pace, to their
    target over GROWTH_DAYS. The target is the "view"
    value in index.json (kept between MIN_VIEWS and
@@ -12,7 +12,7 @@
    so it survives restarts and redeploys.
 ===================================================== */
 
-const START_DATE = Date.parse("2026-10-20T00:00:00+01:00");
+const START_DATE = Date.parse("2026-08-20T00:00:00+01:00");
 
 const GROWTH_DAYS = 90;
 
