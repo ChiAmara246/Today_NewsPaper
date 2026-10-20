@@ -866,9 +866,9 @@ async function renderHomePage() {
 
     const [top, education, politics, trending, editors] = await Promise.all([
         apiGet("/api/top-news"),
-        apiGet("/api/articles?category=Education&page=1&limit=3"),
-        apiGet("/api/articles?category=Politics&page=1&limit=3"),
-        apiGet("/api/articles?category=Trending&page=1&limit=3"),
+        apiGet("/api/articles?category=Education&page=1&limit=6"),
+        apiGet("/api/articles?category=Politics&page=1&limit=6"),
+        apiGet("/api/articles?category=Trending&page=1&limit=6"),
         apiGet("/api/editors-picks")
     ]);
 
@@ -892,7 +892,12 @@ async function renderHomePage() {
         ["newsGridEditor", editors]
     ].forEach(([id, data]) => {
 
-        const list = (data && data.articles) || [];
+        /* Section blocks: skip stories already in Top News, keep 3 */
+        const topIds = new Set(listed.map(article => String(article.id)));
+
+        const list = ((data && data.articles) || [])
+            .filter(article => id === "newsGridEditor" || !topIds.has(String(article.id)))
+            .slice(0, id === "newsGridEditor" ? undefined : 3);
 
         if (list.length) {
 

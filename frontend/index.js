@@ -375,6 +375,9 @@ return card;
 
 
 
+/* Homepage: stories already shown in Top News (not repeated in the section blocks) */
+let homepageShownIds = new Set();
+
 function renderTopNews(articles) {
 
     // =========================================
@@ -425,6 +428,11 @@ function renderTopNews(articles) {
         )
         .filter(Boolean)
         .slice(0, 2);
+
+    homepageShownIds =
+        new Set(
+            [hero, ...others].map(article => String(article.id))
+        );
 
 
     // =========================================
@@ -2540,11 +2548,16 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
 
     try {
 
+        /* Homepage blocks: fetch a few extra, then drop Top News stories */
+        const onHomepage =
+            Boolean(document.getElementById("newsGridEducation")) &&
+            page === 1;
+
         const result =
             await fetchArticlesFromAPI(
                 category,
                 page,
-                pageLimit,
+                onHomepage ? pageLimit + homepageShownIds.size : pageLimit,
                 skip
             );
 
@@ -2555,6 +2568,13 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
             )
                 ? result.articles
                 : [];
+
+        if (onHomepage) {
+            articles =
+                articles
+                    .filter(article => !homepageShownIds.has(String(article.id)))
+                    .slice(0, pageLimit);
+        }
 
 
         totalPages =
@@ -2581,20 +2601,6 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
     }
 
 
-    /* =====================================================
-       GENERAL TOP NEWS
-    ===================================================== */
-
-    if (
-        document.getElementById(
-            "newsGridEducation"
-        )
-    ) {
-
-        renderTopNews(
-            articles
-        );
-    }
 
 
     /* =====================================================
