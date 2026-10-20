@@ -13,7 +13,7 @@
    - everything else          static frontend files
 ===================================================== */
 
-/* Open Hearts Foundation pages are under construction until CHARITY_OPEN=true */
+/* Open Hearts Foundation pages are private until CHARITY_OPEN=true */
 const CHARITY_OPEN = process.env.CHARITY_OPEN === "true";
 
 const path = require("path");
@@ -1260,10 +1260,10 @@ const CHARITY_NOTICE_HTML = `<!DOCTYPE html>
 </head>
 <body>
   <main class="notice">
-    <span class="badge">Coming soon</span>
+    <span class="badge">Private &middot; Restricted access</span>
     <h1>Open Hearts Foundation</h1>
-    <p>This section is currently under construction. We are working on it and it will be available very soon.</p>
-    <p>Thank you for your patience and for your interest. If you have any questions, please contact us at
+    <p>This area is not yet open to the public. Our team is finalising the Open Hearts Foundation programme, and access is restricted until its official launch.</p>
+    <p>Thank you for your interest. For partnership or other enquiries, please contact us at
        <a class="contact" href="mailto:infos@todaynewspaperng.com">infos@todaynewspaperng.com</a>.</p>
     <a class="back" href="/">Back to Today Newspaper</a>
   </main>
@@ -1273,8 +1273,8 @@ const CHARITY_NOTICE_HTML = `<!DOCTYPE html>
 
 function registerSsr(app, getArticles) {
 
-    /* Open Hearts Foundation is under construction: its pages show a
-       "coming soon" notice (set CHARITY_OPEN=true to open them) */
+    /* Open Hearts Foundation is not open yet: its pages show a private
+       notice and their content is not sent (set CHARITY_OPEN=true to open) */
 
     if (!CHARITY_OPEN) {
 
