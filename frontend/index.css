@@ -6335,6 +6335,16 @@ nav .nav-emblem .emblem-dark {
   object-fit: contain;
 }
 
+/* Emblem follows the current theme, even if it changes while open */
+.charity-notice-emblem.is-dark,
+html.dark-mode .charity-notice-emblem.is-light {
+  display: none;
+}
+
+html.dark-mode .charity-notice-emblem.is-dark {
+  display: block;
+}
+
 .charity-notice-badge {
   display: inline-block;
   margin-bottom: 14px;

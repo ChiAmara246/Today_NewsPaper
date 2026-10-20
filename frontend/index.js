@@ -4207,14 +4207,12 @@ function showCharityNotice() {
     const base =
       /\/(navpages|charityEvent)\//.test(window.location.pathname) ? "../" : "";
 
-    const emblem =
-      document.documentElement.classList.contains("dark-mode")
-        ? "open-hearts-emblem-dark.png"
-        : "open-hearts-emblem.png";
+    const logos = `${base}charityEvent/campaign images/logos/`;
 
     notice.innerHTML = `
       <div class="charity-notice-box">
-        <img class="charity-notice-emblem" src="${encodeURI(`${base}charityEvent/campaign images/logos/${emblem}`)}" alt="">
+        <img class="charity-notice-emblem is-light" src="${encodeURI(`${logos}open-hearts-emblem.png`)}" alt="">
+        <img class="charity-notice-emblem is-dark" src="${encodeURI(`${logos}open-hearts-emblem-dark.png`)}" alt="">
         <span class="charity-notice-badge">Back very soon</span>
         <h2 id="charityNoticeTitle">Open Hearts Foundation</h2>
         <p>Our charity and events space is undergoing maintenance while we get everything ready for you. Soon, you will be able to continue to donate, support our campaigns and lend a helping hand to children and communities in need.</p>
