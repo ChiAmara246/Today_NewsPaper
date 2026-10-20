@@ -6291,63 +6291,106 @@ nav .nav-emblem .emblem-dark {
 /* Open Hearts Foundation "coming soon" message */
 .charity-notice {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
   z-index: 20000;
   display: none;
   align-items: center;
   justify-content: center;
   padding: 16px;
-  background: rgba(5, 20, 45, 0.55);
+  background: rgba(5, 20, 45, 0.6);
+  backdrop-filter: blur(3px);
 }
 
 .charity-notice.show {
   display: flex;
+  animation: charityNoticeFade .25s ease;
+}
+
+@keyframes charityNoticeFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .charity-notice-box {
-  width: 100%;
-  max-width: 460px;
-  padding: 32px 28px;
+  box-sizing: border-box;
+  width: min(440px, calc(100vw - 32px));
+  padding: 36px 32px 30px;
   border-top: 4px solid #c9a45c;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #fff;
   color: #1d2733;
   text-align: center;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.charity-notice-emblem {
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 14px;
+  object-fit: contain;
 }
 
 .charity-notice-badge {
   display: inline-block;
-  margin-bottom: 16px;
-  padding: 6px 12px;
-  border: 1px solid var(--primary, #0a2a5c);
-  color: var(--primary, #0a2a5c);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  margin-bottom: 14px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(201, 164, 92, 0.15);
+  color: #8a6a2c;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
 .charity-notice-box h2 {
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   color: var(--primary, #0a2a5c);
+  font-family: var(--serif, Georgia, serif);
+  font-size: 1.6rem;
+  line-height: 1.2;
 }
 
 .charity-notice-box p {
-  margin: 0 0 12px;
-  line-height: 1.6;
+  margin: 0 0 10px;
   color: #5b6573;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.charity-notice-box .charity-notice-lead {
+  color: #1d2733;
+  font-size: 1.02rem;
+  font-weight: 600;
+}
+
+.charity-notice-box .charity-notice-thanks {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #e6e9ee;
+  font-style: italic;
 }
 
 .charity-notice-close {
-  margin-top: 8px;
-  padding: 10px 28px;
+  margin-top: 12px;
+  padding: 11px 34px;
   border: 0;
   border-radius: 4px;
   background: var(--primary, #0a2a5c);
   color: #fff;
   font-weight: 600;
+  letter-spacing: 0.04em;
   cursor: pointer;
+  transition: background .2s ease;
+}
+
+.charity-notice-close:hover {
+  background: #0c3575;
 }
 
 html.dark-mode .charity-notice-box {
@@ -6357,4 +6400,16 @@ html.dark-mode .charity-notice-box {
 
 html.dark-mode .charity-notice-box p {
   color: #b8c2cf;
+}
+
+html.dark-mode .charity-notice-box .charity-notice-lead {
+  color: #e7ecf3;
+}
+
+html.dark-mode .charity-notice-box h2 {
+  color: #f1dca8;
+}
+
+html.dark-mode .charity-notice-box .charity-notice-thanks {
+  border-top-color: rgba(255, 255, 255, 0.1);
 }

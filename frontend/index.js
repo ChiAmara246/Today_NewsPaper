@@ -4204,13 +4204,23 @@ function showCharityNotice() {
     notice.setAttribute("aria-modal", "true");
     notice.setAttribute("aria-labelledby", "charityNoticeTitle");
 
+    const base =
+      /\/(navpages|charityEvent)\//.test(window.location.pathname) ? "../" : "";
+
+    const emblem =
+      document.documentElement.classList.contains("dark-mode")
+        ? "open-hearts-emblem-dark.png"
+        : "open-hearts-emblem.png";
+
     notice.innerHTML = `
       <div class="charity-notice-box">
+        <img class="charity-notice-emblem" src="${encodeURI(`${base}charityEvent/campaign images/logos/${emblem}`)}" alt="">
         <span class="charity-notice-badge">Coming soon</span>
         <h2 id="charityNoticeTitle">Open Hearts Foundation</h2>
-        <p>This section is currently being prepared. We are adding our campaigns and archives, and it will be available very soon.</p>
-        <p>Thank you for your patience and your interest.</p>
-        <button type="button" class="charity-notice-close">OK</button>
+        <p class="charity-notice-lead">Our charity and events space is almost ready.</p>
+        <p>We are putting together our campaigns and archives so you can follow every initiative from the very beginning.</p>
+        <p class="charity-notice-thanks">Thank you for your patience. We look forward to welcoming you very soon.</p>
+        <button type="button" class="charity-notice-close">Got it</button>
       </div>
     `;
 
