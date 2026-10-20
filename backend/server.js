@@ -498,8 +498,11 @@ function breakingArticles() {
    1. A story marked "featured": true, for 24 hours after
       publication (or until "featuredUntil").
    2. Otherwise the most important story of the last
-      48 hours with a real photo, scored on freshness,
-      an ongoing subject, category and real reader views.
+      48 hours (7 days if too few) with a real photo,
+      scored on freshness, an ongoing subject, category
+      and real reader views, minus a variety penalty:
+      never the same story twice in a row, and less
+      chance for the category/subject of recent front pages.
    Chosen once an hour so the front page stays stable.
 ===================================================== */
 
@@ -548,11 +551,11 @@ function manualFeatured(list, now) {
 }
 
 
-function scoreStory(article, recent, now) {
+function scoreStory(article, recent, now, window = 48) {
 
     const age = (now - Date.parse(article.date)) / FRONT_HOUR;
 
-    const freshness = Math.max(0, 1 - age / 48) * 50;
+    const freshness = Math.max(0, 1 - age / window) * 50;
 
     const words = headlineKeywords(article.headline);
 
@@ -572,6 +575,33 @@ function scoreStory(article, recent, now) {
 }
 
 
+/* Recent front pages, newest first (keeps the front page varied) */
+let frontPageHistory = [];
+
+
+function varietyPenalty(article) {
+
+    let penalty = 0;
+
+    const words = headlineKeywords(article.headline);
+
+    frontPageHistory.slice(0, 3).forEach((previous, index) => {
+
+        if (previous.category === article.category) {
+            penalty += [40, 25, 10][index];
+        }
+
+        if (headlineKeywords(previous.headline).filter(word => words.includes(word)).length >= 1) {
+            penalty += [30, 20, 10][index];
+        }
+
+    });
+
+    return penalty;
+
+}
+
+
 function frontPageStory(sorted) {
 
     const now = Date.now();
@@ -581,29 +611,58 @@ function frontPageStory(sorted) {
 
     if (cached) return cached;
 
-    const manual = manualFeatured(sorted, now);
-
-    let hero = manual;
+    let hero = manualFeatured(sorted, now);
 
     if (!hero) {
 
-        const last48 = sorted.filter(article =>
-            now - Date.parse(article.date) <= 48 * FRONT_HOUR &&
-            hasRealPhoto(article)
-        );
+        const shownIds = new Set(frontPageHistory.map(item => String(item.id)));
+
+        const withPhoto = sorted.filter(hasRealPhoto);
+
+        /* Last 48 hours; widened to 7 days when there are too few stories */
+
+        let window = 48;
+
+        let candidates = withPhoto.filter(article => now - Date.parse(article.date) <= window * FRONT_HOUR);
+
+        if (candidates.length < 6) {
+            window = 7 * 24;
+            candidates = withPhoto.filter(article => now - Date.parse(article.date) <= window * FRONT_HOUR);
+        }
+
+        if (!candidates.length) {
+            candidates = withPhoto.slice(0, 30);
+            window = Math.max(48, (now - Date.parse((candidates[candidates.length - 1] || {}).date)) / FRONT_HOUR);
+        }
+
+        /* Never the same story twice in a row (unless nothing else) */
+
+        const fresh = candidates.filter(article => !shownIds.has(String(article.id)));
+
+        if (fresh.length) candidates = fresh;
 
         const last14d = sorted.filter(article =>
             now - Date.parse(article.date) <= 14 * 24 * FRONT_HOUR
         );
 
-        hero = last48
-            .map(article => ({ article, score: scoreStory(article, last14d, now) }))
+        hero = candidates
+            .map(article => ({
+                article,
+                score: scoreStory(article, last14d, now, window) - varietyPenalty(article)
+            }))
             .sort((a, b) => b.score - a.score)
             .map(item => item.article)[0];
 
     }
 
     hero = hero || sorted.find(hasRealPhoto) || sorted[0];
+
+    if (!frontPageHistory.length || String(frontPageHistory[0].id) !== String(hero.id)) {
+        frontPageHistory = [
+            { id: hero.id, category: hero.category, headline: hero.headline },
+            ...frontPageHistory
+        ].slice(0, 6);
+    }
 
     frontPageCache = {
         id: String(hero.id),
