@@ -472,7 +472,7 @@ function sortedArticles(data) {
 
 
 /* =====================================================
-   OPEN HEARTS FOUNDATION: PRIVATE UNTIL LAUNCH
+   OPEN HEARTS FOUNDATION: UNDER CONSTRUCTION
    Charity and donation data are not served until
    CHARITY_OPEN=true (the payment webhook stays open).
 ===================================================== */
@@ -485,7 +485,7 @@ if (process.env.CHARITY_OPEN !== "true") {
 
             res.status(503).json({
                 error:
-                    "The Open Hearts Foundation is not yet open to the public."
+                    "The Open Hearts Foundation section is under construction."
             });
 
         }
