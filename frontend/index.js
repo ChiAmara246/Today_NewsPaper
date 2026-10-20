@@ -68,7 +68,8 @@ function getImagePath(img, width) {
 async function fetchArticlesFromAPI(
     category = "",
     page = 1,
-    limit = 6
+    limit = 6,
+    skip = 0
 ) {
 
     const params =
@@ -90,6 +91,14 @@ async function fetchArticlesFromAPI(
         "limit",
         limit
     );
+
+    /* Section pages: skip the stories already shown in Top News */
+    if (skip) {
+        params.set(
+            "skip",
+            skip
+        );
+    }
 
     const response =
     await fetch(
@@ -2050,7 +2059,7 @@ async function loadMostRead() {
     }
 }
 loadMostRead();
-async function loadArticles(containerId, category, limit = 6, page = 1) {
+async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0) {
 
     const container =
         document.getElementById(containerId);
@@ -2521,7 +2530,8 @@ async function loadArticles(containerId, category, limit = 6, page = 1) {
             await fetchArticlesFromAPI(
                 category,
                 page,
-                pageLimit
+                pageLimit,
+                skip
             );
 
 
@@ -2949,6 +2959,7 @@ let currentPage =
   Math.max(1, Number(new URLSearchParams(window.location.search).get("page")) || 1);
 let totalPages = 1;
 const limit = 4;
+const TOP_NEWS_COUNT = 3;   /* stories shown in Top News, not repeated below */
 
 
 //PAGINATION
@@ -2983,7 +2994,8 @@ if (pagination) {
       "articlesGrid",
       category,
       limit,
-      page
+      page,
+      TOP_NEWS_COUNT
     );
 
     const currentPageEl = document.getElementById("currentPage");

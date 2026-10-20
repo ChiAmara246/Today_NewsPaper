@@ -784,7 +784,7 @@ async function renderSectionPage(file, page) {
 
         const [top, latest] = await Promise.all([
             page === 1 ? apiGet(`/api/top-news/category?category=${encodeURIComponent(category)}`) : null,
-            apiGet(`/api/articles?category=${encodeURIComponent(category)}&page=${page}&limit=${SECTION_PAGE_SIZE}`)
+            apiGet(`/api/articles?category=${encodeURIComponent(category)}&page=${page}&limit=${SECTION_PAGE_SIZE}&skip=3`)
         ]);
 
 

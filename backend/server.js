@@ -519,6 +519,20 @@ app.get(
             sortedArticles(data);
 
 
+        /* SKIP (section pages: stories already in Top News) */
+
+        const skip =
+            Math.max(
+                0,
+                Number(req.query.skip) || 0
+            );
+
+        if (skip && data.length >= skip) {
+            data =
+                data.slice(skip);
+        }
+
+
         /* TOTAL */
 
         const totalArticles =
