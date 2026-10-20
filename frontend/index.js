@@ -3883,7 +3883,7 @@ function initMobileStickyAds(){
         button.id="toggleMobileAds";
         button.className="toggle-mobile-ads";
         button.type="button";
-        button.setAttribute("aria-label","Hide adverts");
+        button.setAttribute("aria-label","Hide Most Read");
 
         const arrow=document.createElement("span");
         arrow.id="toggleArrow";
@@ -3906,7 +3906,7 @@ function initMobileStickyAds(){
     function showAds(){
         ads.classList.remove("hidden");
         arrow.textContent="⌄";
-        button.setAttribute("aria-label","Hide adverts");
+        button.setAttribute("aria-label","Hide Most Read");
 
         localStorage.removeItem("mobileAdsHidden");
 
@@ -3917,7 +3917,7 @@ function initMobileStickyAds(){
     function hideAds(){
         ads.classList.add("hidden");
         arrow.textContent="⌃";
-        button.setAttribute("aria-label","Show adverts");
+        button.setAttribute("aria-label","Show Most Read");
 
         const hiddenTime=Date.now();
 
@@ -3964,7 +3964,7 @@ function initMobileStickyAds(){
                 arrow.textContent="⌃";
                 button.setAttribute(
                     "aria-label",
-                    "Show adverts"
+                    "Show Most Read"
                 );
 
                 clearTimeout(timer);
