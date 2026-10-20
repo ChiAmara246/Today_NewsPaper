@@ -4179,3 +4179,74 @@ function renderSidebarCharity() {
 }
 
 document.addEventListener("DOMContentLoaded", renderSidebarCharity);
+
+
+/* =====================================================
+   OPEN HEARTS FOUNDATION: UNDER CONSTRUCTION
+   Links to the charity section (heart in the menu,
+   sidebar box) show a polite message instead of opening
+   it. The section itself is untouched; set to true to
+   open it again.
+===================================================== */
+
+const CHARITY_SECTION_OPEN = false;
+
+function showCharityNotice() {
+
+  let notice = document.getElementById("charityNotice");
+
+  if (!notice) {
+
+    notice = document.createElement("div");
+    notice.id = "charityNotice";
+    notice.className = "charity-notice";
+    notice.setAttribute("role", "dialog");
+    notice.setAttribute("aria-modal", "true");
+    notice.setAttribute("aria-labelledby", "charityNoticeTitle");
+
+    notice.innerHTML = `
+      <div class="charity-notice-box">
+        <span class="charity-notice-badge">Coming soon</span>
+        <h2 id="charityNoticeTitle">Open Hearts Foundation</h2>
+        <p>This section is currently being prepared. We are adding our campaigns and archives, and it will be available very soon.</p>
+        <p>Thank you for your patience and your interest.</p>
+        <button type="button" class="charity-notice-close">OK</button>
+      </div>
+    `;
+
+    notice.addEventListener("click", event => {
+      if (event.target === notice || event.target.closest(".charity-notice-close")) {
+        notice.classList.remove("show");
+      }
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") notice.classList.remove("show");
+    });
+
+    document.body.appendChild(notice);
+
+  }
+
+  notice.classList.add("show");
+
+  notice.querySelector(".charity-notice-close").focus();
+
+}
+
+document.addEventListener("click", event => {
+
+  if (CHARITY_SECTION_OPEN) return;
+
+  const link = event.target.closest && event.target.closest("a[href]");
+
+  if (!link || !/charityEvent\//.test(link.getAttribute("href"))) return;
+
+  /* Already inside the section (direct link): let it work */
+  if (window.location.pathname.includes("/charityEvent/")) return;
+
+  event.preventDefault();
+
+  showCharityNotice();
+
+});
