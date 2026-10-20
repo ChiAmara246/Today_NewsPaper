@@ -493,6 +493,34 @@ function breakingArticles() {
 }
 
 
+/* Meaningful headline words, for related stories */
+
+const HEADLINE_STOPWORDS = new Set((
+    "after again against amid among also and are around back been before being between both but " +
+    "calls could days does down during each from have into just made make many more most must " +
+    "news over says said should since some still such than that their them then there these " +
+    "they this those through under until upon urges very what when where which while will with " +
+    "without would year years government state states federal nigeria nigerian nigerians " +
+    "first last plans seeks warns tells asks three four five seven eight nine more over million billion"
+).split(" "));
+
+function headlineKeywords(headline) {
+
+    return [...new Set(
+        String(headline || "")
+            .toLowerCase()
+            .replace(/[^a-z0-9\s]/g, " ")
+            .split(/\s+/)
+            .filter(word =>
+                word.length >= 4 &&
+                !/^\d+$/.test(word) &&
+                !HEADLINE_STOPWORDS.has(word)
+            )
+    )];
+
+}
+
+
 function listedArticles() {
 
     const breakingIds =
@@ -829,24 +857,50 @@ app.get(
     "/api/most-read",
     (req, res) => {
 
-        const mostRead =
-            listedArticles()
-                .filter(
-                    article =>
-                        typeof article.fullStory ===
-                            "string" &&
-                        article.fullStory.trim() !==
-                            ""
-                )
-                .sort(
+        /* Most read among recent stories: last 7 days,
+           widened to 30 days, then all time if too few */
+
+        const readable =
+            listedArticles().filter(
+                article =>
+                    typeof article.fullStory ===
+                        "string" &&
+                    article.fullStory.trim() !==
+                        ""
+            );
+
+        const byViews =
+            list =>
+                [...list].sort(
                     (a, b) =>
                         (b.view || 0) -
                         (a.view || 0)
-                )
-                .slice(
-                    0,
-                    4
                 );
+
+        let mostRead = [];
+
+        for (const days of [7, 30]) {
+
+            const since =
+                Date.now() -
+                days * 24 * 60 * 60 * 1000;
+
+            const recent =
+                readable.filter(
+                    article =>
+                        new Date(article.date).getTime() >= since
+                );
+
+            if (recent.length >= 4) {
+                mostRead = byViews(recent).slice(0, 4);
+                break;
+            }
+
+        }
+
+        if (mostRead.length < 4) {
+            mostRead = byViews(readable).slice(0, 4);
+        }
 
 
         res.json({
@@ -1168,69 +1222,92 @@ app.get(
 
 
         /* =============================================
-           SAME CATEGORY
+           RELATED: same subject first, then recent
+           stories of the same category, within
+           3 months of the current story
         ============================================= */
 
-        let related =
+        const WINDOW =
+            90 * 24 * 60 * 60 * 1000;
+
+        const currentTime =
+            new Date(currentArticle.date).getTime() ||
+            Date.now();
+
+        const keywords =
+            headlineKeywords(currentArticle.headline);
+
+        const candidates =
             listedArticles().filter(
                 article =>
                     String(article.id) !==
                         String(articleId) &&
-                    article.category ===
-                        currentArticle.category &&
                     typeof article.fullStory ===
                         "string" &&
                     article.fullStory.trim() !==
-                        ""
+                        "" &&
+                    Math.abs(
+                        new Date(article.date).getTime() -
+                        currentTime
+                    ) <= WINDOW
             );
 
+        const newestFirst =
+            (a, b) =>
+                new Date(b.date) -
+                new Date(a.date);
 
-        /* =============================================
-           FILL REMAINING SLOTS
-        ============================================= */
+        const shared =
+            article =>
+                headlineKeywords(article.headline)
+                    .filter(word => keywords.includes(word))
+                    .length;
 
-        if (
-            related.length <
-            4
-        ) {
+        /* 1. Same subject (shared headline keywords) */
 
-            const extra =
-                listedArticles().filter(
-                    article =>
-                        String(article.id) !==
-                            String(articleId) &&
-                        !related.some(
-                            item =>
-                                String(item.id) ===
-                                String(article.id)
-                        ) &&
-                        typeof article.fullStory ===
-                            "string" &&
-                        article.fullStory.trim() !==
-                            ""
-                );
+        let related =
+            candidates
+                .map(article => ({ article, score: shared(article) }))
+                .filter(item =>
+                    item.score >= (item.article.category === currentArticle.category ? 1 : 2)
+                )
+                .sort(
+                    (a, b) =>
+                        b.score - a.score ||
+                        newestFirst(a.article, b.article)
+                )
+                .map(item => item.article);
 
+        const fill =
+            list => {
+                for (const article of list) {
+                    if (related.length >= 4) break;
+                    if (!related.some(item => String(item.id) === String(article.id))) {
+                        related.push(article);
+                    }
+                }
+            };
 
-            related = [
+        /* 2. Recent stories of the same category */
 
-                ...related,
+        fill(
+            candidates
+                .filter(article => article.category === currentArticle.category)
+                .sort(newestFirst)
+        );
 
-                ...extra
+        /* 3. Any recent story */
 
-            ];
-
-        }
-
-
-        /* =============================================
-           LIMIT
-        ============================================= */
+        fill(
+            [...candidates].sort(newestFirst)
+        );
 
         related =
             related.slice(
                 0,
                 4
             );
+
 
 
         res.json({
