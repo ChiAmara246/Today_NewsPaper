@@ -686,70 +686,66 @@ app.get(
             );
 
 
-        /* NEWEST 8 */
+        /* HERO: the story the newsroom marked "featured": true
+           (newest one), otherwise the newest story */
 
-        const latestEight =
-            sorted.slice(
-                0,
-                8
-            );
-
-
-        if (!latestEight.length) {
+        if (!sorted.length) {
 
             return res.json({
-
                 hero: null,
-
                 side: []
-
             });
 
         }
 
-
-        /* RANDOM HERO */
-
         const hero =
-            latestEight[
-                Math.floor(
-                    Math.random() *
-                    latestEight.length
-                )
-            ];
+            sorted.find(
+                article =>
+                    article.featured === true
+            ) ||
+            sorted[0];
 
 
-        /* SIDE CATEGORIES */
+        /* SIDE: the two newest stories, each from a different
+           category than the hero and than each other */
 
-        const categories = [
+        const usedCategories =
+            new Set([hero.category]);
 
-            "Education",
-            "Politics",
-            "Trending",
-            "Entertainment"
+        const side = [];
 
-        ];
+        for (const article of sorted) {
+
+            if (side.length >= 2) break;
+
+            if (
+                article.id === hero.id ||
+                usedCategories.has(article.category)
+            ) {
+                continue;
+            }
+
+            side.push(article);
+
+            usedCategories.add(article.category);
+
+        }
 
 
-        /* TWO SIDE ARTICLES */
+        /* Fewer than 3 categories available: fill with the newest */
 
-        const side =
-            categories
-                .map(
-                    category =>
-                        sorted.find(
-                            article =>
-                                article.category ===
-                                    category &&
-                                article.id !==
-                                    hero.id
-                        )
-                )
-                .filter(Boolean)
-                .slice(
-                    0,
-                    2
-                );
+        for (const article of sorted) {
+
+            if (side.length >= 2) break;
+
+            if (
+                article.id !== hero.id &&
+                !side.includes(article)
+            ) {
+                side.push(article);
+            }
+
+        }
 
 
         res.json({

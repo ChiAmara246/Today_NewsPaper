@@ -380,54 +380,17 @@ let homepageShownIds = new Set();
 
 function renderTopNews(articles) {
 
-    // =========================================
-    // NEWEST FIRST
-    // =========================================
+    /* The server chooses: first = hero, next two = side stories
+       (no reshuffling here, so the page never changes while loading) */
 
-    const sorted = [...articles].sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-    );
+    const list =
+        (Array.isArray(articles) ? articles : []).filter(Boolean);
 
+    if (!list.length) return;
 
-    // =========================================
-    // HERO
-    // =========================================
+    const hero = list[0];
 
-    const latestEight = sorted.slice(0, 8);
-
-    if (!latestEight.length) return;
-
-    const hero =
-        latestEight[
-            Math.floor(Math.random() * latestEight.length)
-        ];
-
-
-    // =========================================
-    // SIDE CATEGORIES
-    // =========================================
-
-    const categories = [
-        "Education",
-        "Politics",
-        "Trending",
-        "Entertainment"
-    ];
-
-
-    // =========================================
-    // ONLY 2 SIDE ARTICLES
-    // =========================================
-
-    const others = categories
-        .map(category =>
-            sorted.find(article =>
-                article.category === category &&
-                article.id !== hero.id
-            )
-        )
-        .filter(Boolean)
-        .slice(0, 2);
+    const others = list.slice(1, 3);
 
     homepageShownIds =
         new Set(
