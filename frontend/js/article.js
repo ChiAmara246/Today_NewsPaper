@@ -1,3 +1,39 @@
+/* Saved copies (article and related stories), shown if the server is unreachable */
+
+const ARTICLE_COPIES = 30;
+
+function saveArticleCopy(key, data) {
+
+    try {
+
+        const index = JSON.parse(localStorage.getItem("tnpArticleCopies") || "[]")
+            .filter(item => item !== key);
+
+        index.unshift(key);
+
+        index.slice(ARTICLE_COPIES).forEach(old => localStorage.removeItem(old));
+
+        localStorage.setItem(key, JSON.stringify(data));
+
+        localStorage.setItem("tnpArticleCopies", JSON.stringify(index.slice(0, ARTICLE_COPIES)));
+
+    } catch (error) {
+        /* storage full or blocked: nothing to do */
+    }
+
+}
+
+function readArticleCopy(key) {
+
+    try {
+        return JSON.parse(localStorage.getItem(key) || "null");
+    } catch (error) {
+        return null;
+    }
+
+}
+
+
 const params = new URLSearchParams(window.location.search);
 
 /* Server-rendered pages (/article/12-headline) give the id directly */
@@ -9,6 +45,14 @@ const serverRendered =
     Boolean(window.__ARTICLE_ID__);
 
 async function loadRelatedArticles(articleId) {
+
+    const copyKey = `tnpRelated_${articleId}`;
+
+    const saved = readArticleCopy(copyKey);
+
+    if (saved && Array.isArray(saved.articles) && saved.articles.length) {
+        renderRelatedArticles(saved.articles);
+    }
 
     try {
 
@@ -30,9 +74,27 @@ async function loadRelatedArticles(articleId) {
         const data =
             await response.json();
 
+        saveArticleCopy(copyKey, data);
 
-        const related =
-            data.articles || [];
+        renderRelatedArticles(data.articles || []);
+
+    } catch (error) {
+
+        /* Server unreachable: the saved copy stays on screen */
+
+        console.error(
+            "Failed to load related articles:",
+            error
+        );
+
+    }
+
+}
+
+
+function renderRelatedArticles(related) {
+
+    {
 
 
         const container =
@@ -81,13 +143,6 @@ async function loadRelatedArticles(articleId) {
             }
         );
 
-
-    } catch (error) {
-
-        console.error(
-            "Failed to load related articles:",
-            error
-        );
 
     }
 
@@ -284,23 +339,46 @@ async function loadArticle() {
 
     showArticleSkeleton();
 
-    const response =
-    await fetch(
-        `${API_BASE_URL}/api/articles/${articleId}`
-    );
+    let data = null;
 
+    try {
 
-if (!response.ok) {
+        const response =
+        await fetch(
+            `${API_BASE_URL}/api/articles/${articleId}`
+        );
 
-    throw new Error(
-        `HTTP ${response.status}`
-    );
+        if (!response.ok) {
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+        }
 
-}
+        data = await response.json();
 
+        if (data && data.article) {
+            saveArticleCopy(`tnpArticle_${articleId}`, data);
+        }
 
-const data =
-    await response.json();
+    } catch (error) {
+
+        /* Server unreachable: show the saved copy if we have one */
+
+        data = readArticleCopy(`tnpArticle_${articleId}`);
+
+        if (!data) {
+
+            const story = document.getElementById("story");
+
+            if (story) {
+                story.innerHTML = `<p class="article-offline">We can't load this article right now. Please check your connection and try again in a moment.</p>`;
+            }
+
+            return;
+
+        }
+
+    }
 
 
 const article =

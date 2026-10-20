@@ -1605,6 +1605,8 @@ async function loadBreakingNews() {
         const data =
             await response.json();
 
+        saveHomeBackup("breaking", data);
+
         news =
             (data.articles || []).map(article => ({
                 id: article.id,
@@ -1620,6 +1622,21 @@ async function loadBreakingNews() {
             "Failed to load breaking news:",
             error
         );
+
+        /* Server unreachable: use the last slides we had */
+
+        const backup = readHomeBackup("breaking");
+
+        if (backup && Array.isArray(backup.articles)) {
+            news =
+                backup.articles.map(article => ({
+                    id: article.id,
+                    img: getImagePath(article.img),
+                    title: article.headline,
+                    desc: article.summary,
+                    categoryTag: "Breaking News"
+                }));
+        }
 
     }
 
@@ -2157,7 +2174,7 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
     let cachedTotalPages = 1;
 
 
-    if (!isCategoryPage) {
+    {
 
         const cachedPage =
             localStorage.getItem(
@@ -2467,7 +2484,8 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
                 );
 
 
-            if (topNewsGrid) {
+            /* Keep the saved copy if there is one */
+            if (topNewsGrid && !shownFromCache) {
 
                 topNewsGrid.innerHTML = "";
 
@@ -2690,10 +2708,10 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
 
 
     /* =====================================================
-       CACHE NON-CATEGORY PAGES ONLY
+       SAVE A COPY (homepage and section pages)
     ===================================================== */
 
-    if (!isCategoryPage) {
+    {
 
         try {
 
