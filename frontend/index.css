@@ -6451,3 +6451,72 @@ html.dark-mode .load-more {
   border-color: #c9a45c;
   color: #f1dca8;
 }
+
+/* Editor's Picks on phones: one story per row, picture left, headline right */
+@media (max-width: 746px) {
+
+  #newsGridEditor,
+  #newsGridEditor[class*="grid-"] {
+    display: flex !important;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  #newsGridEditor .card {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: auto;
+    padding: 10px;
+    margin: 0 0 10px;
+    box-sizing: border-box;
+  }
+
+  #newsGridEditor .card > img {
+    width: 38%;
+    max-width: 160px;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  #newsGridEditor .cardContent {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  #newsGridEditor .categoryTag {
+    position: static;
+    align-self: flex-start;
+    margin: 0;
+  }
+
+  #newsGridEditor .cardContent h3 {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  #newsGridEditor .cardContent p {
+    display: none;
+  }
+
+  #newsGridEditor .cardContent .date {
+    font-size: 11px;
+    margin: 0;
+    padding-left: 0;
+  }
+}
