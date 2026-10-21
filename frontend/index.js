@@ -1696,8 +1696,20 @@ async function loadMostRead() {
     }
 }
 loadMostRead();
-/* Stories per page in a section's Latest News (same as the server) */
+/* Stories per page in a section's Latest News, by screen:
+   phone 4 (+ "Load more"), tablet 9, desktop 12 (server default) */
 const SECTION_PAGE_SIZE = 12;
+
+function sectionScreen() {
+    const width = window.innerWidth;
+    if (width <= 746) return "phone";
+    if (width < 1000) return "tablet";
+    return "desktop";
+}
+
+function sectionPageSize() {
+    return { phone: 4, tablet: 9, desktop: 12 }[sectionScreen()];
+}
 
 
 /* Draw a list of article cards in a block */
@@ -1764,7 +1776,7 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
     ===================================================== */
 
     const cacheKey =
-        `articles_${containerId}_${category || "all"}_${page}`;
+        `articles_${containerId}_${category || "all"}_${limit}_${page}`;
 
     let shownFromCache = false;
 
@@ -2233,7 +2245,6 @@ function setArticleGridLayout(container) {
 let currentPage =
   Math.max(1, Number(new URLSearchParams(window.location.search).get("page")) || 1);
 let totalPages = 1;
-const limit = SECTION_PAGE_SIZE;
 const TOP_NEWS_COUNT = 3;   /* stories shown in Top News, not repeated below */
 
 
@@ -2268,10 +2279,12 @@ if (pagination) {
     totalPages = await loadArticles(
       "articlesGrid",
       category,
-      limit,
+      sectionPageSize(),
       page,
       TOP_NEWS_COUNT
     );
+
+    loadedPages = page;
 
     const currentPageEl = document.getElementById("currentPage");
     const dots = document.querySelectorAll(".Dots");
@@ -2313,7 +2326,104 @@ if (pagination) {
     nextBtn.disabled = isLast;
 
     showEmptySection();
+
+    updateLoadMore();
   }
+
+
+  /* =====================================================
+     PHONE: "Load more" instead of page numbers
+  ===================================================== */
+
+  let loadedPages = 1;
+
+  let loadingMore = false;
+
+  const loadMoreButton = document.createElement("button");
+  loadMoreButton.type = "button";
+  loadMoreButton.id = "loadMoreStories";
+  loadMoreButton.className = "load-more hidden";
+  loadMoreButton.textContent = "Load more";
+  pagination.insertAdjacentElement("beforebegin", loadMoreButton);
+
+  function updateLoadMore() {
+
+    const onPhone = sectionScreen() === "phone";
+
+    const hasStories =
+      Boolean(document.querySelector("#articlesGrid .card:not(.skeleton):not(.failed-card)"));
+
+    loadMoreButton.classList.toggle("hidden", !onPhone || !hasStories || loadedPages >= totalPages);
+
+    if (onPhone) {
+      pagination.classList.add("hidden");
+    }
+
+  }
+
+  loadMoreButton.addEventListener("click", async () => {
+
+    if (loadingMore || loadedPages >= totalPages) return;
+
+    loadingMore = true;
+    loadMoreButton.disabled = true;
+    loadMoreButton.textContent = "Loading…";
+
+    try {
+
+      const result =
+        await fetchArticlesFromAPI(category, loadedPages + 1, sectionPageSize(), TOP_NEWS_COUNT);
+
+      const grid = document.getElementById("articlesGrid");
+
+      (result.articles || []).forEach(article => {
+        grid.appendChild(createNewsCard(article, "standard"));
+      });
+
+      setArticleGridLayout(grid);
+
+      loadedPages += 1;
+
+      totalPages = Number(result.totalPages) || totalPages;
+
+    } catch (error) {
+
+      console.error("Failed to load more stories:", error);
+
+    }
+
+    loadingMore = false;
+    loadMoreButton.disabled = false;
+    loadMoreButton.textContent = "Load more";
+
+    updateLoadMore();
+
+  });
+
+
+  /* Changing screen type (rotation, resizing): start again at page 1 */
+
+  let lastScreen = sectionScreen();
+
+  let resizeTimer = null;
+
+  window.addEventListener("resize", () => {
+
+    clearTimeout(resizeTimer);
+
+    resizeTimer = setTimeout(() => {
+
+      const screen = sectionScreen();
+
+      if (screen === lastScreen) return;
+
+      lastScreen = screen;
+      currentPage = 1;
+      renderPage(1);
+
+    }, 250);
+
+  });
 
 
   /* No articles yet: friendly message, no pagination */
@@ -2393,7 +2503,11 @@ if (pagination) {
     }
   });
 
-  // Initial render
+  // Initial render (phones use "Load more", so they start at page 1)
+  if (sectionScreen() === "phone") {
+    currentPage = 1;
+  }
+
   renderPage(currentPage);
 }
 

@@ -6423,3 +6423,31 @@ html.dark-mode .charity-notice-box h2 {
 html.dark-mode .charity-notice-box .charity-notice-thanks {
   border-top-color: rgba(255, 255, 255, 0.1);
 }
+
+/* Section pages on phones: "Load more" instead of page numbers */
+.load-more {
+  display: block;
+  margin: 24px auto 8px;
+  padding: 12px 36px;
+  border: 1px solid var(--primary, #0a2a5c);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--primary, #0a2a5c);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.load-more:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.load-more.hidden {
+  display: none;
+}
+
+html.dark-mode .load-more {
+  border-color: #c9a45c;
+  color: #f1dca8;
+}
