@@ -2484,8 +2484,12 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
                 );
 
 
-            /* Keep the saved copy if there is one */
-            if (topNewsGrid && !shownFromCache) {
+            /* Keep the saved copy or the stories sent with the page */
+            if (
+                topNewsGrid &&
+                !shownFromCache &&
+                !topNewsGrid.querySelector("[data-ssr]")
+            ) {
 
                 topNewsGrid.innerHTML = "";
 
@@ -2618,6 +2622,11 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
         /* Server unreachable: the last copy stays on screen */
         if (shownFromCache) {
             return cachedTotalPages;
+        }
+
+        /* Stories already sent with the page stay on screen too */
+        if (container.querySelector("[data-ssr]")) {
+            return 1;
         }
 
 
@@ -3099,8 +3108,11 @@ if (pagination) {
 
     const top = document.getElementById("topNewsGrid");
 
+    /* Only a section with really no stories; a loading failure keeps
+       its own "try again" cards instead of "No stories here yet" */
     const isEmpty =
       grid &&
+      !grid.querySelector(".failed-card") &&
       !grid.querySelector(".card:not(.skeleton):not(.failed-card)") &&
       !document.querySelector("#topNewsGrids .card:not(.skeleton)");
 
