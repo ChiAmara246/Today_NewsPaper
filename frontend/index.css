@@ -6520,3 +6520,12 @@ html.dark-mode .load-more {
     padding-left: 0;
   }
 }
+
+/* Phones: the sticky bar's slide panel is empty (test ads removed,
+   Most Read hidden), so only WhatsApp stays, without the arrow */
+@media (max-width: 900px) {
+  .toggle-mobile-ads,
+  .mobile-sticky-area .mobile-ads {
+    display: none !important;
+  }
+}
