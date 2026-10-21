@@ -797,6 +797,9 @@ async function renderSectionPage(file, page) {
 
         if (topArticles.length >= 3) {
             html = fillById(html, "topNewsGrids", topNewsHtml(topArticles[0], topArticles.slice(1, 3), false));
+        } else {
+            /* Too few stories for Top News: hide its heading too */
+            html = html.replace('<section id="topNewsGrid">', '<section id="topNewsGrid" class="hidden">');
         }
 
 

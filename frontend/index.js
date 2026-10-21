@@ -3120,8 +3120,13 @@ if (pagination) {
     pagination.classList.toggle("hidden", Boolean(isEmpty) || !totalPages || totalPages <= 1);
 
 
+    /* Hide "Top News" when it has no stories (empty section or
+       fewer than 3 stories in the category) */
+    const topHasStories =
+      Boolean(document.querySelector("#topNewsGrids .card:not(.skeleton), #topNewsGrids article:not(.skeleton)"));
+
     if (top) {
-      top.classList.toggle("hidden", Boolean(isEmpty));
+      top.classList.toggle("hidden", Boolean(isEmpty) || !topHasStories);
     }
 
 
@@ -4302,7 +4307,7 @@ function showCharityNotice() {
         <img class="charity-notice-emblem is-dark" src="${encodeURI(`${logos}open-hearts-emblem-dark.png`)}" alt="">
         <span class="charity-notice-badge">Back very soon</span>
         <h2 id="charityNoticeTitle">Open Hearts Foundation</h2>
-        <p>Our charity and events space is undergoing maintenance while we get everything ready for you. Soon, you will be able to continue to donate, support our campaigns and lend a helping hand to children and communities in need.</p>
+        <p>Open Hearts Foundation's charity and events space is undergoing maintenance. Soon, you will be able to continue to donate, support campaigns and lend a helping hand to children and communities in need.</p>
         <p class="charity-notice-thanks">Thank you for your kindness and your patience. Together, we can make a real difference.</p>
         <button type="button" class="charity-notice-close">OK</button>
       </div>
