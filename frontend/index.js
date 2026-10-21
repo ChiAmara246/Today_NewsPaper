@@ -151,53 +151,6 @@ function readHomeBackup(name) {
 
 }
 
-async function fetchTopNewsFromAPI() {
-
-    const response =
-    await fetch(
-        `${API_BASE_URL}/api/top-news`
-    );
-
-    if (!response.ok) {
-
-        throw new Error(
-            `HTTP ${response.status}`
-        );
-
-    }
-
-    return await response.json();
-}
-
-
-async function fetchCategoryTopNewsFromAPI(
-    category
-) {
-
-    const params =
-        new URLSearchParams();
-
-    params.set(
-        "category",
-        category
-    );
-
-    const response =
-    await fetch(
-        `${API_BASE_URL}/api/top-news/category?category=${encodeURIComponent(category)}`
-    );
-
-    if (!response.ok) {
-
-        throw new Error(
-            `HTTP ${response.status}`
-        );
-
-    }
-
-    return await response.json();
-}
-
 
 async function fetchMostReadFromAPI() {
 
@@ -392,9 +345,6 @@ openArticle(article.id, article.headline);
 
 return card;
 }
-
-
-
 
 
 /* Homepage: stories already shown in Top News (not repeated in the section blocks) */
@@ -1202,9 +1152,6 @@ const title = document.getElementById("title");
 const desc = document.getElementById("desc");
 const categoryTag = document.querySelector(".categoryTag");
 
-const prevButton = document.getElementById("prev");
-const nextButton = document.getElementById("next");
-
 
 /* =========================
    SHOW SLIDE
@@ -1756,19 +1703,6 @@ function toggleMenu() {
   }
 }
 
-function closeMenu() {
-  const menu = document.getElementById("links");
-  const overlay = document.getElementById("overlay");
-
-  if (menu) {
-    menu.classList.remove("show");
-  }
-
-  if (overlay) {
-    overlay.classList.remove("show");
-  }
-}
-
 
 const dots = document.querySelectorAll('.dotP');
 
@@ -1884,10 +1818,6 @@ function renderTopNewsCategory(articles) {
 
 
     if (!grid) {
-
-        console.log(
-            "Top News grid not found."
-        );
 
         return [];
 
@@ -2640,8 +2570,6 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
     }
 
 
-
-
     /* =====================================================
        TOP NEWS ALWAYS VISIBLE
     ===================================================== */
@@ -2773,7 +2701,6 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
 
     return totalPages;
 }
-
 
 
 /* =========================
@@ -3362,8 +3289,6 @@ if (
 
 }
 
-const pageCategories = {"education.html": "Education", "politics.html": "Politics", "entertainment.html": "Entertainment", "announces.html": "Announces", "economy.html": "Economy", "offTheRecord.html": "Off the Record", "pressEvent.html": "Press & Events", "today.html": "Trending"};
-const currentPageName = window.location.pathname.split("/").pop();
 
 function sidebarCarousel() {
   const track = document.querySelector(".track");
@@ -4106,102 +4031,6 @@ function initMobileStickyAds(){
 }
 initMobileStickyAds();
 
-function renderEditorsPicks(articles) {
-const grid = document.getElementById("newsGridEditor");
-if (!grid) return;
-
-const storageKey = "editorsPicks";
-const TEN_DAYS = 10 * 24 * 60 * 60 * 1000;
-const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
-
-let saved = null;
-
-try {
-    saved = JSON.parse(localStorage.getItem(storageKey));
-} catch (error) {
-    saved = null;
-}
-
-if (
-    saved &&
-    saved.expires > Date.now() &&
-    Array.isArray(saved.ids)
-) {
-    const selected = saved.ids
-        .map(id =>
-            articles.find(
-                article =>
-                    String(article.id) === String(id)
-            )
-        )
-        .filter(Boolean);
-
-    if (selected.length === 4) {
-        renderEditorCards(grid, selected);
-        return;
-    }
-}
-
-const now = Date.now();
-
-const eligible = articles.filter(article => {
-    const articleDate = new Date(article.date);
-
-    if (Number.isNaN(articleDate.getTime())) {
-        return false;
-    }
-
-    const age = now - articleDate.getTime();
-
-    return age >= 0 && age <= TEN_DAYS;
-});
-
-const categoryGroups = {};
-
-eligible.forEach(article => {
-    const category = article.category;
-
-    if (!category) return;
-
-    if (!categoryGroups[category]) {
-        categoryGroups[category] = [];
-    }
-
-    categoryGroups[category].push(article);
-});
-
-const categories = Object.keys(categoryGroups);
-
-if (categories.length < 4) {
-    grid.innerHTML = "";
-    return;
-}
-
-const selectedCategories = [...categories]
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 4);
-
-const selected = selectedCategories.map(category => {
-    const categoryArticles = categoryGroups[category];
-
-    const randomIndex = Math.floor(
-        Math.random() * categoryArticles.length
-    );
-
-    return categoryArticles[randomIndex];
-});
-
-localStorage.setItem(
-    storageKey,
-    JSON.stringify({
-        ids: selected.map(article => article.id),
-        expires: Date.now() + SEVEN_DAYS
-    })
-);
-
-renderEditorCards(grid, selected);
-
-}
 
 function renderEditorCards(grid, articles) {
 grid.innerHTML = "";
@@ -4247,7 +4076,6 @@ window.addEventListener("resize", syncStickyHeaderHeight);
 window.addEventListener("load", syncStickyHeaderHeight);
 
 document.getElementById("logo")?.addEventListener("load", syncStickyHeaderHeight);
-
 
 
 /* Sidebar: "Open Hearts" box, shown on every page */
