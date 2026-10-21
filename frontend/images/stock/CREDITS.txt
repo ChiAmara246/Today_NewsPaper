@@ -28,3 +28,4 @@ fuel-1.jpg	CC0	File:Suntaal Filling Station Esure.jpg	https://commons.wikimedia.
 fuel-2.jpg	CC0	File:NNPC Filling Station, Iragunshi, Epe.jpg	https://commons.wikimedia.org/wiki/File:NNPC_Filling_Station,_Iragunshi,_Epe.jpg
 fuel-3.jpg	CC0	File:Fuel City Filling Station, Mojoda.jpg	https://commons.wikimedia.org/wiki/File:Fuel_City_Filling_Station,_Mojoda.jpg
 naira-1.jpg	Public domain	File:Azikiwe 500 Naira note.jpg	https://commons.wikimedia.org/wiki/File:Azikiwe_500_Naira_note.jpg
+ebola-1.jpg	Public domain	File:Ebola virus virion.jpg (CDC/Cynthia Goldsmith)	https://commons.wikimedia.org/wiki/File:Ebola_virus_virion.jpg
