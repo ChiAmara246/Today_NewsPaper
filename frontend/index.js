@@ -3023,7 +3023,40 @@ function initEPaperModal() {
         modal.querySelector("#epaperCreateAccount").addEventListener("click", showRegisterForm);
     }
 
-    epaper.addEventListener("click", openModal);
+    /* The edition on the cover opens as a PDF (free to read; the
+       sign-in window above waits until accounts are ready) */
+    epaper.addEventListener("click", () => {
+
+        const cover = document.getElementById("epaperImage");
+        const day = ((cover && cover.getAttribute("src")) || "").match(/(\d{4}-\d{2}-\d{2})\.jpg/);
+
+        if (!day) {
+            showEPaperNotice();
+            return;
+        }
+
+        const pdf = getImagePath(`ePaper/${day[1]}.pdf`);
+
+        /* Open the tab now (pop-up blockers), fill it once the file is found */
+        const tab = window.open("", "_blank");
+
+        fetch(pdf, { method: "HEAD" })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                if (tab) {
+                    tab.opener = null;
+                    tab.location.href = pdf;
+                } else {
+                    window.location.href = pdf;
+                }
+            })
+            .catch(() => {
+                if (tab) tab.close();
+                showEPaperNotice();
+            });
+
+    });
+
     closeButton.addEventListener("click", closeModal);
 
     modal.addEventListener("click", event => {
@@ -3193,6 +3226,40 @@ function initEPaperModal() {
     }, 10000);
 });
 
+
+}
+
+/* No PDF for this edition yet: a short, polite notice */
+
+function showEPaperNotice() {
+
+    const popup = document.createElement("div");
+    popup.className = "epaper-error-popup";
+
+    popup.innerHTML = `
+        <div class="epaper-error-content">
+            <button type="button" class="epaper-error-close" aria-label="Close">&times;</button>
+            <div class="epaper-error-icon">i</div>
+            <h3>Today's edition is on its way</h3>
+            <p>Our ePaper is being prepared. Please check back shortly.</p>
+            <button type="button" class="epaper-error-ok">Okay</button>
+        </div>
+    `;
+
+    document.body.appendChild(popup);
+
+    setTimeout(() => popup.classList.add("active"), 10);
+
+    function closeNotice() {
+        popup.classList.remove("active");
+        setTimeout(() => popup.remove(), 300);
+    }
+
+    popup.querySelector(".epaper-error-close").addEventListener("click", closeNotice);
+    popup.querySelector(".epaper-error-ok").addEventListener("click", closeNotice);
+    popup.addEventListener("click", event => {
+        if (event.target === popup) closeNotice();
+    });
 
 }
 

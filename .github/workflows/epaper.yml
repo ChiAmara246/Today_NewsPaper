@@ -1,0 +1,52 @@
+# Every night at 00:05 Lagos time (23:05 UTC), build the ePaper of the
+# day that has just ended from backend/data/index.json, then commit the
+# PDF and its cover so the site (Render) shows the new edition.
+# Can also be started by hand from the Actions tab, with a date.
+
+name: Daily ePaper
+
+on:
+  schedule:
+    - cron: "5 23 * * *"
+  workflow_dispatch:
+    inputs:
+      day:
+        description: "News day to build (YYYY-MM-DD). Empty = yesterday, Lagos time."
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: epaper
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Image tools
+        run: command -v convert >/dev/null || (sudo apt-get update && sudo apt-get install -y imagemagick)
+
+      - name: Build the edition
+        env:
+          CHROME: /usr/bin/google-chrome
+        run: node tools/epaper/build.js ${{ github.event.inputs.day }}
+
+      - name: Publish
+        run: |
+          git add frontend/images/ePaper
+          if git diff --cached --quiet; then
+            echo "Nothing new to publish."
+            exit 0
+          fi
+          git config user.name "Today Newspaper ePaper"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "ePaper: edition of $(date -u -d '+1 hour' +%Y-%m-%d)"
+          git push
