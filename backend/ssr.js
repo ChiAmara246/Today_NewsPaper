@@ -760,7 +760,7 @@ const SECTION_TITLES = {
 };
 
 
-const SECTION_PAGE_SIZE = 4;
+const SECTION_PAGE_SIZE = 12;   /* same as index.js */
 
 
 async function renderSectionPage(file, page) {

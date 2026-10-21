@@ -575,332 +575,7 @@ function renderTopNews(articles) {
     };
 
 }
-/* =========================================================
-   FIT CATEGORY CONTENT TO ASIDE
-   ========================================================= */
 
-function fitCategoryContentToAside(latestContainer) {
-
-    const container0 =
-        document.querySelector(".container0");
-
-    const mainContainer =
-        container0?.querySelector(".container");
-
-    const aside =
-        container0?.querySelector(".aside");
-
-    const topNews =
-        document.getElementById("topNewsGrids");
-
-    const pagination =
-        document.getElementById("pagination");
-
-
-    if (
-        !container0 ||
-        !mainContainer ||
-        !aside ||
-        !topNews ||
-        !pagination ||
-        !latestContainer
-    ) {
-        return null;
-    }
-
-
-    /* =====================================================
-       RESPONSIVE BREAKPOINT
-       ===================================================== */
-
-    const width =
-        window.innerWidth;
-
-
-    /* =====================================================
-       PHONE
-       ===================================================== */
-
-    if (width <= 746) {
-
-        mainContainer.style.height =
-            "auto";
-
-        /*
-           Phones do not try to match the
-           sidebar height.
-
-           Keep Latest News compact and
-           predictable.
-        */
-
-        return 6;
-    }
-
-
-    /* =====================================================
-       SIDEBAR HEIGHT
-       ===================================================== */
-
-    const asideHeight =
-        aside.getBoundingClientRect().height;
-
-    if (
-        !Number.isFinite(asideHeight) ||
-        asideHeight <= 0
-    ) {
-        return null;
-    }
-
-
-    /*
-       Match the main container to the
-       sidebar height.
-    */
-
-    mainContainer.style.height =
-        `${asideHeight}px`;
-
-
-    /* =====================================================
-       MAIN CONTAINER INNER HEIGHT
-       ===================================================== */
-
-    const mainStyles =
-        getComputedStyle(
-            mainContainer
-        );
-
-    const paddingTop =
-        parseFloat(
-            mainStyles.paddingTop
-        ) || 0;
-
-    const paddingBottom =
-        parseFloat(
-            mainStyles.paddingBottom
-        ) || 0;
-
-    const containerHeight =
-        asideHeight -
-        paddingTop -
-        paddingBottom;
-
-
-    /* =====================================================
-       MAIN CONTAINER GAP
-       ===================================================== */
-
-    const containerGap =
-        parseFloat(
-            mainStyles.gap
-        ) || 0;
-
-
-    /* =====================================================
-       TOP NEWS HEIGHT
-       ===================================================== */
-
-    const topNewsHeight =
-        topNews.getBoundingClientRect()
-            .height;
-
-
-    /* =====================================================
-       PAGINATION HEIGHT
-       ===================================================== */
-
-    const paginationHeight =
-        pagination.getBoundingClientRect()
-            .height;
-
-
-    /* =====================================================
-       AVAILABLE LATEST NEWS HEIGHT
-       ===================================================== */
-
-    const availableHeight =
-        containerHeight -
-        topNewsHeight -
-        paginationHeight -
-        (containerGap * 2);
-
-
-    if (
-        !Number.isFinite(availableHeight) ||
-        availableHeight <= 0
-    ) {
-        return null;
-    }
-
-
-    /* =====================================================
-       LATEST NEWS WIDTH
-       ===================================================== */
-
-    const latestRect =
-        latestContainer.getBoundingClientRect();
-
-    const latestWidth =
-        latestRect.width;
-
-    if (
-        !Number.isFinite(latestWidth) ||
-        latestWidth <= 0
-    ) {
-        return null;
-    }
-
-
-    /* =====================================================
-       GRID STYLES
-       ===================================================== */
-
-    const gridStyles =
-        getComputedStyle(
-            latestContainer
-        );
-
-    const columnGap =
-        parseFloat(
-            gridStyles.columnGap
-        ) || 0;
-
-    const rowGap =
-        parseFloat(
-            gridStyles.rowGap
-        ) || 0;
-
-
-    /* =====================================================
-       RESPONSIVE COLUMNS
-       ===================================================== */
-
-    let columns;
-
-    if (width <= 900) {
-
-        columns = 2;
-
-    } else {
-
-        columns = 3;
-    }
-
-
-    /* =====================================================
-       CARD WIDTH
-       ===================================================== */
-
-    const totalColumnGaps =
-        columnGap *
-        (columns - 1);
-
-    const cardWidth =
-        (
-            latestWidth -
-            totalColumnGaps
-        ) / columns;
-
-
-    if (
-        !Number.isFinite(cardWidth) ||
-        cardWidth <= 0
-    ) {
-        return null;
-    }
-
-
-    /* =====================================================
-       SQUARE CARD
-       ===================================================== */
-
-    const cardHeight =
-        cardWidth;
-
-
-    /* =====================================================
-       ROWS THAT FIT
-       ===================================================== */
-
-    const rows =
-        Math.floor(
-            (
-                availableHeight +
-                rowGap
-            ) /
-            (
-                cardHeight +
-                rowGap
-            )
-        );
-
-
-    if (rows <= 0) {
-
-        return columns;
-    }
-
-
-    /* =====================================================
-       ARTICLE CAPACITY
-       ===================================================== */
-
-    let articleCount =
-        rows *
-        columns;
-
-
-    /* =====================================================
-       EDITORIAL / VISUAL LIMITS
-       ===================================================== */
-
-    const MIN_ARTICLES =
-        4;
-
-    const MAX_ARTICLES =
-        12;
-
-
-    articleCount =
-        Math.max(
-            MIN_ARTICLES,
-            Math.min(
-                MAX_ARTICLES,
-                articleCount
-            )
-        );
-
-
-    /* =====================================================
-       KEEP COMPLETE GRID ROWS
-       ===================================================== */
-
-    articleCount =
-        Math.floor(
-            articleCount /
-            columns
-        ) *
-        columns;
-
-
-    /*
-       Safety fallback.
-
-       Prevents returning 0 when
-       the minimum is smaller than
-       the current column count.
-    */
-
-    if (articleCount < columns) {
-
-        articleCount =
-            columns;
-    }
-
-
-    return articleCount;
-}
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -1989,8 +1664,6 @@ function renderMostRead(articles) {
 }
 /* Load articles from JSON file and display them in the specified container */
 
-let categoryPageLimit = null;
-let categoryPageWidth = null;
 
 async function loadMostRead() {
 
@@ -2023,6 +1696,10 @@ async function loadMostRead() {
     }
 }
 loadMostRead();
+/* Stories per page in a section's Latest News (same as the server) */
+const SECTION_PAGE_SIZE = 12;
+
+
 /* Draw a list of article cards in a block */
 
 function renderArticleCards(container, articles) {
@@ -2124,67 +1801,12 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
 
 
     /* =====================================================
-       PAGE CAPACITY
+       PAGE SIZE: fixed, so a page always holds the same
+       stories on every screen (shared links, resizing)
     ===================================================== */
 
-    let pageLimit =
+    const pageLimit =
         limit;
-
-
-    /* =====================================================
-       CATEGORY PAGE CAPACITY
-    ===================================================== */
-
-    if (isCategoryPage) {
-
-        /* ================================================
-           PHONE
-        ================================================ */
-
-        if (window.innerWidth <= 746) {
-
-            pageLimit =
-                Math.max(
-                    4,
-                    Math.min(
-                        6,
-                        limit
-                    )
-                );
-
-
-            categoryPageLimit =
-                pageLimit;
-
-
-            categoryPageWidth =
-                window.innerWidth;
-        }
-
-
-        /* ================================================
-           DESKTOP / TABLET
-        ================================================ */
-
-        else {
-
-            if (
-                page === 1 ||
-                categoryPageLimit === null ||
-                categoryPageWidth !==
-                    window.innerWidth
-            ) {
-
-                categoryPageLimit =
-                    null;
-            }
-
-
-            pageLimit =
-                categoryPageLimit ||
-                limit;
-        }
-    }
 
 
     /* =====================================================
@@ -2256,62 +1878,6 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
 
             }
         }
-    }
-
-
-    /* =====================================================
-       CALCULATE LATEST NEWS CAPACITY
-    ===================================================== */
-
-    if (
-        isCategoryPage &&
-        window.innerWidth > 746
-    ) {
-
-        if (
-            page === 1 ||
-            categoryPageLimit === null ||
-            categoryPageWidth !==
-                window.innerWidth
-        ) {
-
-            await new Promise(resolve =>
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(
-                        resolve
-                    );
-                })
-            );
-
-
-            const calculatedLimit =
-                fitCategoryContentToAside(
-                    container
-                );
-
-
-            if (
-                calculatedLimit &&
-                calculatedLimit > 0
-            ) {
-
-                categoryPageLimit =
-                    calculatedLimit;
-
-            } else {
-
-                categoryPageLimit =
-                    limit;
-            }
-
-
-            categoryPageWidth =
-                window.innerWidth;
-        }
-
-
-        pageLimit =
-            categoryPageLimit;
     }
 
 
@@ -2405,35 +1971,6 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
     ===================================================== */
 
     renderArticleCards(container, articles);
-
-
-    /* =====================================================
-       MATCH MAIN CONTAINER TO ASIDE
-    ===================================================== */
-
-    if (isCategoryPage) {
-
-        const container0 =
-            document.querySelector(
-                ".container0"
-            );
-
-
-        const mainContainer =
-            container0?.querySelector(
-                ".container"
-            );
-
-
-        if (
-            mainContainer &&
-            window.innerWidth > 746
-        ) {
-
-            mainContainer.style.height =
-                "auto";
-        }
-    }
 
 
     /* =====================================================
@@ -2696,7 +2233,7 @@ function setArticleGridLayout(container) {
 let currentPage =
   Math.max(1, Number(new URLSearchParams(window.location.search).get("page")) || 1);
 let totalPages = 1;
-const limit = 4;
+const limit = SECTION_PAGE_SIZE;
 const TOP_NEWS_COUNT = 3;   /* stories shown in Top News, not repeated below */
 
 
