@@ -918,13 +918,14 @@ async function renderHomePage() {
         logo: `${SITE_URL}/images/logoDefaultMode.jpg`,
         email: "infos@todaynewspaperng.com",
         telephone: "+2347076254498",
-        address: { "@type": "PostalAddress", addressLocality: "Lekki, Lagos", addressCountry: "NG" },
+        address: { "@type": "PostalAddress", addressLocality: "Lekki, Lagos", addressCountry: "NG" }
+        /* Social accounts hidden while they are being set up; put back:
         sameAs: [
             "https://www.facebook.com/Today-Newspaper-100000000000000",
             "https://twitter.com/TodayNewspaper",
             "https://www.instagram.com/todaynewspaper/",
             "https://www.tiktok.com/@todaynewspaper"
-        ]
+        ] */
     };
 
 
