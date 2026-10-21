@@ -1740,267 +1740,165 @@ try {
 }
 
 
-async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0) {
+/* Category page Top News: the section's 3 leading stories,
+   on page 1 only (like a front page). Returns the stories shown. */
 
-    const container =
-        document.getElementById(containerId);
+async function loadCategoryTopNews(category, page, keepShown) {
 
-    const topNewsSection =
-        document.getElementById("topNewsGrids");
+    const grid = document.getElementById("topNewsGrids");
 
+    if (!grid) return null;
 
-    if (!container) {
+    if (page !== 1) {
+        grid.innerHTML = "";
+        return null;
+    }
 
-        console.error(
-            `Container "${containerId}" not found.`
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/top-news/category?category=${encodeURIComponent(category)}`
         );
 
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const articles = Array.isArray(data.articles) ? data.articles : [];
+
+        renderTopNewsCategory(articles);
+
+        return articles;
+
+    } catch (error) {
+
+        /* Server unreachable: keep the saved copy or the stories sent with the page */
+        if (!keepShown && !grid.querySelector("[data-ssr]")) {
+            grid.innerHTML = "";
+        }
+
+        return null;
+
+    }
+
+}
+
+
+/* Fill a block with a page of stories.
+   1. Show the saved copy at once if the block is still empty.
+   2. Ask the server for fresh stories (and the section's Top News).
+   3. Draw them and save a copy for the next visit.
+   Returns the number of pages, or nothing if it failed. */
+
+async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0) {
+
+    const container = document.getElementById(containerId);
+
+    if (!container) {
+        console.error(`Container "${containerId}" not found.`);
         return;
     }
 
+    const isCategoryPage = Boolean(document.getElementById("topNewsGrids"));
 
-    /* =====================================================
-       CATEGORY PAGE
-    ===================================================== */
-
-    const isCategoryPage =
-        !!document.getElementById(
-            "topNewsGrids"
-        );
+    /* Homepage blocks: fetch a few extra, then drop Top News stories */
+    const onHomepage =
+        Boolean(document.getElementById("newsGridEducation")) && page === 1;
 
 
-    /* =====================================================
-       SAVED COPY (articles, not HTML)
-       Shown right away when the block is still empty;
-       the fresh list from the server replaces it below.
-    ===================================================== */
+    /* 1. Saved copy (articles, not HTML) */
 
     const cacheKey =
         `articles_${containerId}_${category || "all"}_${limit}_${page}`;
 
-    let shownFromCache = false;
-
-    let cachedTotalPages = 1;
-
     const savedCopy = readHomeBackup(cacheKey);
 
-    let categoryTopArticles =
-        savedCopy && Array.isArray(savedCopy.topArticles)
-            ? savedCopy.topArticles
-            : null;
+    const savedTop =
+        savedCopy && Array.isArray(savedCopy.topArticles) ? savedCopy.topArticles : null;
 
     const alreadyFilled =
         container.querySelector("[data-ssr], .card:not(.skeleton):not(.failed-card)");
 
-    if (
-        !alreadyFilled &&
-        savedCopy &&
-        Array.isArray(savedCopy.articles) &&
-        savedCopy.articles.length
-    ) {
+    let shownFromCache = false;
 
-        if (isCategoryPage && categoryTopArticles && categoryTopArticles.length) {
-            renderTopNewsCategory(categoryTopArticles);
+    if (!alreadyFilled && savedCopy && Array.isArray(savedCopy.articles) && savedCopy.articles.length) {
+
+        if (isCategoryPage && page === 1 && savedTop && savedTop.length) {
+            renderTopNewsCategory(savedTop);
         }
 
         renderArticleCards(container, savedCopy.articles);
 
         shownFromCache = true;
 
-        cachedTotalPages = savedCopy.totalPages || 1;
+    } else if (!alreadyFilled) {
+
+        showLoadingCards(container, limit);
 
     }
 
 
-    /* =====================================================
-       PAGE SIZE: fixed, so a page always holds the same
-       stories on every screen (shared links, resizing)
-    ===================================================== */
+    /* 2. Fresh stories and Top News, asked for at the same time */
 
-    const pageLimit =
-        limit;
+    const [listResult, topArticles] = await Promise.all([
 
+        fetchArticlesFromAPI(
+            category,
+            page,
+            onHomepage ? limit + homepageShownIds.size : limit,
+            skip
+        ).catch(error => {
+            console.error("Failed to load articles from backend:", error);
+            return null;
+        }),
 
-    /* =====================================================
-       LOADING
-    ===================================================== */
+        isCategoryPage ? loadCategoryTopNews(category, page, shownFromCache) : null
 
-    if (!shownFromCache) {
-        showLoadingCards(
-            container,
-            pageLimit
-        );
-    }
+    ]);
 
 
-    /* =====================================================
-       CATEGORY TOP NEWS
-    ===================================================== */
+    if (!listResult) {
 
-    let usedIds = [];
-
-
-    if (isCategoryPage) {
-
-        try {
-
-            const topNewsResponse =
-            await fetch(
-                `${API_BASE_URL}/api/top-news/category?category=${encodeURIComponent(category)}`
-            );
-
-
-            if (!topNewsResponse.ok) {
-
-                throw new Error(
-                    `HTTP ${topNewsResponse.status}`
-                );
-
-            }
-
-
-            const topNewsData =
-                await topNewsResponse.json();
-
-
-            usedIds =
-                renderTopNewsCategory(
-                    topNewsData.articles
-                ) || [];
-
-            categoryTopArticles =
-                topNewsData.articles || [];
-        } catch (err) {
-
-
-            const topNewsGrid =
-                document.getElementById(
-                    "topNewsGrids"
-                );
-
-
-            /* Keep the saved copy or the stories sent with the page */
-            if (
-                topNewsGrid &&
-                !shownFromCache &&
-                !topNewsGrid.querySelector("[data-ssr]")
-            ) {
-
-                topNewsGrid.innerHTML = "";
-
-            }
-        }
-    }
-
-
-    /* =====================================================
-       FETCH LATEST NEWS FROM BACKEND
-    ===================================================== */
-
-    let articles = [];
-    let totalPages = 1;
-
-
-    try {
-
-        /* Homepage blocks: fetch a few extra, then drop Top News stories */
-        const onHomepage =
-            Boolean(document.getElementById("newsGridEducation")) &&
-            page === 1;
-
-        const result =
-            await fetchArticlesFromAPI(
-                category,
-                page,
-                onHomepage ? pageLimit + homepageShownIds.size : pageLimit,
-                skip
-            );
-
-
-        articles =
-            Array.isArray(
-                result.articles
-            )
-                ? result.articles
-                : [];
-
-        if (onHomepage) {
-            articles =
-                articles
-                    .filter(article => !homepageShownIds.has(String(article.id)))
-                    .slice(0, pageLimit);
-        }
-
-
-        totalPages =
-            Number(
-                result.totalPages
-            ) || 1;
-
-
-    } catch (err) {
-
-        console.error(
-            "Failed to load articles from backend:",
-            err
-        );
-
-
-        /* Server unreachable: the last copy stays on screen */
+        /* Server unreachable: the saved copy or the stories sent with the page stay */
         if (shownFromCache) {
-            return cachedTotalPages;
+            return savedCopy.totalPages || 1;
         }
 
-        /* Stories already sent with the page stay on screen too */
         if (container.querySelector("[data-ssr]")) {
             return 1;
         }
 
-
-        showFailedCards(
-            container,
-            pageLimit
-        );
-
+        showFailedCards(container, limit);
 
         return;
+
     }
 
 
-    /* =====================================================
-       TOP NEWS ALWAYS VISIBLE
-    ===================================================== */
+    /* 3. Draw and save */
 
-    if (topNewsSection) {
+    let articles = Array.isArray(listResult.articles) ? listResult.articles : [];
 
-        topNewsSection.style.display =
-            "";
+    if (onHomepage) {
+        articles = articles
+            .filter(article => !homepageShownIds.has(String(article.id)))
+            .slice(0, limit);
     }
 
-
-    /* =====================================================
-       RENDER ARTICLES
-    ===================================================== */
+    const totalPages = Number(listResult.totalPages) || 1;
 
     renderArticleCards(container, articles);
 
-
-    /* =====================================================
-       SAVE A COPY OF THE ARTICLES (next visit / server down)
-    ===================================================== */
-
     saveHomeBackup(cacheKey, {
         articles: uniqueArticles(articles),
-        topArticles: isCategoryPage ? categoryTopArticles : null,
+        topArticles: topArticles || savedTop,
         totalPages
     });
 
-
-    /* =====================================================
-       RETURN TOTAL PAGES
-    ===================================================== */
-
     return totalPages;
+
 }
 
 
@@ -2265,6 +2163,8 @@ if (pagination) {
     el.classList.toggle("hidden", !show);
   }
 
+  let pageShown = false;
+
   async function renderPage(page) {
 
     /* Keep the page number in the address (shareable, crawlable) */
@@ -2275,6 +2175,14 @@ if (pagination) {
       pageUrl.searchParams.delete("page");
     }
     window.history.replaceState({}, "", pageUrl);
+
+    /* After the first load, a new page starts empty
+       (saved copy or loading cards, not the previous page) */
+    if (pageShown) {
+      document.getElementById("articlesGrid").innerHTML = "";
+    }
+
+    pageShown = true;
 
     totalPages = await loadArticles(
       "articlesGrid",
