@@ -2023,6 +2023,34 @@ async function loadMostRead() {
     }
 }
 loadMostRead();
+/* Draw a list of article cards in a block */
+
+function renderArticleCards(container, articles) {
+
+    container.innerHTML = "";
+
+    uniqueArticles(articles).forEach(article => {
+        container.appendChild(
+            createNewsCard(article, "standard")
+        );
+    });
+
+    setArticleGridLayout(container);
+
+}
+
+
+/* Old copies were saved as HTML ("pageCache_..."); remove them once */
+
+try {
+    Object.keys(localStorage)
+        .filter(key => key.startsWith("pageCache_"))
+        .forEach(key => localStorage.removeItem(key));
+} catch (error) {
+    /* storage blocked: nothing to do */
+}
+
+
 async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0) {
 
     const container =
@@ -2043,46 +2071,6 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
 
 
     /* =====================================================
-       EDITOR'S PICKS
-    ===================================================== */
-
-    if (containerId === "newsGridEditor") {
-
-        showLoadingCards(
-            container,
-            limit
-        );
-
-        try {
-
-            const result =
-                await fetchEditorsPicksFromAPI();
-
-            renderEditorCards(
-                container,
-                result.articles
-            );
-
-            return 1;
-
-        } catch (err) {
-
-            console.error(
-                "Failed to load Editor's Picks:",
-                err
-            );
-
-            showFailedCards(
-                container,
-                limit
-            );
-
-            return;
-        }
-    }
-
-
-    /* =====================================================
        CATEGORY PAGE
     ===================================================== */
 
@@ -2093,205 +2081,45 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
 
 
     /* =====================================================
-       CACHE
+       SAVED COPY (articles, not HTML)
+       Shown right away when the block is still empty;
+       the fresh list from the server replaces it below.
     ===================================================== */
 
     const cacheKey =
-        `pageCache_${containerId}_${category || "all"}_${page}`;
+        `articles_${containerId}_${category || "all"}_${page}`;
 
     let shownFromCache = false;
 
     let cachedTotalPages = 1;
 
+    const savedCopy = readHomeBackup(cacheKey);
 
-    {
+    let categoryTopArticles =
+        savedCopy && Array.isArray(savedCopy.topArticles)
+            ? savedCopy.topArticles
+            : null;
 
-        const cachedPage =
-            localStorage.getItem(
-                cacheKey
-            );
+    const alreadyFilled =
+        container.querySelector("[data-ssr], .card:not(.skeleton):not(.failed-card)");
 
-        if (cachedPage) {
+    if (
+        !alreadyFilled &&
+        savedCopy &&
+        Array.isArray(savedCopy.articles) &&
+        savedCopy.articles.length
+    ) {
 
-            try {
-
-                const saved =
-                    JSON.parse(
-                        cachedPage
-                    );
-
-
-                container.innerHTML =
-                    saved.articleHTML || "";
-
-
-                const topNewsGrid =
-                    document.getElementById(
-                        "topNewsGrid"
-                    );
-
-
-                if (
-                    topNewsGrid &&
-                    saved.topNewsHTML !==
-                    undefined
-                ) {
-
-                    topNewsGrid.innerHTML =
-                        saved.topNewsHTML;
-
-                    topNewsGrid.style.display =
-                        saved.topNewsDisplay || "";
-                }
-
-
-                const categoryTopNews =
-                    document.getElementById(
-                        "topNewsGrids"
-                    );
-
-
-                if (
-                    categoryTopNews &&
-                    saved.categoryTopNewsHTML !==
-                    undefined
-                ) {
-
-                    categoryTopNews.innerHTML =
-                        saved.categoryTopNewsHTML;
-                }
-
-
-                setArticleGridLayout(
-                    container
-                );
-
-
-                /* =====================================
-                   RESTORE IMAGE ERRORS
-                ===================================== */
-
-                const restoreImageError =
-                    image => {
-
-                        image.addEventListener(
-                            "error",
-                            () => {
-
-                                if (
-                                    image.dataset
-                                        .errorHandled ===
-                                    "true"
-                                ) {
-
-                                    return;
-                                }
-
-
-                                image.dataset
-                                    .errorHandled =
-                                    "true";
-
-
-                                const card =
-                                    image.closest(
-                                        ".card"
-                                    );
-
-
-                                if (!card) {
-                                    return;
-                                }
-
-
-                                card.classList.add(
-                                    "image-error"
-                                );
-
-
-                                image.alt = "";
-
-                                image.src =
-                                    getImagePath(IMAGE_PLACEHOLDER);
-                            }
-                        );
-                    };
-
-
-                container
-                    .querySelectorAll("img")
-                    .forEach(
-                        restoreImageError
-                    );
-
-
-                if (topNewsGrid) {
-
-                    topNewsGrid
-                        .querySelectorAll("img")
-                        .forEach(
-                            restoreImageError
-                        );
-                }
-
-
-                /* =====================================
-                   RESTORE ARTICLE CLICKS
-                ===================================== */
-
-                container
-                    .querySelectorAll("[data-id]")
-                    .forEach(card => {
-
-                        card.addEventListener(
-                            "click",
-                            () => {
-
-                                openArticle(card.dataset.id, card.dataset.headline);
-
-                            }
-                        );
-
-                    });
-
-
-                if (topNewsGrid) {
-
-                    topNewsGrid
-                        .querySelectorAll("[data-id]")
-                        .forEach(card => {
-
-                            card.addEventListener(
-                                "click",
-                                () => {
-
-                                    openArticle(card.dataset.id, card.dataset.headline);
-
-                                }
-                            );
-
-                        });
-                }
-
-
-                /* Shown right away; the fresh list replaces it below */
-                shownFromCache = true;
-
-                cachedTotalPages = saved.totalPages;
-
-            } catch (error) {
-
-                console.warn(
-                    "Invalid page cache. Loading page normally.",
-                    error
-                );
-
-
-                localStorage.removeItem(
-                    cacheKey
-                );
-            }
+        if (isCategoryPage && categoryTopArticles && categoryTopArticles.length) {
+            renderTopNewsCategory(categoryTopArticles);
         }
+
+        renderArticleCards(container, savedCopy.articles);
+
+        shownFromCache = true;
+
+        cachedTotalPages = savedCopy.totalPages || 1;
+
     }
 
 
@@ -2405,6 +2233,9 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
                 renderTopNewsCategory(
                     topNewsData.articles
                 ) || [];
+
+            categoryTopArticles =
+                topNewsData.articles || [];
         } catch (err) {
 
 
@@ -2481,18 +2312,6 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
 
         pageLimit =
             categoryPageLimit;
-    }
-
-
-    /* =====================================================
-       LOADING LATEST NEWS
-    ===================================================== */
-
-    if (!shownFromCache) {
-        showLoadingCards(
-            container,
-            pageLimit
-        );
     }
 
 
@@ -2585,34 +2404,7 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
        RENDER ARTICLES
     ===================================================== */
 
-    container.innerHTML = "";
-
-
-    uniqueArticles(articles).forEach(
-        article => {
-
-            const card =
-                createNewsCard(
-                    article,
-                    "standard"
-                );
-
-
-            container.appendChild(
-                card
-            );
-
-        }
-    );
-
-
-    /* =====================================================
-       GRID LAYOUT
-    ===================================================== */
-
-    setArticleGridLayout(
-        container
-    );
+    renderArticleCards(container, articles);
 
 
     /* =====================================================
@@ -2645,54 +2437,14 @@ async function loadArticles(containerId, category, limit = 6, page = 1, skip = 0
 
 
     /* =====================================================
-       SAVE A COPY (homepage and section pages)
+       SAVE A COPY OF THE ARTICLES (next visit / server down)
     ===================================================== */
 
-    {
-
-        try {
-
-            localStorage.setItem(
-                cacheKey,
-                JSON.stringify({
-
-                    articleHTML:
-                        container.innerHTML,
-
-                    topNewsHTML:
-                        topNewsSection
-                            ? topNewsSection.innerHTML
-                            : "",
-
-                    topNewsDisplay:
-                        topNewsSection
-                            ? topNewsSection.style.display
-                            : "",
-
-                    categoryTopNewsHTML:
-                        document.getElementById(
-                            "topNewsGrids"
-                        )
-                            ? document.getElementById(
-                                  "topNewsGrids"
-                              ).innerHTML
-                            : "",
-
-                    totalPages:
-                        totalPages
-
-                })
-            );
-
-
-        } catch (error) {
-
-            console.warn(
-                "Could not save page cache:",
-                error
-            );
-        }
-    }
+    saveHomeBackup(cacheKey, {
+        articles: uniqueArticles(articles),
+        topArticles: isCategoryPage ? categoryTopArticles : null,
+        totalPages
+    });
 
 
     /* =====================================================
