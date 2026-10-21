@@ -1128,6 +1128,36 @@ let editorsPicksCache = {
 };
 
 
+/* A story can be placed in Editor's Picks by hand:
+   "editorsPick": true, for 7 days after publication
+   (or until "editorsPickUntil": "YYYY-MM-DD"). */
+
+const EDITORS_PICK_DAYS = 7;
+
+function isEditorsPick(article) {
+
+    if (article.editorsPick !== true) return false;
+
+    const until = article.editorsPickUntil
+        ? Date.parse(`${article.editorsPickUntil}T23:59:59+01:00`)
+        : Date.parse(article.date) + EDITORS_PICK_DAYS * 24 * 60 * 60 * 1000;
+
+    return Date.now() <= until;
+
+}
+
+function manualEditorsPicks() {
+
+    const seen = new Set();
+
+    return listedArticles()
+        .filter(isEditorsPick)
+        .sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
+        .filter(article => !seen.has(article.category) && seen.add(article.category))
+        .slice(0, 4);
+
+}
+
 const EDITORS_CACHE_TIME =
     7 *
     24 *
@@ -1144,7 +1174,17 @@ app.get(
            RETURN EXISTING SELECTION
         ============================================= */
 
+        /* A story picked by hand shows at once, without waiting for the cache */
+        const picks =
+            manualEditorsPicks();
+
+        const picksShown =
+            picks.every(article =>
+                editorsPicksCache.ids.map(String).includes(String(article.id))
+            );
+
         if (
+            picksShown &&
             editorsPicksCache.expires >
                 Date.now() &&
             editorsPicksCache.ids.length ===
@@ -1315,8 +1355,12 @@ app.get(
            RANDOM FOUR CATEGORIES
         ============================================= */
 
+        const pickedCategories =
+            new Set(picks.map(article => article.category));
+
         const selectedCategories =
-            [...categories]
+            categories
+                .filter(category => !pickedCategories.has(category))
                 .sort(
                     () =>
                         Math.random() -
@@ -1324,7 +1368,7 @@ app.get(
                 )
                 .slice(
                     0,
-                    4
+                    4 - picks.length
                 );
 
 
@@ -1356,6 +1400,9 @@ app.get(
                 }
             );
 
+
+        /* Stories picked by hand sit in second place: visible, not loud */
+        selected.splice(1, 0, ...picks);
 
         /* =============================================
            SAVE SELECTION
