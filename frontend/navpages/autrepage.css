@@ -1374,3 +1374,137 @@ html.dark-mode .ab-policy button {
     }
 
 }
+
+
+/* "Our Policies" window on About Us: the full Privacy Policy and
+   Terms of Use, scrolling inside the window */
+
+.policies-popup {
+
+    width: min(640px, calc(100vw - 32px)) !important;
+
+    max-height: 85vh;
+
+    display: none;
+
+    flex-direction: column;
+
+    box-sizing: border-box;
+
+    text-align: left !important;
+
+}
+
+.policies-popup[style*="block"] {
+
+    display: flex !important;
+
+}
+
+.policies-popup > h2,
+.policies-popup > p {
+
+    text-align: center;
+
+}
+
+.policies-body {
+
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    margin-top: 12px;
+
+    padding: 4px 6px 4px 0;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    line-height: 1.6;
+
+}
+
+.policies-body h3 {
+
+    margin: 18px 0 6px;
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    color: #032456;
+
+}
+
+.policies-body h4 {
+
+    margin: 14px 0 4px;
+
+}
+
+.policies-body p {
+
+    margin: 0 0 8px;
+
+    font-size: 0.92rem;
+
+}
+
+.policies-popup > button {
+
+    align-self: center;
+
+}
+
+html.dark-mode .policies-body h3 {
+
+    color: #f1dca8;
+
+}
+
+html.dark-mode .policies-body {
+
+    border-color: rgba(255, 255, 255, 0.15);
+
+}
+
+
+/* "Read the full ..." buttons on the page */
+
+.policy-open {
+
+    margin-top: 6px;
+
+    padding: 8px 18px;
+
+    border: 1px solid #032456;
+
+    border-radius: 999px;
+
+    background: transparent;
+
+    color: #032456;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+.policy-open:hover {
+
+    background: #032456;
+
+    color: #ffffff;
+
+}
+
+html.dark-mode .policy-open {
+
+    border-color: #c9a45c;
+
+    color: #f1dca8;
+
+}
