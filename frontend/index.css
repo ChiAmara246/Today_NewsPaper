@@ -6539,3 +6539,46 @@ html.dark-mode .load-more {
     padding: 0 !important;
   }
 }
+
+/* Homepage blocks on computers: readable text, no empty space
+   (cards follow their content instead of being forced square) */
+@media (min-width: 901px) {
+
+  #newsGridEducation .card, #newsGridPolitics .card, #newsGridToday .card, #newsGridEditor .card {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+
+  #newsGridEducation .card > img, #newsGridPolitics .card > img, #newsGridToday .card > img, #newsGridEditor .card > img {
+    height: auto;
+    aspect-ratio: 16 / 10;
+  }
+
+  #newsGridEducation .cardContent, #newsGridPolitics .cardContent, #newsGridToday .cardContent, #newsGridEditor .cardContent {
+    padding: 14px 16px 16px;
+    gap: 8px;
+  }
+
+  #newsGridEducation .cardContent h3, #newsGridPolitics .cardContent h3, #newsGridToday .cardContent h3, #newsGridEditor .cardContent h3 {
+    font-size: clamp(15px, 1.15vw, 17px);
+    line-height: 1.3;
+  }
+
+  #newsGridEducation .cardContent p, #newsGridPolitics .cardContent p, #newsGridToday .cardContent p, #newsGridEditor .cardContent p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.45;
+    -webkit-line-clamp: 2;
+  }
+
+  #newsGridEducation .cardContent .date, #newsGridPolitics .cardContent .date, #newsGridToday .cardContent .date, #newsGridEditor .cardContent .date {
+    font-size: 11px;
+    padding-top: 6px;
+  }
+
+  #newsGridEditor .categoryTag {
+    position: static;
+    align-self: flex-start;
+    margin: 0;
+  }
+}
