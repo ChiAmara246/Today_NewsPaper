@@ -697,38 +697,10 @@ if (whatsapp && whatsappPopup) {
       event.preventDefault();
 
 
-      // =========================
-      // CHECK STORAGE
-      // =========================
-
-      const hasClicked =
-        localStorage.getItem("whatsappClicked") === "true";
-
-
-      // =========================
-      // FIRST CLICK
-      // =========================
-
-      if (!hasClicked) {
-
-        // Save BEFORE leaving page
-        localStorage.setItem(
-          "whatsappClicked",
-          "true"
-        );
-
-        // Open WhatsApp in same tab
-        window.location.href = whatsappURL;
-
-        return;
-      }
-
-
-      // =========================
-      // SECOND + FUTURE CLICKS
-      // =========================
-
-      whatsappPopup.classList.add("show");
+      /* Always open the community. (A "community is filled" message
+         used to appear from the second click on, even when it was not
+         full; the popup stays in the page for when it really is.) */
+      window.open(whatsappURL, "_blank", "noopener");
 
     });
 
