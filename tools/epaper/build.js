@@ -450,6 +450,7 @@ img { display: block; width: 100%; object-fit: cover; }
 .story.opening h2 { grid-column: 1 / -1; font: 400 24pt/1.05 "Anton", Impact, sans-serif; text-transform: uppercase; }
 .story.opening img { height: 72mm; margin: 0; }
 .story.opening .text { column-count: 2; column-gap: 4mm; font-size: 8.8pt; }
+.story.opening:not(:has(img)) .text { grid-column: 1 / -1; column-count: 3; }
 .story.brief h2 { font-size: 10.5pt; }
 .story.brief .text { font-style: italic; }
 .story.continued .from { margin: 0 0 1mm; font: 700 7.5pt "Oswald", Arial, sans-serif; color: #c4161c; text-transform: uppercase; }
