@@ -121,11 +121,33 @@ function shorten(text, max) {
     return `${clean.slice(0, max).replace(/[\s,;:.]+\S*$/, "")}…`;
 }
 
+/* Photos go into the PDF as small copies (720px, JPEG), so an
+   edition stays light; the originals are left untouched. */
+const WORK = fs.mkdtempSync(path.join(os.tmpdir(), "tnp-epaper-"));
+const smallCopies = new Map();
+
+function smallCopy(file) {
+    if (smallCopies.has(file)) return smallCopies.get(file);
+    const copy = path.join(WORK, `photo-${smallCopies.size}.jpg`);
+    try {
+        if (process.platform === "darwin") {
+            execFileSync("sips", ["-Z", "720", "-s", "format", "jpeg", "-s", "formatOptions", "55", file, "--out", copy], { stdio: "ignore" });
+        } else {
+            execFileSync("convert", [file, "-resize", "720x720>", "-quality", "55", copy], { stdio: "ignore" });
+        }
+    } catch (error) {
+        smallCopies.set(file, file);
+        return file;
+    }
+    smallCopies.set(file, copy);
+    return copy;
+}
+
 function photoUrl(article) {
     const img = String(article.img || "").trim();
     if (!img || /^(https?:)?\/\//.test(img)) return "";
     const file = path.join(IMAGES, img);
-    return fs.existsSync(file) ? `file://${encodeURI(file)}` : "";
+    return fs.existsSync(file) ? `file://${encodeURI(smallCopy(file))}` : "";
 }
 
 
@@ -429,6 +451,7 @@ img { display: block; width: 100%; object-fit: cover; }
 .teaser-bottom .label { background: none; color: #c4161c; padding: 0; align-self: flex-start; }
 .teaser-bottom h3 { margin: .5mm 0 1mm; font: 700 9pt/1.15 "Source Serif 4", Georgia, serif; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .teaser-bottom img { flex: 1; min-height: 0; }
+.teaser-bottom .page-ref, .teaser-more .page-ref { margin-top: auto; }
 
 .foot-strip { margin-top: 3mm; background: #032456; color: #fff; text-align: center; font: 500 8pt "Oswald", Arial, sans-serif; padding: 1.5mm; letter-spacing: .03em; }
 
@@ -601,7 +624,7 @@ function main() {
         pages.map((page, i) => sectionPageHtml(edition, page.section, page.number, page.list, lead, i === pages.length - 1))
     );
 
-    const work = fs.mkdtempSync(path.join(os.tmpdir(), "tnp-epaper-"));
+    const work = WORK;
     const htmlFile = path.join(work, `${day}.html`);
     fs.writeFileSync(htmlFile, html);
 
